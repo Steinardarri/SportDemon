@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.sportdemon;
+package is.hi.hbvg601.team16.SportDemon;
 
 import androidx.appcompat.app.AppCompatActivity;
 

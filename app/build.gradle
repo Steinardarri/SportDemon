@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'is.hi.hbvg601.team16.sportdemon'
+    namespace 'is.hi.hbvg601.team16.SportDemon'
     compileSdk 33
 
     defaultConfig {
-        applicationId "is.hi.hbvg601.team16.sportdemon"
+        applicationId "is.hi.hbvg601.team16.SportDemon"
         minSdk 24
         targetSdk 33
         versionCode 1
