@@ -16,7 +16,7 @@ import is.hi.hbvg601.team16.SportDemon.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     @SuppressWarnings("FieldCanBeLocal")
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         binding.fab.setOnClickListener( view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Hallo mitt action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         );
     }
