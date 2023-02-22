@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.SportDemon.Persistences.Entities;
+package is.hi.hbvg601.team16.sportdemon.persistences.entities;
 
 import java.util.*;
 
