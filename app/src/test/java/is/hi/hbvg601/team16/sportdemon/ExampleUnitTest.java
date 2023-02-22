@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.SportDemon;
+package is.hi.hbvg601.team16.sportdemon;
 
 import org.junit.Test;
 
