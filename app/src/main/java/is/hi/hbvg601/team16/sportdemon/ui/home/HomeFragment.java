@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import is.hi.hbvg601.team16.sportdemon.R;
 import is.hi.hbvg601.team16.sportdemon.databinding.FragmentHomeBinding;
 import is.hi.hbvg601.team16.sportdemon.persistences.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistences.entities.Workout;

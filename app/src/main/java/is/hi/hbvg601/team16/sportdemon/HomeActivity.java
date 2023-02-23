@@ -1,8 +1,6 @@
 package is.hi.hbvg601.team16.sportdemon;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -12,12 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import java.util.*;
-
 import is.hi.hbvg601.team16.sportdemon.databinding.ActivityHomeBinding;
-import is.hi.hbvg601.team16.sportdemon.persistences.entities.User;
-import is.hi.hbvg601.team16.sportdemon.persistences.entities.Workout;
-import is.hi.hbvg601.team16.sportdemon.ui.home.WorkoutsRecyclerViewAdapter;
 
 public class HomeActivity extends AppCompatActivity {
 
