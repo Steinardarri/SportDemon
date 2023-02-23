@@ -14,18 +14,62 @@ import java.util.*;
  *****************************************************************************/
 
 public class User {
+
     private UUID ID;
     private String username;
     private String password;
-    private String string;
+    private String email;
     private List<Workout> myWorkouts;
     private List<WorkoutResult> journal;
 
     public User() {
     }
 
-    public User(String username, String password) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
+    }
+
+    public UUID getID() {
+        return ID;
+    }
+    public void setID(UUID ID) {
+        this.ID = ID;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String string) {
+        this.email = string;
+    }
+
+    public List<Workout> getMyWorkouts() {
+        return myWorkouts;
+    }
+    public void setMyWorkouts(List<Workout> myWorkouts) {
+        this.myWorkouts = myWorkouts;
+    }
+
+    public List<WorkoutResult> getJournal() {
+        return journal;
+    }
+    public void setJournal(List<WorkoutResult> journal) {
+        this.journal = journal;
     }
 }

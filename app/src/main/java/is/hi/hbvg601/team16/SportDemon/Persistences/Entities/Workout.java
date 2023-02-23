@@ -14,6 +14,7 @@ import java.util.*;
  *****************************************************************************/
 
 public class Workout {
+
     private UUID ID;
     private User user;
     private String title;
@@ -30,7 +31,47 @@ public class Workout {
         this.description = description;
     }
 
+    public UUID getID() {
+        return ID;
+    }
+    public void setID(UUID ID) {
+        this.ID = ID;
+    }
 
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<ExerciseCombo> getExerciseCombo() {
+        return exerciseCombo;
+    }
+    public void setExerciseCombo(List<ExerciseCombo> exerciseCombo) {
+        this.exerciseCombo = exerciseCombo;
+    }
 }
 
 

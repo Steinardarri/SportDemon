@@ -1,16 +1,16 @@
-package is.hi.hbvg601.team16.sportdemon.ui.notifications;
+package is.hi.hbvg601.team16.sportdemon.ui.addexercise;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
+public class AddExerciseViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public AddExerciseViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mText.setValue("Hér kemur yfirlit yfir æfingar");
     }
 
     public LiveData<String> getText() {

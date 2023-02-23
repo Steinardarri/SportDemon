@@ -16,6 +16,7 @@ import java.util.*;
  *****************************************************************************/
 
 public class WorkoutResult {
+
     private UUID ID;
     private User user;
     private Date date;
