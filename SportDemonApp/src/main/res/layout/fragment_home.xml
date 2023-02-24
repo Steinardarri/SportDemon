@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="10dp"
     android:paddingVertical="40dp"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.homeactivity.home.HomeFragment">
 
     <ImageView
         android:id="@+id/sportDemonImage"

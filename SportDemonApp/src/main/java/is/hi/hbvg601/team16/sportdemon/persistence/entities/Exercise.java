@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.sportdemon.persistences.entities;
+package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
 import java.util.*;
 
@@ -20,9 +20,6 @@ public class Exercise {
 
     public UUID getID() {
         return ID;
-    }
-    public void setID(UUID ID) {
-        this.ID = ID;
     }
 
     public String getTitle() {

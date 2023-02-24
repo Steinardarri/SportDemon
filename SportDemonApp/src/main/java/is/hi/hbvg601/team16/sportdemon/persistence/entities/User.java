@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.sportdemon.persistences.entities;
+package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
 import java.util.*;
 
@@ -16,60 +16,57 @@ import java.util.*;
 public class User {
 
     private UUID ID;
-    private String username;
-    private String password;
-    private String email;
-    private List<Workout> myWorkouts;
-    private List<WorkoutResult> journal;
+    private String mUsername;
+    private String mPassword;
+    private String mEmail;
+    private List<Workout> mWorkoutList;
+    private List<WorkoutResult> mJournal;
 
     public User() {
     }
 
     public User(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
+        this.mUsername = username;
+        this.mPassword = password;
+        this.mEmail = email;
     }
 
     public UUID getID() {
         return ID;
     }
-    public void setID(UUID ID) {
-        this.ID = ID;
-    }
 
     public String getUsername() {
-        return username;
+        return mUsername;
     }
     public void setUsername(String username) {
-        this.username = username;
+        this.mUsername = username;
     }
 
     public String getPassword() {
-        return password;
+        return mPassword;
     }
     public void setPassword(String password) {
-        this.password = password;
+        this.mPassword = password;
     }
 
     public String getEmail() {
-        return email;
+        return mEmail;
     }
     public void setEmail(String string) {
-        this.email = string;
+        this.mEmail = string;
     }
 
-    public List<Workout> getMyWorkouts() {
-        return myWorkouts;
+    public List<Workout> getWorkoutList() {
+        return mWorkoutList;
     }
-    public void setMyWorkouts(List<Workout> myWorkouts) {
-        this.myWorkouts = myWorkouts;
+    public void setWorkoutList(List<Workout> workoutList) {
+        this.mWorkoutList = workoutList;
     }
 
     public List<WorkoutResult> getJournal() {
-        return journal;
+        return mJournal;
     }
     public void setJournal(List<WorkoutResult> journal) {
-        this.journal = journal;
+        this.mJournal = journal;
     }
 }

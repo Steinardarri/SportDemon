@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.sportdemon.ui.addexercise;
+package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.addexercise;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
