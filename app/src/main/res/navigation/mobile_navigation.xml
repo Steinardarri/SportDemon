@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="is.hi.hbvg601.team16.sportdemon.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_add_exercise"
+        android:name="is.hi.hbvg601.team16.sportdemon.ui.addexercise.AddExerciseFragment"
+        android:label="@string/title_add_exercise"
+        tools:layout="@layout/fragment_add_exercise" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="is.hi.hbvg601.team16.sportdemon.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_journal"
+        android:name="is.hi.hbvg601.team16.sportdemon.ui.journal.JournalFragment"
+        android:label="@string/title_journal"
+        tools:layout="@layout/fragment_journal" />
 </navigation>
