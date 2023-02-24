@@ -1,16 +1,16 @@
-package is.hi.hbvg601.team16.sportdemon.ui.journal;
+package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.addexercise;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class JournalViewModel extends ViewModel {
+public class AddExerciseViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public JournalViewModel() {
+    public AddExerciseViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Hér kemur Journal dagatal; yfirlit yfir kláraðar æfingar");
+        mText.setValue("Hér kemur yfirlit yfir æfingar");
     }
 
     public LiveData<String> getText() {

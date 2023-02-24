@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.sportdemon.ui.home;
+package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

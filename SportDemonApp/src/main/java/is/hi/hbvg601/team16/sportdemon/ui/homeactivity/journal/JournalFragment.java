@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.sportdemon.ui.journal;
+package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.journal;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

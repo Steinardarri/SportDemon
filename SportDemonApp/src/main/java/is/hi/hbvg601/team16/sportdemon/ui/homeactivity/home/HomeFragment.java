@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.sportdemon.ui.home;
+package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,39 +16,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbvg601.team16.sportdemon.databinding.FragmentHomeBinding;
-import is.hi.hbvg601.team16.sportdemon.persistences.entities.User;
-import is.hi.hbvg601.team16.sportdemon.persistences.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 
 public class HomeFragment extends Fragment implements WorkoutsRecyclerViewAdapter.ItemClickListener {
 
-    private FragmentHomeBinding binding;
-    private WorkoutsRecyclerViewAdapter adapter;
+    private FragmentHomeBinding mBinding;
+    private WorkoutsRecyclerViewAdapter mAdapter;
 
-    private final User user = createDummyData();
+    private final User mUser = createDummyData();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        mBinding = FragmentHomeBinding.inflate(inflater, container, false);
+        View root = mBinding.getRoot();
 
 //        final TextView textView = binding.textHome;
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         // Setja upp RecyclerView fyrir workouts
-        List<Workout> workouts = user.getMyWorkouts();
+        List<Workout> workouts = mUser.getWorkoutList();
         List<String> titles = new ArrayList<>();
         for (Workout w: workouts) {
             titles.add(w.getTitle());
         }
 
-        RecyclerView recyclerView = binding.workoutRecyclerView;
+        RecyclerView recyclerView = mBinding.workoutRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new WorkoutsRecyclerViewAdapter(getContext(), titles);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new WorkoutsRecyclerViewAdapter(getContext(), titles);
+        mAdapter.setClickListener(this);
+        recyclerView.setAdapter(mAdapter);
 
         return root;
     }
@@ -56,12 +56,12 @@ public class HomeFragment extends Fragment implements WorkoutsRecyclerViewAdapte
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        mBinding = null;
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(getContext(), "Þú valdir " + adapter.getItem(position) + " á röð " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Þú valdir " + mAdapter.getItem(position) + " á röð " + position, Toast.LENGTH_SHORT).show();
     }
 
     private User createDummyData() {
@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment implements WorkoutsRecyclerViewAdapte
             workouts.add(w);
         }
 
-        u.setMyWorkouts(workouts);
+        u.setWorkoutList(workouts);
         return u;
     }
 }

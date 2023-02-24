@@ -1,4 +1,4 @@
-package is.hi.hbvg601.team16.sportdemon.ui.home;
+package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.home;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -35,8 +35,8 @@ public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRe
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = data.get(position);
-        holder.workoutTextView.setText(animal);
+        String workoutTitle = data.get(position);
+        holder.workoutTextView.setText(workoutTitle);
     }
 
     // total number of rows
