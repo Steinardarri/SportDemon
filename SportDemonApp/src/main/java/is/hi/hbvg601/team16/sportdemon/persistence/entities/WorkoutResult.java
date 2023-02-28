@@ -2,7 +2,8 @@ package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
 import android.graphics.Bitmap;
 
-import java.util.*;
+import java.util.Date;
+import java.util.UUID;
 
 /******************************************************************************
  *  Name    : Team 16
@@ -21,12 +22,12 @@ public class WorkoutResult {
     private User user;
     private Date date;
     private Workout data;
-    private Bitmap photo;
+    private byte[] photo;
 
     public WorkoutResult() {
     }
 
-    public WorkoutResult(Workout data, Bitmap photo) {
+    public WorkoutResult(Workout data, byte[] photo) {
         this.data = data;
         this.photo = photo;
     }
@@ -56,10 +57,10 @@ public class WorkoutResult {
         this.data = data;
     }
 
-    public Bitmap getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
-    public void setPhoto(Bitmap photo) {
+    public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
 }

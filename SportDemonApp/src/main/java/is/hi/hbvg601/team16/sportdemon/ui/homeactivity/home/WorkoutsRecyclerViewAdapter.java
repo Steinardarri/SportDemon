@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.*;
+import java.util.List;
 
 import is.hi.hbvg601.team16.sportdemon.R;
 
