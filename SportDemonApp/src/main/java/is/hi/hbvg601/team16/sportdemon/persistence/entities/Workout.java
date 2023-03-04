@@ -27,9 +27,8 @@ public class Workout {
     public Workout() {
     }
 
-    public Workout(String title, int duration, String description) {
+    public Workout(String title, String description) {
         this.title = title;
-        this.duration = duration;
         this.description = description;
     }
 

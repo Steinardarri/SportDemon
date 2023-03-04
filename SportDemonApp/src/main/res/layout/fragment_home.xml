@@ -9,7 +9,7 @@
     tools:context=".ui.homeactivity.home.HomeFragment">
 
     <ImageView
-        android:id="@+id/sportDemonImage"
+        android:id="@+id/home_sportDemonLogo"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:contentDescription="@string/app_name"
@@ -25,9 +25,19 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sportDemonImage"
-        app:layout_constraintHorizontal_bias="0.37"
+        app:layout_constraintEnd_toStartOf="@+id/home_sportDemonLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/home_signup_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/workoutRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/home_sportDemonLogo"
+        app:layout_constraintVertical_bias="0.33" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
