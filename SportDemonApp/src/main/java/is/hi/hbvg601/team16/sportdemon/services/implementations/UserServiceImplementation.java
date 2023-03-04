@@ -1,30 +1,87 @@
 package is.hi.hbvg601.team16.sportdemon.services.implementations;
 
-import is.hi.hbvg601.team16.sportdemon.services.NetworkManager;
+import java.util.UUID;
+
 import is.hi.hbvg601.team16.sportdemon.services.UserService;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 
-public abstract class UserServiceImplementation implements UserService {
+public class UserServiceImplementation implements UserService {
 
-    private final NetworkManager mNetworkManager;
+    private final NetworkManagerAPI nmAPI;
 
     private User mUser;
 
-    public UserServiceImplementation(NetworkManager networkManager){
-        this.mNetworkManager = networkManager;
+    public UserServiceImplementation(NetworkManagerAPI networkManager){
+        this.nmAPI = networkManager;
     }
 
     /**
-     * Basic save service.
-     *
-     * @param user the user that is to be saved
+     * @param  id of the user to get
+     * @return User data of the id
+     */
+    @Override
+    public User findUserByID(UUID id) {
+        User returnUser = nmAPI.getUser(id);
+        // returnUser has possibly null values, when not found
+        return returnUser;
+    }
+
+    /**
+     * @param  username of the user to get
+     * @return User data of the username
+     */
+    @Override
+    public User findUserByUsername(String username) {
+        User returnUser = nmAPI.getUser(username);
+        // returnUser has possibly null values, when not found
+        return returnUser;
+    }
+
+    @Override
+    public boolean isLoggedIn(User user) {
+        return false;
+    }
+
+    /**
+     * @param  user the user that is to be saved
      * @return boolean success
      */
+    @Override
     public String createAccount(User user) {
-//        Call<User> response = mNetworkManager.createAccount(user);
-
-        this.mUser = user;
+        // TODO: Implement server side users
+        User createdUser = nmAPI.createAccount(user);
 
         return "Success";
+    }
+
+    @Override
+    public String editAccount(User user) {
+        return null;
+    }
+
+    @Override
+    public String deleteAccount(UUID id) {
+        return null;
+    }
+
+    /**
+     * @param  username of the account to login
+     * @param  password of the account to login
+     * @return User of the account, void if not correct
+     */
+    @Override
+    public User login(String username, String password) {
+        User doesExist = findUserByUsername(username);
+        if(doesExist != null){
+            if(doesExist.getPassword().equals(password)){
+                return doesExist;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean logout() {
+        return null;
     }
 }
