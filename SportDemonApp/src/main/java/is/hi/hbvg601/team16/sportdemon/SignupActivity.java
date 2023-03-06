@@ -1,5 +1,6 @@
 package is.hi.hbvg601.team16.sportdemon;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -53,11 +54,19 @@ public class SignupActivity extends AppCompatActivity {
                 ).show();
             } else {
                 User user = new User(username, password, email);
-                mUserService.createAccount(user);
+                String outcome = mUserService.createAccount(user);
                 Toast.makeText(this,
-                        "Tókst að búa til aðgang!",
+                        outcome,
                         Toast.LENGTH_SHORT
                 ).show();
+
+                Intent skil = new Intent();
+                if (outcome.equals("Success")) {
+                    skil.putExtra("USER", user);
+                    setResult(-1, skil);
+                } else {
+                    setResult(0, null);
+                }
                 finish();
             }
         });

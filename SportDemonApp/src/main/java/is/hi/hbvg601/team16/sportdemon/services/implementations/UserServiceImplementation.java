@@ -49,9 +49,15 @@ public class UserServiceImplementation implements UserService {
     @Override
     public String createAccount(User user) {
         // TODO: Implement server side users
-        User createdUser = nmAPI.createAccount(user);
+//        User createdUser = nmAPI.createAccount(user);
+        User createdUser = user;
+        this.mUser = user;
 
-        return "Success";
+        if (createdUser != null) {
+            return "Success";
+        } else {
+            return "Failure";
+        }
     }
 
     @Override
@@ -83,5 +89,10 @@ public class UserServiceImplementation implements UserService {
     @Override
     public Boolean logout() {
         return null;
+    }
+
+    // TODO: Taka út þegar server komið inn
+    public User getUser() {
+        return mUser;
     }
 }

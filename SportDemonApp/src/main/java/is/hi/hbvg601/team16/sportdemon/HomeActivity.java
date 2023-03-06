@@ -46,4 +46,11 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public User getSportUser() {
+        return mSportUser;
+    }
+
+    public void setSportUser(User sportUser) {
+        mSportUser = sportUser;
+    }
 }

@@ -1,5 +1,6 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
  *  Description  : A class that generates the User entity.
  *****************************************************************************/
 
-public class User {
+public class User implements Serializable {
 
     private UUID ID;
     private String mUsername;

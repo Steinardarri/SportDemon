@@ -1,5 +1,6 @@
 package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,10 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -32,9 +30,9 @@ public class HomeFragment extends Fragment {
     private WorkoutsRecyclerViewAdapter mAdapter;
 
     // Intent code
-    private static final int LOGIN = 0;
+//    private static final int SIGNUP_SUCCESS = 1;
 
-    private final User mUser = createDummyData();
+    private User mUser = new User();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,8 +48,10 @@ public class HomeFragment extends Fragment {
         // Setja upp RecyclerView fyrir workouts
         List<Workout> workouts = mUser.getWorkoutList();
         List<String> titles = new ArrayList<>();
-        for (Workout w: workouts) {
-            titles.add(w.getTitle());
+        if (workouts != null && !workouts.isEmpty()) {
+            for (Workout w: workouts) {
+                titles.add(w.getTitle());
+            }
         }
 
         RecyclerView recyclerView = mBinding.workoutRecyclerView;
@@ -67,7 +67,9 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
 
         Button signupBtn = mBinding.homeSignupButton;
-        signupBtn.setOnClickListener(v -> openSignupActivity());
+        signupBtn.setOnClickListener(v ->
+                signupResultLauncher.launch(new Intent(getActivity(), SignupActivity.class))
+        );
 
         return root;
     }
@@ -78,24 +80,25 @@ public class HomeFragment extends Fragment {
         mBinding = null;
     }
 
-    public void openSignupActivity() {
-        Intent i = new Intent(getActivity(), SignupActivity.class);
-        signupResultLauncher.launch(i);
-    }
-
-    ActivityResultLauncher<Intent> signupResultLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> signupResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if(result.getResultCode() == LOGIN) {
+                if(result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
-                    // Hugsanlega logga beint inn eftir að hafa búið til account
+                    // TODO: Hugsanlega logga beint inn eftir að hafa búið til account
                     // Annars gera ekkert og skilja eftir autt
+
+                    assert data != null;
+                    mUser = (User) data.getSerializableExtra("USER");
+                    createDummyData(this.mUser);
+                    mBinding.textUserName.setText(mUser.getUsername());
+                    mBinding.textUserEmail.setText(mUser.getEmail());
+                    refreshList();
                 }
             }
     );
 
-    private User createDummyData() {
-        User u = new User("gervimadur","lykilord", "gm@hi.is");
+    private void createDummyData(User u) {
 
         String[] workoutTitles = {"Kettlebell" , "Monday Lifting", "HIIT Running",
                 "Calisthenics", "Yoga"};
@@ -106,6 +109,17 @@ public class HomeFragment extends Fragment {
         }
 
         u.setWorkoutList(workouts);
-        return u;
+    }
+
+    private void refreshList() {
+        WorkoutsRecyclerViewAdapter adapter =
+                (WorkoutsRecyclerViewAdapter) mBinding.workoutRecyclerView.getAdapter();
+        assert adapter != null;
+        List<String> titles = new ArrayList<>();
+        for (Workout w: mUser.getWorkoutList()) {
+            titles.add(w.getTitle());
+        }
+        adapter.setData(titles);
+        mBinding.workoutRecyclerView.setAdapter(adapter);
     }
 }

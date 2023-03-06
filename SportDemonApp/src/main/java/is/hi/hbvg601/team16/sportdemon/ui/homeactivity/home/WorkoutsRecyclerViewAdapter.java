@@ -14,7 +14,7 @@ import java.util.List;
 import is.hi.hbvg601.team16.sportdemon.R;
 
 public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRecyclerViewAdapter.ViewHolder> {
-    private final List<String> data;
+    private List<String> data;
     private final LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
@@ -75,5 +75,13 @@ public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRe
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+    }
+
+    public List<String> getData() {
+        return data;
+    }
+
+    public void setData(List<String> data) {
+        this.data = data;
     }
 }
