@@ -22,8 +22,8 @@ public class NetworkManagerAPI {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://localhost:7666") // Local
-//                .baseUrl("https://sportdemonserver-production.up.railway.app") // Server
+                //.baseUrl("https://localhost:7666") // Local
+                .baseUrl("https://sportdemonserver-production.up.railway.app") // Server
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();
