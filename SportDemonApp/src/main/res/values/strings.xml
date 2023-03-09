@@ -3,4 +3,12 @@
     <string name="title_home">Home</string>
     <string name="title_add_exercise">Add Exercise</string>
     <string name="title_journal">Journal</string>
+    <string name="signup_from_email">Email</string>
+    <string name="signup_from_username">Username</string>
+    <string name="signup_from_password">Password</string>
+    <string name="signup_from_confirm_password">Confirm Password</string>
+    <string name="signup_from_back">Back</string>
+    <string name="signup_from_submit">Submit</string>
+    <string name="signup_from_title">Signup</string>
+    <string name="home_signup">Signup</string>
 </resources>

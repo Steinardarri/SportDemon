@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 public class HomeViewModel extends ViewModel {
 
+    // TODO: Setja gagna föll hér
     public HomeViewModel() {
     }
 }

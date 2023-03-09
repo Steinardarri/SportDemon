@@ -1,6 +1,6 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
-import java.util.*;
+import java.util.UUID;
 
 /******************************************************************************
  *  Name    : Team 16
