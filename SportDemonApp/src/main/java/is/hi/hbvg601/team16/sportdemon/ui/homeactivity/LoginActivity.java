@@ -25,54 +25,25 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_login);
 
         NetworkManagerAPI nmAPI = new NetworkManagerAPI();
         this.mUserService = new UserServiceImplementation(nmAPI);
 
-        EditText emailEdit = findViewById(R.id.signup_email);
-        EditText usernameEdit = findViewById(R.id.signup_username);
-        EditText passwordEdit = findViewById(R.id.signup_password);
-        EditText passwordConfEdit = findViewById(R.id.signup_passwordConf);
+        EditText usernameEdit = findViewById(R.id.login_username);
+        EditText passwordEdit = findViewById(R.id.login_password);
 
-        Button submitBtn = findViewById(R.id.signup_submit_button);
+        Button submitBtn = findViewById(R.id.login_button);
         submitBtn.setOnClickListener( v -> {
-            String email = emailEdit.getText().toString();
             String username = usernameEdit.getText().toString();
             String password = passwordEdit.getText().toString();
-            String PasswordConf = passwordConfEdit.getText().toString();
 
-            if (!password.equals(PasswordConf)) {
+            if (mUserService.findUserByUsername(username) == null) {
                 Toast.makeText(this,
-                        "Lykilorðin pössuðu ekki saman",
+                        "User not found. Sign up!",
                         Toast.LENGTH_SHORT
                 ).show();
-            } else if (mUserService.findUserByUsername(username) != null) {
-                Toast.makeText(this,
-                        "Notendanafnið er ekki laust",
-                        Toast.LENGTH_SHORT
-                ).show();
-            } else {
-                User user = new User(username, password, email);
-                String outcome = mUserService.createAccount(user);
-                Toast.makeText(this,
-                        outcome,
-                        Toast.LENGTH_SHORT
-                ).show();
-
-                Intent skil = new Intent();
-                if (outcome.equals("Success")) {
-                    skil.putExtra("USER", user);
-                    setResult(-1, skil);
-                } else {
-                    setResult(0, null);
-                }
-                finish();
             }
-        });
-
-        Button returnBtn = findViewById(R.id.signup_return_button);
-        returnBtn.setOnClickListener( v -> finish());
+        }
     }
 }
-

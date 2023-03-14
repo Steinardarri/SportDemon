@@ -55,27 +55,27 @@
             android:id="@+id/signup_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="104dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signup_Logo_Layout">
 
             <EditText
-                android:id="@+id/signup_username"
+                android:id="@+id/login_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="200dp"
-                android:layout_marginBottom="50dp"
                 android:ems="12"
                 android:hint="@string/signup_from_username"
                 android:inputType="text"
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="none"/>
 
             <EditText
-                android:id="@+id/signup_password"
+                android:id="@+id/login_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -87,7 +87,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/signup_username" />
+                app:layout_constraintTop_toBottomOf="@id/login_username" />
 
             <Button
                 android:id="@+id/login_button"
@@ -101,7 +101,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/signup_password"
+                app:layout_constraintTop_toBottomOf="@id/login_password"
                 app:layout_constraintVertical_bias="0.33" />
 
             <TextView
@@ -120,8 +120,6 @@
                 app:layout_constraintVertical_bias="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
