@@ -10,7 +10,7 @@ public interface UserService {
      * @param  user to check if logged in
      * @return boolean success
      */
-    boolean isLoggedIn(User user);
+    boolean isLoggedIn(User user); // Not implemented
 
     /**
      * @param  user that is to be created
@@ -22,13 +22,13 @@ public interface UserService {
      * @param  user that is to be saved over
      * @return execute result
      */
-    String editAccount(User user);
+    String editAccount(User user); // Not implemented
 
     /**
      * @param  id of the user to delete
      * @return execute result
      */
-    String deleteAccount(UUID id);
+    String deleteAccount(UUID id); // Not implemented
 
     /**
      * @param  username of the account to login
@@ -40,7 +40,7 @@ public interface UserService {
     /**
      * @return boolean success
      */
-    Boolean logout();
+    Boolean logout(); // Not implemented
 
     /**
      * @param  id of the user to get

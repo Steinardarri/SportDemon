@@ -20,7 +20,7 @@ public interface NetworkManager {
     Call<User> getUser(@Path("username") String username);
 
     @POST("/signup")
-    Call<User> createAccount(@Body User user);
+    Call<String> createAccount(@Body User user);
 
     // Workout Service
 
