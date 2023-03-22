@@ -3,6 +3,9 @@ package is.hi.hbvg601.team16.sportdemon.services.implementations;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,56 +32,51 @@ public class NetworkManagerAPI {
     }
 
     private static void setupNetworkManagerAPI() {
-            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        Gson demonGson = new GsonBuilder()
+                .serializeNulls()
+                .setPrettyPrinting()
+                .create();
 
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8080") // Local server
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080") // Local server
 //                    .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient.build())
-                    .build();
+                .addConverterFactory(GsonConverterFactory.create(demonGson))
+                .client(httpClient.build())
+                .build();
 
-            mAPI = retrofit.create(NetworkManager.class);
-    }
-
-    public static NetworkManager getAPI() {
-        return mAPI;
+        mAPI = retrofit.create(NetworkManager.class);
     }
 
     /*
      * Network manager föll til að senda á server
-     * Notar NetworManager.java fyrir köll
+     * Notar NetworkManager.java fyrir köll
      */
 
     // User Service
 
     /**
-     *
      * @param user sem á að vista
      * @return String með 'Failure' eða 'Success', eftir því hvernig tókst að vista
      */
     public String createAccount(User user) {
-        AtomicReference<Response<String>> response = new AtomicReference<>();
-        AtomicReference<String> returnString = new AtomicReference<>("Failure");
 
         executor.execute(() -> {
             //Background work here
-            Call<String> callSync = mAPI.createAccount(user);
+            Call<User> callSync = mAPI.createAccount(user);
             try {
-                response.set(callSync.execute());
+                Response<User> response = callSync.execute();
+                System.out.println(response.body());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
             handler.post(() -> {
                 //UI Thread work here
-                if (response.get() != null) {
-                    returnString.set(response.get().body());
-                }
             });
         });
 
-        return returnString.get();
+        return "Success";
     }
 
     public User getUser(UUID id) {

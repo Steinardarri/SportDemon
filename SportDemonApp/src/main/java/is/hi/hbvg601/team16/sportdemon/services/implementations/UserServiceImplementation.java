@@ -48,7 +48,6 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public String createAccount(User user) {
-        // TODO: Implement server side users
         return nmAPI.createAccount(user);
     }
 

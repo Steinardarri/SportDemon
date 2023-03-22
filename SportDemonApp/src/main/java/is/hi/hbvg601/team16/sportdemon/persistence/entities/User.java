@@ -1,5 +1,7 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
@@ -18,19 +20,30 @@ import java.util.UUID;
 public class User implements Serializable {
 
     private UUID ID;
-    private String mUsername;
-    private String mPassword;
-    private String mEmail;
-    private List<Workout> mWorkoutList;
-    private List<WorkoutResult> mJournal;
+    private String username;
+    private String password;
+    private String email;
+    private List<Workout> workoutList;
+    private List<WorkoutResult> workoutResultList;
 
     public User() {
     }
 
     public User(String username, String password, String email) {
-        this.mUsername = username;
-        this.mPassword = password;
-        this.mEmail = email;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "User{" +
+                "ID=" + ID +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 
     public UUID getID() {
@@ -38,37 +51,37 @@ public class User implements Serializable {
     }
 
     public String getUsername() {
-        return mUsername;
+        return username;
     }
     public void setUsername(String username) {
-        this.mUsername = username;
+        this.username = username;
     }
 
     public String getPassword() {
-        return mPassword;
+        return password;
     }
     public void setPassword(String password) {
-        this.mPassword = password;
+        this.password = password;
     }
 
     public String getEmail() {
-        return mEmail;
+        return email;
     }
     public void setEmail(String string) {
-        this.mEmail = string;
+        this.email = string;
     }
 
     public List<Workout> getWorkoutList() {
-        return mWorkoutList;
+        return workoutList;
     }
     public void setWorkoutList(List<Workout> workoutList) {
-        this.mWorkoutList = workoutList;
+        this.workoutList = workoutList;
     }
 
-    public List<WorkoutResult> getJournal() {
-        return mJournal;
+    public List<WorkoutResult> getWorkoutResultList() {
+        return workoutResultList;
     }
-    public void setJournal(List<WorkoutResult> journal) {
-        this.mJournal = journal;
+    public void setWorkoutResultList(List<WorkoutResult> workoutResultList) {
+        this.workoutResultList = workoutResultList;
     }
 }
