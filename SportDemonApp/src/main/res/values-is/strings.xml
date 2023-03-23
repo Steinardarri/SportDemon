@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_home">Heim</string>
+    <string name="title_add_exercise">Búa Til Hreyfingu</string>
+    <string name="title_journal">Hreyfibók</string>
+    <string name="signup_form_email">Tölvupóstfang</string>
+    <string name="signup_form_username">Notendanafn</string>
+    <string name="signup_form_password">Lykilorð</string>
+    <string name="signup_form_confirm_password">Staðfesta Lykilorð</string>
+    <string name="signup_form_back">Til Baka</string>
+    <string name="signup_form_submit">Leggja Fram</string>
+    <string name="home_signup">Skráning</string>
+    <string name="add_workout">Búa Til Æfingu</string>
+</resources>
