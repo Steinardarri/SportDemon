@@ -9,6 +9,20 @@
     <string name="signup_from_confirm_password">Confirm Password</string>
     <string name="signup_from_back">Back</string>
     <string name="signup_from_submit">Submit</string>
-    <string name="signup_from_title">Signup</string>
+    <string name="signup_from_title">Sign up</string>
     <string name="home_signup">Signup</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <string name="login_from_username">Username</string>
+    <string name="login_from_password">Password</string>
+    <string name="login_from_title">Log in</string>
+    <string name="hyperlink"><a href="activity_signup">Don´t have an account? Click here to sign up!</a></string>
 </resources>

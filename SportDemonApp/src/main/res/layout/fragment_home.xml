@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/workoutRecyclerView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/workoutRecyclerView"
@@ -39,6 +39,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/workoutRecyclerView"
         app:layout_constraintTop_toBottomOf="@+id/home_sportDemonLogo"
+        app:layout_constraintVertical_bias="0.33" />
+
+    <Button
+        android:id="@+id/home_login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_from_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/workoutRecyclerView"
+        app:layout_constraintTop_toBottomOf="@id/home_signup_button"
         app:layout_constraintVertical_bias="0.33" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

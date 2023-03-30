@@ -39,8 +39,8 @@ public class NetworkManagerAPI {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080") // Local server
-//                    .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
+//                .baseUrl("http://10.0.2.2:8080") // Local server
+                .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
                 .addConverterFactory(GsonConverterFactory.create(demonGson))
                 .client(httpClient.build())
                 .build();
