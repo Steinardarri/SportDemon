@@ -44,20 +44,11 @@ public class UserServiceImplementation implements UserService {
 
     /**
      * @param  user the user that is to be saved
-     * @return boolean success
+     * @return String success status
      */
     @Override
     public String createAccount(User user) {
-        // TODO: Implement server side users
-//        User createdUser = nmAPI.createAccount(user);
-        User createdUser = user;
-        this.mUser = user;
-
-        if (createdUser != null) {
-            return "Success";
-        } else {
-            return "Failure";
-        }
+        return nmAPI.createAccount(user);
     }
 
     @Override
