@@ -33,18 +33,30 @@ public class LoginActivity extends AppCompatActivity {
         EditText usernameEdit = findViewById(R.id.login_username);
         EditText passwordEdit = findViewById(R.id.login_password);
 
-        Button submitBtn = findViewById(R.id.login_button);
-        submitBtn.setOnClickListener( v -> {
+        Button loginBtn = findViewById(R.id.login_button);
+        loginBtn.setOnClickListener( v -> {
             String username = usernameEdit.getText().toString();
             String password = passwordEdit.getText().toString();
 
-            if (mUserService.findUserByUsername(username) == null) {
+            User loginUser = mUserService.findUserByUsername(username);
+            if (loginUser == null ||
+                !loginUser.getPassword().equals(password)) {
                 Toast.makeText(this,
-                        "User not found. Sign up!",
-                        Toast.LENGTH_SHORT
+                        "Username and/or password incorrect. Try again.",
+                        Toast.LENGTH_LONG
                 ).show();
+            } else {
+                User outcome = mUserService.login(username, password);
+
+                Intent skil = new Intent();
+                if (outcome != null) {
+                    skil.putExtra("USER", outcome);
+                    setResult(-1, skil);
+                } else {
+                    setResult(0, null);
+                }
+                finish();
             }
-            //Eftir að klára hér:)))
-        }
+        });
     }
 }
