@@ -20,7 +20,7 @@ public class HomeActivity extends AppCompatActivity {
     @SuppressWarnings("FieldCanBeLocal")
     private ActivityHomeBinding binding;
 
-    private User mSportUser;
+    private User mSportUser; // Aðal user loggaður inn
     public HomeService mHomeService;
 
     @Override
