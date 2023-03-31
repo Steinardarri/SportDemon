@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33" >
         <activity
-            android:name=".ExerciseActivity"
+            android:name=".ExerciseComboActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
