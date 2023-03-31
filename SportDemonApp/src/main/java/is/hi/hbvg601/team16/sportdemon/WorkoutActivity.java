@@ -34,6 +34,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
         NetworkManagerAPI nmAPI = new NetworkManagerAPI();
         this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
+
+
     }
 
 

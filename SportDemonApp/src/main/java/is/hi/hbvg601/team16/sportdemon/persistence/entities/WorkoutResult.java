@@ -2,6 +2,7 @@ package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
  *  Description  : A class that generates the WorkoutResult entity.
  *****************************************************************************/
 
-public class WorkoutResult {
+public class WorkoutResult implements Serializable {
 
     private UUID ID;
     private User user;

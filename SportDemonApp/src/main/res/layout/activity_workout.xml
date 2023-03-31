@@ -25,7 +25,6 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="52dp"
-        app:layout_constraintBottom_toTopOf="workout_buttonLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,5 +1,6 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /******************************************************************************
@@ -13,7 +14,7 @@ import java.util.UUID;
  *  Description  : A class that generates the Workout entity.
  *****************************************************************************/
 
-public class ExerciseCombo {
+public class ExerciseCombo implements Serializable {
 
     private UUID id;
     private int sets;
