@@ -17,6 +17,7 @@ import is.hi.hbvg601.team16.sportdemon.services.HomeService;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.HomeServiceImplementation;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.NetworkManagerAPI;
+import is.hi.hbvg601.team16.sportdemon.services.implementations.WorkoutServiceImplementation;
 
 public class WorkoutActivity extends AppCompatActivity {
     @SuppressWarnings("FieldCanBeLocal")
@@ -31,7 +32,8 @@ public class WorkoutActivity extends AppCompatActivity {
         binding = ActivityWorkoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
+        NetworkManagerAPI nmAPI = new NetworkManagerAPI();
+        this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
     }
 
 
