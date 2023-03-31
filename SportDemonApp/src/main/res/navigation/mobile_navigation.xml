@@ -12,12 +12,6 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_add_exercise"
-        android:name="is.hi.hbvg601.team16.sportdemon.ui.homeactivity.addexercise.AddExerciseFragment"
-        android:label="@string/title_add_exercise"
-        tools:layout="@layout/fragment_add_exercise" />
-
-    <fragment
         android:id="@+id/navigation_journal"
         android:name="is.hi.hbvg601.team16.sportdemon.ui.homeactivity.journal.JournalFragment"
         android:label="@string/title_journal"
