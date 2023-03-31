@@ -2,11 +2,11 @@ package is.hi.hbvg601.team16.sportdemon;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.Exercise;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
@@ -21,10 +21,13 @@ public class ExerciseComboActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_combo);
-
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        Workout workout = (Workout) bundle.getSerializable("WORKOUT");
         NetworkManagerAPI nmAPI = new NetworkManagerAPI();
         this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
 
+        EditText titleEdit = findViewById(R.id.editTextName);
         EditText setsEdit = findViewById(R.id.editTextSets);
         EditText repsEdit = findViewById(R.id.editTextReps);
         EditText weightEdit = findViewById(R.id.editTextWeight);
@@ -34,6 +37,7 @@ public class ExerciseComboActivity extends AppCompatActivity {
 
         Button submitBtn = findViewById(R.id.submit_button);
         submitBtn.setOnClickListener( v -> {
+            String title = titleEdit.getText().toString();
             int sets = Integer.parseInt(setsEdit.getText().toString());
             int reps = Integer.parseInt(repsEdit.getText().toString());
             double weight = Double.parseDouble(weightEdit.getText().toString());
@@ -41,9 +45,7 @@ public class ExerciseComboActivity extends AppCompatActivity {
             int durationPerSet = Integer.parseInt(durationPerSetEdit.getText().toString());
             int restBetweenSets = Integer.parseInt(restBetweenSetsEdit.getText().toString());
 
-            ExerciseCombo exerciseCombo = new ExerciseCombo(sets, reps, weight, new Exercise());
-
-            Workout workout = new Workout();
+            ExerciseCombo exerciseCombo = new ExerciseCombo(title, sets, reps, weight, equipment, durationPerSet, restBetweenSets);
 
             mWorkoutService.addExerciseCombo(exerciseCombo, workout);
 

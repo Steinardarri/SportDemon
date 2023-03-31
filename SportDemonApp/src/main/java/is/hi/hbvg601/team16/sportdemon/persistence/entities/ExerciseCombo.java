@@ -16,20 +16,26 @@ import java.util.UUID;
 public class ExerciseCombo {
 
     private UUID id;
+
+    private String title;
     private int sets;
     private int reps;
     private double weight;
     private String equipment;
     private int durationPerSet;
     private int restBetweenSets;
-    private Exercise exercise;
 
     public ExerciseCombo() {
     }
-    public ExerciseCombo(int sets, int reps, double weight, Exercise exercise) {
+    public ExerciseCombo(String title, int sets, int reps, double weight, String equipment, int durationPerSet, int restBetweenSets) {
+        this.title = title;
         this.sets = sets;
         this.reps = reps;
         this.weight = weight;
+        this.equipment = equipment;
+        this.durationPerSet = durationPerSet;
+        this.restBetweenSets = restBetweenSets;
+
     }
 
     public UUID getId() {
@@ -78,10 +84,4 @@ public class ExerciseCombo {
         this.restBetweenSets = restBetweenSets;
     }
 
-    public Exercise getExercise() {
-        return exercise;
-    }
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
-    }
 }
