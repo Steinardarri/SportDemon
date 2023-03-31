@@ -20,7 +20,7 @@ public class ExerciseComboActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exercise_combo);
+        setContentView(R.layout.activity_exercise);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         Workout workout = (Workout) bundle.getSerializable("WORKOUT");
@@ -31,11 +31,11 @@ public class ExerciseComboActivity extends AppCompatActivity {
         EditText setsEdit = findViewById(R.id.editTextSets);
         EditText repsEdit = findViewById(R.id.editTextReps);
         EditText weightEdit = findViewById(R.id.editTextWeight);
-        EditText equipmentEdit = findViewById(R.id.editTextEquipment);
+        EditText equipmentEdit = findViewById(R.id.editTextTextEquipment);
         EditText durationPerSetEdit = findViewById(R.id.editTextDurationPerSet);
         EditText restBetweenSetsEdit = findViewById(R.id.editTextRestBetweenSets);
 
-        Button submitBtn = findViewById(R.id.submit_button);
+        Button submitBtn = findViewById(R.id.btnAddExercise);
         submitBtn.setOnClickListener( v -> {
             String title = titleEdit.getText().toString();
             int sets = Integer.parseInt(setsEdit.getText().toString());
