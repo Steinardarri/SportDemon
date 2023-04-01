@@ -21,22 +21,22 @@
         app:layout_constraintVertical_chainStyle="packed">
 
         <TextView
-            android:text="@string/title_of_workout"
+            app:layout_constraintHorizontal_bias="0.1"
             android:id="@+id/workout_title"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:maxWidth="300dp"
             android:maxLines="1"
+            android:text="@string/title_of_workout"
             android:textColor="@color/black"
-            android:textSize="32sp" />
+            android:textSize="32sp"
+            tools:layout_editor_absoluteY="27dp" />
 
         <Button
             android:id="@+id/workout_play_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/play"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/play_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
