@@ -5,6 +5,7 @@ import java.util.UUID;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.GET;
@@ -23,6 +24,9 @@ public interface NetworkManager {
 
     @POST("/signup")
     Call<User> createAccount(@Body User user);
+
+    @POST("/login")
+    Call<User> login(@Body User user); // Sendir User með einungis username og password
 
     // Workout Service
 

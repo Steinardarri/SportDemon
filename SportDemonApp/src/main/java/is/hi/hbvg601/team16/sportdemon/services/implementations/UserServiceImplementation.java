@@ -68,13 +68,7 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public User login(String username, String password) {
-        User doesExist = findUserByUsername(username);
-        if(doesExist != null){
-            if(doesExist.getPassword().equals(password)){
-                return doesExist;
-            }
-        }
-        return null;
+        return nmAPI.login(username, password);
     }
 
     @Override
