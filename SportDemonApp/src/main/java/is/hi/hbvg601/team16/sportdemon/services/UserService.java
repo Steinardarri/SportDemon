@@ -3,8 +3,12 @@ package is.hi.hbvg601.team16.sportdemon.services;
 import java.util.UUID;
 
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
+import retrofit2.Call;
 
 public interface UserService {
+
+    // Hendir rusli frá network manager
+    void dispose();
 
     /**
      * @param  user to check if logged in
@@ -14,9 +18,9 @@ public interface UserService {
 
     /**
      * @param  user that is to be created
-     * @return execute result
+     * @return call to server
      */
-    String createAccount(User user);
+    Call<User> createAccount(User user);
 
     /**
      * @param  user that is to be saved over

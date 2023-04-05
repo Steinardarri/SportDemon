@@ -4,12 +4,13 @@ import java.util.UUID;
 
 import is.hi.hbvg601.team16.sportdemon.services.UserService;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
+import retrofit2.Call;
 
 public class UserServiceImplementation implements UserService {
 
     private final NetworkManagerAPI nmAPI;
 
-    private User mUser;
+    public void dispose() {this.nmAPI.dispose();}
 
     public UserServiceImplementation(NetworkManagerAPI networkManager){
         this.nmAPI = networkManager;
@@ -21,9 +22,7 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public User findUserByID(UUID id) {
-        User returnUser = nmAPI.getUser(id);
-        // returnUser has possibly null values, when not found
-        return returnUser;
+        return nmAPI.getUser(id);
     }
 
     /**
@@ -32,9 +31,7 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public User findUserByUsername(String username) {
-        User returnUser = nmAPI.getUser(username);
-        // returnUser has possibly null values, when not found
-        return returnUser;
+        return nmAPI.getUser(username);
     }
 
     @Override
@@ -44,10 +41,10 @@ public class UserServiceImplementation implements UserService {
 
     /**
      * @param  user the user that is to be saved
-     * @return String success status
+     * @return call to server repo
      */
     @Override
-    public String createAccount(User user) {
+    public Call<User> createAccount(User user) {
         return nmAPI.createAccount(user);
     }
 
@@ -74,10 +71,5 @@ public class UserServiceImplementation implements UserService {
     @Override
     public Boolean logout() {
         return null;
-    }
-
-    // TODO: Taka út þegar server komið inn
-    public User getUser() {
-        return mUser;
     }
 }

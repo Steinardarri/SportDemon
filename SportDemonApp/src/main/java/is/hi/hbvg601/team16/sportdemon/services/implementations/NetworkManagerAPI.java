@@ -11,6 +11,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.services.NetworkManager;
 
@@ -19,6 +21,7 @@ import retrofit2.Retrofit;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
 
 public class NetworkManagerAPI {
 
@@ -26,6 +29,9 @@ public class NetworkManagerAPI {
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler handler = new Handler(Looper.getMainLooper());
+
+    // Safnar async observerum til að eyða þeim þegar Activity hættir
+    private final CompositeDisposable observerHaugur = new CompositeDisposable();
 
     static {
         setupNetworkManagerAPI();
@@ -35,17 +41,24 @@ public class NetworkManagerAPI {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         Gson demonGson = new GsonBuilder()
                 .serializeNulls()
+                .setLenient()
                 .setPrettyPrinting()
                 .create();
+        RxJava3CallAdapterFactory rxAdapter = RxJava3CallAdapterFactory.create();
 
         Retrofit retrofit = new Retrofit.Builder()
 //                .baseUrl("http://10.0.2.2:8080") // Local server
-                .baseUrl("https://sportdemonserver.up.railway.app") // Railway Server
+                .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
                 .addConverterFactory(GsonConverterFactory.create(demonGson))
+                .addCallAdapterFactory(rxAdapter)
                 .client(httpClient.build())
                 .build();
 
         mAPI = retrofit.create(NetworkManager.class);
+    }
+
+    public void dispose() {
+        observerHaugur.dispose();
     }
 
     /*
@@ -57,38 +70,15 @@ public class NetworkManagerAPI {
 
     /**
      * @param user sem á að vista
-     * @return String með 'Failure' eða 'Success', eftir því hvernig tókst að vista
+     * @return call til server repo, til að executa í activity
      */
-    public String createAccount(User user) {
-        AtomicReference<Response<User>> response = new AtomicReference<>();
-        AtomicReference<String> returnString = new AtomicReference<>();
-
-        executor.execute(() -> {
-            //Background work here
-            Call<User> callSync = mAPI.createAccount(user);
-            try {
-                response.set(callSync.execute());
-                System.out.println(response.get().body());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-            handler.post(() -> {
-                //UI Thread work here
-                if(response.get().body() == null) {
-                    returnString.set("Failure");
-                } else {
-                    returnString.set("Success");
-                }
-            });
-        });
-
-        return returnString.get();
+    public Call<User> createAccount(User user) {
+        return mAPI.createAccount(user);
     }
 
     public User login(String username, String password) {
         AtomicReference<Response<User>> response = new AtomicReference<>();
-        AtomicReference<User> returnUser = new AtomicReference<>(null);
+        AtomicReference<Boolean> flag = new AtomicReference<>(false);
 
         executor.execute(() -> {
             //Background work here
@@ -97,22 +87,29 @@ public class NetworkManagerAPI {
             try {
                 response.set(callSync.execute());
                 System.out.println(response.get().body());
+                flag.set(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
             handler.post(() -> {
                 //UI Thread work here
-                returnUser.set(response.get().body());
             });
         });
 
-        return returnUser.get();
+        while (!flag.get()) {
+        }
+
+        if (response.get() != null) {
+            return response.get().body();
+        } else {
+            return null;
+        }
+
     }
 
     public User getUser(UUID id) {
         AtomicReference<Response<User>> response = new AtomicReference<>();
-        AtomicReference<User> returnUser = new AtomicReference<>(null);
 
         executor.execute(() -> {
             //Background work here
@@ -125,13 +122,14 @@ public class NetworkManagerAPI {
 
             handler.post(() -> {
                 //UI Thread work here
-                if (response.get() != null) {
-                    returnUser.set(response.get().body());
-                }
             });
         });
 
-        return returnUser.get();
+        if (response.get() != null) {
+            return response.get().body();
+        } else {
+            return null;
+        }
     }
 
     public User getUser(String username) {

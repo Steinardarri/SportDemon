@@ -40,10 +40,10 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "ID=" + ID +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
+                "ID=" + getID() +
+                ", username='" + getUsername() + '\'' +
+                ", password='" + getPassword() + '\'' +
+                ", email='" + getEmail() + '\'' +
                 '}';
     }
 

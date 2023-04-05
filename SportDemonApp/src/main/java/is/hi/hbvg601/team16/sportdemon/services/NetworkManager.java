@@ -5,7 +5,8 @@ import java.util.UUID;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.GET;

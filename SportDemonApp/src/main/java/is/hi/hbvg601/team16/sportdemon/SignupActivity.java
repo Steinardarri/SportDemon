@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -17,10 +20,16 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.services.UserService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.NetworkManagerAPI;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.UserServiceImplementation;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignupActivity extends AppCompatActivity {
 
     public UserService mUserService;
+
+    private ProgressBar progressBar;
+    private LinearLayout form;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,9 @@ public class SignupActivity extends AppCompatActivity {
         EditText usernameEdit = findViewById(R.id.signup_username);
         EditText passwordEdit = findViewById(R.id.signup_password);
         EditText passwordConfEdit = findViewById(R.id.signup_passwordConf);
+
+        progressBar = findViewById(R.id.signup_progress);
+        form = findViewById(R.id.signup_form);
 
         Button submitBtn = findViewById(R.id.signup_submit_button);
         submitBtn.setOnClickListener( v -> {
@@ -54,24 +66,70 @@ public class SignupActivity extends AppCompatActivity {
                 ).show();
             } else {
                 User user = new User(username, password, email);
-                String outcome = mUserService.createAccount(user);
-                Toast.makeText(this,
-                        outcome,
-                        Toast.LENGTH_SHORT
-                ).show();
+                showLoading();
+                Call<User> callSync = mUserService.createAccount(user);
+                callSync.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                        if (response.isSuccessful()) {
+                            // Get response
+                            try {
+                                if (response.body() != null) {
+                                    // UI
+                                    Toast.makeText(SignupActivity.super.getApplicationContext(),
+                                            "Aðgerð tókst",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+                                    hideLoading();
 
-                Intent skil = new Intent();
-                if (outcome.equals("Success")) {
-                    skil.putExtra("USER", user);
-                    setResult(-1, skil);
-                } else {
-                    setResult(0, null);
-                }
-                finish();
+                                    // return
+                                    Intent skil = new Intent();
+                                    skil.putExtra("USER", user);
+                                    setResult(-1, skil);
+                                    finish();
+                                } else {
+                                    // UI
+                                    Toast.makeText(SignupActivity.super.getApplicationContext(),
+                                            "Villa",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+                                    hideLoading();
+                                }
+                            } catch (Exception e) {
+                                // UI
+                                Toast.makeText(SignupActivity.super.getApplicationContext(),
+                                        e.toString(),
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                                hideLoading();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
+                        // UI
+                        Toast.makeText(SignupActivity.super.getApplicationContext(),
+                                t.toString(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        hideLoading();
+                    }
+                });
             }
         });
 
         Button returnBtn = findViewById(R.id.signup_return_button);
         returnBtn.setOnClickListener( v -> finish());
+    }
+
+    public void showLoading() {
+        progressBar.setVisibility(View.VISIBLE);
+        form.setVisibility(View.GONE);
+    }
+
+    public void hideLoading() {
+        progressBar.setVisibility(View.GONE);
+        form.setVisibility(View.VISIBLE);
     }
 }

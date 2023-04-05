@@ -53,4 +53,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        mUserService.dispose();
+        super.onDestroy();
+    }
 }
