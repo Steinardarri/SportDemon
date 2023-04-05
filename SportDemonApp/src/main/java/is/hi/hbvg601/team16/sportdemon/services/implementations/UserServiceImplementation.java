@@ -10,8 +10,6 @@ public class UserServiceImplementation implements UserService {
 
     private final NetworkManagerAPI nmAPI;
 
-    public void dispose() {this.nmAPI.dispose();}
-
     public UserServiceImplementation(NetworkManagerAPI networkManager){
         this.nmAPI = networkManager;
     }
@@ -21,7 +19,7 @@ public class UserServiceImplementation implements UserService {
      * @return User data of the id
      */
     @Override
-    public User findUserByID(UUID id) {
+    public Call<User> findUserByID(UUID id) {
         return nmAPI.getUser(id);
     }
 
@@ -30,7 +28,7 @@ public class UserServiceImplementation implements UserService {
      * @return User data of the username
      */
     @Override
-    public User findUserByUsername(String username) {
+    public Call<User> findUserByUsername(String username) {
         return nmAPI.getUser(username);
     }
 
@@ -41,7 +39,7 @@ public class UserServiceImplementation implements UserService {
 
     /**
      * @param  user the user that is to be saved
-     * @return call to server repo
+     * @return Call to server repo to create account
      */
     @Override
     public Call<User> createAccount(User user) {
@@ -61,10 +59,10 @@ public class UserServiceImplementation implements UserService {
     /**
      * @param  username of the account to login
      * @param  password of the account to login
-     * @return User of the account, void if not correct
+     * @return Call to server repo to login
      */
     @Override
-    public User login(String username, String password) {
+    public Call<User> login(String username, String password) {
         return nmAPI.login(username, password);
     }
 

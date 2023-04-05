@@ -7,9 +7,6 @@ import retrofit2.Call;
 
 public interface UserService {
 
-    // Hendir rusli frá network manager
-    void dispose();
-
     /**
      * @param  user to check if logged in
      * @return boolean success
@@ -18,7 +15,7 @@ public interface UserService {
 
     /**
      * @param  user that is to be created
-     * @return call to server
+     * @return call to server to create account
      */
     Call<User> createAccount(User user);
 
@@ -37,9 +34,9 @@ public interface UserService {
     /**
      * @param  username of the account to login
      * @param  password of the account to login
-     * @return execute result
+     * @return call to server to login
      */
-    User login(String username, String password);
+    Call<User> login(String username, String password);
 
     /**
      * @return boolean success
@@ -48,13 +45,13 @@ public interface UserService {
 
     /**
      * @param  id of the user to get
-     * @return User data of the id
+     * @return call to server
      */
-    User findUserByID(UUID id);
+    Call<User> findUserByID(UUID id);
 
     /**
      * @param  username of the user to get
-     * @return User data of the username
+     * @return call to server to find user
      */
-    User findUserByUsername(String username);
+    Call<User> findUserByUsername(String username);
 }
