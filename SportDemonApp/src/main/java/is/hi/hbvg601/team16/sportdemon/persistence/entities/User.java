@@ -3,6 +3,7 @@ package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

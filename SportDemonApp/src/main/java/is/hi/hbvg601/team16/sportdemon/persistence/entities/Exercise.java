@@ -1,10 +1,11 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Exercise {
+public class Exercise implements Serializable {
 
     private UUID ID;
     private String title;

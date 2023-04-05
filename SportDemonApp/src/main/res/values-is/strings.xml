@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_home">Heim</string>
+    <string name="title_add_exercise">Búa Til Hreyfingu</string>
+    <string name="title_journal">Hreyfibók</string>
+    <string name="signup_form_email">Tölvupóstfang</string>
+    <string name="signup_form_username">Notendanafn</string>
+    <string name="signup_form_password">Lykilorð</string>
+    <string name="signup_form_confirm_password">Staðfesta Lykilorð</string>
+    <string name="signup_form_back">Til Baka</string>
+    <string name="signup_form_submit">Leggja Fram</string>
+    <string name="home_signup">Skráning</string>
+    <string name="add_workout">Búa Til Æfingu</string>
+    <string name="prompt_email">Tölvupóstfang</string>
+    <string name="prompt_password">Lykilorð</string>
+    <string name="action_sign_in">Logga inn eða búa til aðgang</string>
+    <string name="action_sign_in_short">Innskráining</string>
+    <string name="welcome">Velkominn!</string>
+    <string name="invalid_username">Ekki leyfilegt notendanafn</string>
+    <string name="invalid_password">Lykilorð þarf að vera >5</string>
+    <string name="login_failed">Innskránning mistókst</string>
+    <string name="login_form_username">Notendanafn</string>
+    <string name="login_form_password">Lykilorð</string>
+    <string name="login_form_title">Innskráining</string>
+    <string name="hyperlink"><a href="activity_signup">Ertu ekki með aðgang? Nýskráðu þig! </a></string>
+
+</resources>

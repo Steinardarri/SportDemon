@@ -40,7 +40,7 @@ public class NetworkManagerAPI {
 
         Retrofit retrofit = new Retrofit.Builder()
 //                .baseUrl("http://10.0.2.2:8080") // Local server
-                .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
+                .baseUrl("https://sportdemonserver.up.railway.app") // Railway Server
                 .addConverterFactory(GsonConverterFactory.create(demonGson))
                 .client(httpClient.build())
                 .build();
@@ -60,23 +60,54 @@ public class NetworkManagerAPI {
      * @return String með 'Failure' eða 'Success', eftir því hvernig tókst að vista
      */
     public String createAccount(User user) {
+        AtomicReference<Response<User>> response = new AtomicReference<>();
+        AtomicReference<String> returnString = new AtomicReference<>();
 
         executor.execute(() -> {
             //Background work here
             Call<User> callSync = mAPI.createAccount(user);
             try {
-                Response<User> response = callSync.execute();
-                System.out.println(response.body());
+                response.set(callSync.execute());
+                System.out.println(response.get().body());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
             handler.post(() -> {
                 //UI Thread work here
+                if(response.get().body() == null) {
+                    returnString.set("Failure");
+                } else {
+                    returnString.set("Success");
+                }
             });
         });
 
-        return "Success";
+        return returnString.get();
+    }
+
+    public User login(String username, String password) {
+        AtomicReference<Response<User>> response = new AtomicReference<>();
+        AtomicReference<User> returnUser = new AtomicReference<>(null);
+
+        executor.execute(() -> {
+            //Background work here
+            User u = new User(username, password,"");
+            Call<User> callSync = mAPI.login(u);
+            try {
+                response.set(callSync.execute());
+                System.out.println(response.get().body());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            handler.post(() -> {
+                //UI Thread work here
+                returnUser.set(response.get().body());
+            });
+        });
+
+        return returnUser.get();
     }
 
     public User getUser(UUID id) {

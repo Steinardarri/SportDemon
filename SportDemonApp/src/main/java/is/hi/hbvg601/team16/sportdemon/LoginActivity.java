@@ -34,27 +34,21 @@ public class LoginActivity extends AppCompatActivity {
         EditText passwordEdit = findViewById(R.id.login_password);
 
         Button loginBtn = findViewById(R.id.login_button);
-        loginBtn.setOnClickListener( v -> {
+        loginBtn.setOnClickListener(v -> {
             String username = usernameEdit.getText().toString();
             String password = passwordEdit.getText().toString();
+            User outcome = mUserService.login(username, password);
 
-            User loginUser = mUserService.findUserByUsername(username);
-            if (loginUser == null ||
-                !loginUser.getPassword().equals(password)) {
+            if (outcome == null) {
                 Toast.makeText(this,
                         "Username and/or password incorrect. Try again.",
                         Toast.LENGTH_LONG
                 ).show();
             } else {
-                User outcome = mUserService.login(username, password);
-
                 Intent skil = new Intent();
-                if (outcome != null) {
-                    skil.putExtra("USER", outcome);
-                    setResult(-1, skil);
-                } else {
-                    setResult(0, null);
-                }
+                skil.putExtra("USER", outcome);
+                setResult(-1, skil);
+
                 finish();
             }
         });

@@ -12,14 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import is.hi.hbvg601.team16.sportdemon.R;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 
 public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRecyclerViewAdapter.ViewHolder> {
-    private List<String> data;
+    private List<Workout> data;
     private final LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public WorkoutsRecyclerViewAdapter(Context context, List<String> data) {
+    public WorkoutsRecyclerViewAdapter(Context context, List<Workout> data) {
         this.inflater = LayoutInflater.from(context);
         this.data = data;
     }
@@ -35,7 +36,7 @@ public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRe
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String workoutTitle = data.get(position);
+        String workoutTitle = data.get(position).getTitle();
         holder.workoutTextView.setText(workoutTitle);
     }
 
@@ -58,12 +59,12 @@ public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRe
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition(), getData());
         }
     }
 
     // convenience method for getting data at click position
-    public String getItem(int id) {
+    public Workout getItem(int id) {
         return data.get(id);
     }
 
@@ -74,14 +75,14 @@ public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRe
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position, List<Workout> data);
     }
 
-    public List<String> getData() {
+    public List<Workout> getData() {
         return data;
     }
 
-    public void setData(List<String> data) {
+    public void setData(List<Workout> data) {
         this.data = data;
     }
 }
