@@ -1,5 +1,7 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -36,11 +38,17 @@ public class ExerciseCombo implements Serializable {
         this.equipment = equipment;
         this.durationPerSet = durationPerSet;
         this.restBetweenSets = restBetweenSets;
-
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getSets() {
@@ -85,4 +93,21 @@ public class ExerciseCombo implements Serializable {
         this.restBetweenSets = restBetweenSets;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        String info = "";
+        info += ""    + getReps() + " reps" +
+                " - " + getSets() + " sets";
+        String magn = "";
+        if (getWeight() > 0) {
+            magn += getWeight() + " kg";
+        } else if (getDurationPerSet() > 0) {
+            magn += getDurationPerSet() + " sek á set";
+        }
+        if (!magn.equals("")) {
+            info += " - " + magn;
+        }
+        return info;
+    }
 }

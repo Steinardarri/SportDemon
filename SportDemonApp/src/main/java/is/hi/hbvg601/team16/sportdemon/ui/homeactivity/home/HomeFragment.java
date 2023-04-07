@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -44,8 +42,8 @@ public class HomeFragment extends Fragment {
         mBinding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = mBinding.getRoot();
 
-        User mUser = ((HomeActivity) requireActivity()).getSportUser(); // Sækir aðal current user
-                                                                        // frá Home activity
+        User mUser = HomeActivity.getSportUser(); // Sækir aðal current user
+                                                  // frá Home activity
 
         // Setja upp RecyclerView fyrir workouts
         RecyclerView recyclerView = mBinding.workoutRecyclerView;
@@ -65,20 +63,18 @@ public class HomeFragment extends Fragment {
                 });
         recyclerView.setAdapter(mAdapter);
 
-        ImageButton addWorkoutBtn = mBinding.addWorkoutButton;
-        addWorkoutBtn.setOnClickListener(v -> {
+        mBinding.addWorkoutButton.setVisibility(View.INVISIBLE);
+        mBinding.addWorkoutButton.setOnClickListener(v -> {
             Intent i = new Intent(getActivity(), WorkoutActivity.class);
             i.putExtra("WORKOUT", new Workout());
             workoutResultLauncher.launch(i);
         });
 
-        Button signupBtn = mBinding.homeSignupButton;
-        signupBtn.setOnClickListener(v ->
+        mBinding.homeSignupButton.setOnClickListener(v ->
                 signupResultLauncher.launch(new Intent(getActivity(), SignupActivity.class))
         );
 
-        Button loginBtn = mBinding.homeLoginButton;
-        loginBtn.setOnClickListener(v ->
+        mBinding.homeLoginButton.setOnClickListener(v ->
                 loginResultLauncher.launch(new Intent(getActivity(), LoginActivity.class))
         );
 
@@ -95,9 +91,9 @@ public class HomeFragment extends Fragment {
     private final ActivityResultLauncher<Intent> workoutResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
+                refreshList();
                 if(result.getResultCode() == RESULT_SUCCESS) {
                     Intent data = result.getData();
-                    refreshList();
                 }
             }
     );
@@ -123,8 +119,9 @@ public class HomeFragment extends Fragment {
                     User resultUser = (User) data.getSerializableExtra("USER");
                     mBinding.textUserName.setText(resultUser.getUsername());
                     mBinding.textUserEmail.setText(resultUser.getEmail());
-                    ((HomeActivity) requireActivity()).setSportUser(resultUser);
+                    mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
                     // Vista nýjan user sem aðal
+                    HomeActivity.setSportUser(resultUser);
                     refreshList();
                 }
             }
@@ -134,7 +131,7 @@ public class HomeFragment extends Fragment {
         WorkoutsRecyclerViewAdapter adapter =
                 (WorkoutsRecyclerViewAdapter) mBinding.workoutRecyclerView.getAdapter();
         assert adapter != null;
-        User mUser = ((HomeActivity) requireActivity()).getSportUser();
+        User mUser = HomeActivity.getSportUser();
         adapter.setData(mUser.getWorkoutList());
         mBinding.workoutRecyclerView.setAdapter(adapter);
     }

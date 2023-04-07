@@ -16,9 +16,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".ExerciseComboActivity"
-            android:exported="false" />
-        <activity
             android:name=".HomeActivity"
             android:exported="true">
             <intent-filter>
@@ -30,6 +27,7 @@
         <activity android:name=".SignupActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".WorkoutActivity" />
+        <activity android:name=".ExerciseComboActivity" />
     </application>
 
 </manifest>

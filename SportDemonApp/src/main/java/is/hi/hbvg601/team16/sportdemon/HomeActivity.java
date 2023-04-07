@@ -20,7 +20,7 @@ public class HomeActivity extends AppCompatActivity {
     @SuppressWarnings("FieldCanBeLocal")
     private ActivityHomeBinding binding;
 
-    private User mSportUser; // Aðal user loggaður inn
+    private static User mSportUser; // Aðal user loggaður inn
     public HomeService mHomeService;
 
     @Override
@@ -45,11 +45,11 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public User getSportUser() {
+    public static User getSportUser() {
         return mSportUser;
     }
 
-    public void setSportUser(User sportUser) {
+    public static void setSportUser(User sportUser) {
         mSportUser = sportUser;
     }
 }

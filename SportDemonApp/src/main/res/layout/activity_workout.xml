@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,7 +22,6 @@
         app:layout_constraintVertical_chainStyle="packed">
 
         <TextView
-            app:layout_constraintHorizontal_bias="0.1"
             android:id="@+id/workout_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -30,16 +30,21 @@
             android:text="@string/title_of_workout"
             android:textColor="@color/black"
             android:textSize="32sp"
-            tools:layout_editor_absoluteY="27dp" />
+            app:layout_constraintHorizontal_bias=".1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/workout_play_button"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:background="@drawable/play_button"
+            android:contentDescription="@string/play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias=".9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,13 +54,14 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="0dp"
         android:background="#FFFFFF"
         android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/workout_top"
-        tools:context=".workout"
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="40dp">
+        app:layout_constraintBottom_toTopOf="@+id/workout_buttonLayout"
+        tools:context=".workout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,7 +101,7 @@
 
 
         <Button
-            android:id="@+id/signup_edit_button"
+            android:id="@+id/workout_edit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/workout_edit"
