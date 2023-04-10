@@ -1,16 +1,23 @@
 <resources>
-    <!-- Base application theme. -->
+    <!-- Base application theme -->
     <style name="Theme.SportDemon" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
+        <!-- Primary brand color -->
         <item name="colorPrimary">@color/butterscotch</item>
         <item name="colorPrimaryVariant">@color/golden_brown</item>
         <item name="colorOnPrimary">@color/night</item>
-        <!-- Secondary brand color. -->
+
+        <!-- Secondary brand color -->
         <item name="colorSecondary">@color/viridian</item>
         <item name="colorSecondaryVariant">@color/indigo</item>
         <item name="colorOnSecondary">@color/platinum</item>
-        <!-- Status bar color. -->
+
+        <!-- Tertiary brand color -->
+        <item name="colorOnTertiary">@color/grape</item>
+
+        <!-- Status bar color -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
+        <!-- Customize your theme here -->
+
     </style>
 </resources>

@@ -4,120 +4,131 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExerciseComboActivityActivity">
+    tools:context=".ExerciseComboActivity">
 
     <TextView
-        android:id="@+id/txtAddExercise"
+        android:id="@+id/exerciseTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="@string/title_add_exercise"
         android:textAlignment="center"
-        android:textColor="#673AB7"
+        android:textColor="@color/grape"
         android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.055" />
+        app:layout_constraintBottom_toTopOf="@+id/exerciseName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/editTextName"
+        android:id="@+id/exerciseName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:ems="10"
-        android:hint="Exercise name"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/txtAddExercise"
-        app:layout_constraintHorizontal_bias="0.416"
-        app:layout_constraintStart_toStartOf="@+id/txtAddExercise"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddExercise" />
+        android:hint="@string/exercise_name"
+        android:inputType="text"
+        android:autofillHints="@string/exercise_name"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseTitle"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseSets"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/editTextSets"
+        android:id="@+id/exerciseSets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Sets"
+        android:hint="@string/sets"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="@+id/editTextName"
-        app:layout_constraintStart_toStartOf="@+id/editTextName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+        android:autofillHints="@string/sets"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseName"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseReps"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/editTextReps"
+        android:id="@+id/exerciseReps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Repetitions"
+        android:hint="@string/repetitions"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="@+id/editTextSets"
-        app:layout_constraintStart_toStartOf="@+id/editTextSets"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSets" />
+        android:autofillHints="@string/repetitions"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseSets"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseWeight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/editTextWeight"
+        android:id="@+id/exerciseWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Weight"
+        android:hint="@string/weight"
         android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="@+id/editTextReps"
-        app:layout_constraintStart_toStartOf="@+id/editTextReps"
-        app:layout_constraintTop_toBottomOf="@+id/editTextReps" />
+        android:autofillHints="@string/weight"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseReps"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseEquipment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextEquipment"
+        android:id="@+id/exerciseEquipment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Equipment"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/editTextWeight"
-        app:layout_constraintStart_toStartOf="@+id/editTextWeight"
-        app:layout_constraintTop_toBottomOf="@+id/editTextWeight" />
+        android:hint="@string/equipment"
+        android:inputType="text"
+        android:autofillHints="@string/equipment"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseWeight"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseDuration"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/editTextDurationPerSet"
+        android:id="@+id/exerciseDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Duration (per set)"
+        android:hint="@string/duration_per_set"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextEquipment"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextEquipment"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEquipment" />
+        android:autofillHints="@string/duration_per_set"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseEquipment"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseRest"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/editTextRestBetweenSets"
+        android:id="@+id/exerciseRest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Rest (between sets)"
+        android:hint="@string/rest_between_sets"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="@+id/editTextDurationPerSet"
-        app:layout_constraintStart_toStartOf="@+id/editTextDurationPerSet"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDurationPerSet" />
+        android:autofillHints="@string/rest_between_sets"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseDuration"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddExercise"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btnAddExercise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/title_add_exercise"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseRest"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/editTextRestBetweenSets"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="@+id/editTextRestBetweenSets"
-        app:layout_constraintTop_toBottomOf="@+id/editTextRestBetweenSets"
-        app:layout_constraintVertical_bias="0.212" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

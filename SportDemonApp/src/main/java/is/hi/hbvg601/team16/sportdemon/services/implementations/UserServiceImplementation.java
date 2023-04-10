@@ -46,10 +46,14 @@ public class UserServiceImplementation implements UserService {
         return nmAPI.createAccount(user);
     }
 
+    /**
+     * @param  user the user that is to be saved over
+     * @return Call to server repo to edit account
+     */
     @Override
-    public String editAccount(User user) {
-        return null;
-    }
+    public Call<User> editAccount(User user) {
+        return nmAPI.createAccount(user); // Notar sama save() í crud og createAccount
+    }                                     // sem bæði nýskráir og uppfærir
 
     @Override
     public String deleteAccount(UUID id) {

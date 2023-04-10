@@ -36,6 +36,9 @@ public class WorkoutResult implements Serializable {
     public UUID getID() {
         return ID;
     }
+    public void setID(UUID ID) {
+        this.ID = ID;
+    }
 
     public User getUser() {
         return user;

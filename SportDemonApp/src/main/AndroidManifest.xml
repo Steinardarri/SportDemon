@@ -11,6 +11,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher_sport_demon"
         android:label="@string/app_name"
+        android:name=".SportDemon"
         android:supportsRtl="true"
         android:theme="@style/Theme.SportDemon"
         android:usesCleartextTraffic="true"

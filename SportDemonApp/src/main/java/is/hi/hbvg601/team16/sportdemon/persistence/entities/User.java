@@ -24,8 +24,8 @@ public class User implements Serializable {
     private String username;
     private String password;
     private String email;
-    private List<Workout> workoutList;
-    private List<WorkoutResult> workoutResultList;
+    private List<Workout> workoutList = new ArrayList<>();
+    private List<WorkoutResult> workoutResultList = new ArrayList<>();
 
     public User() {
     }
@@ -49,6 +49,9 @@ public class User implements Serializable {
 
     public UUID getID() {
         return ID;
+    }
+    public void setID(UUID ID) {
+        this.ID = ID;
     }
 
     public String getUsername() {
@@ -84,5 +87,11 @@ public class User implements Serializable {
     }
     public void setWorkoutResultList(List<WorkoutResult> workoutResultList) {
         this.workoutResultList = workoutResultList;
+    }
+
+    public void addWorkout(Workout w) {
+        List<Workout> wl = getWorkoutList();
+        wl.add(w);
+        setWorkoutList(wl);
     }
 }

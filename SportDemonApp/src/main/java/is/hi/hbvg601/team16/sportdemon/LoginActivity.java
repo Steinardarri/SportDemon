@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // return
                                 Intent skil = new Intent();
                                 skil.putExtra("USER", response.body());
-                                setResult(-1, skil);
+                                setResult(RESULT_OK, skil);
                                 finish();
                             } else {
                                 // UI

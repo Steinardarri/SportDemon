@@ -3,29 +3,35 @@ package is.hi.hbvg601.team16.sportdemon;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.services.HomeService;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
+import is.hi.hbvg601.team16.sportdemon.services.implementations.HomeServiceImplementation;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.NetworkManagerAPI;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.WorkoutServiceImplementation;
-import is.hi.hbvg601.team16.sportdemon.ui.homeactivity.home.WorkoutsRecyclerViewAdapter;
 import is.hi.hbvg601.team16.sportdemon.ui.workoutactivity.ExerciseComboRecyclerViewAdapter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WorkoutActivity extends AppCompatActivity {
 
-    public WorkoutService mWorkoutService;
-
-    private Workout mWorkout;
+    private WorkoutService mWorkoutService;
+    private HomeService mHomeService;
 
     // Intent code
     private static final int RESULT_SUCCESS = -1;
@@ -35,13 +41,11 @@ public class WorkoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
-        mWorkout = (Workout) getIntent().getSerializableExtra("WORKOUT");
-
         NetworkManagerAPI nmAPI = new NetworkManagerAPI();
         this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
+        this.mHomeService = new HomeServiceImplementation(nmAPI);
 
-        User mUser = HomeActivity.getSportUser(); // Sækir aðal current user
-        // frá Home activity
+        Workout mWorkout = mHomeService.getCurrentWorkout(this);
 
         // Setja upp RecyclerView fyrir ExerciseCombos
         RecyclerView mECRecyclerView = findViewById(R.id.workout_recyclerView);
@@ -62,9 +66,42 @@ public class WorkoutActivity extends AppCompatActivity {
         mECRecyclerView.setAdapter(adapter);
 
         findViewById(R.id.workout_add_button).setOnClickListener(v -> {
-            Intent i = new Intent(WorkoutActivity.this, ExerciseComboActivity.class);
-            i.putExtra("EXERCISECOMBO", new ExerciseCombo());
-            exerciseComboResultLauncher.launch(i);
+            ExerciseCombo ec = new ExerciseCombo();
+
+            SpotsDialog loadingDialog = new SpotsDialog(this, "Setting up new Exercise");
+            loadingDialog.show();
+            // Setja upp nýtt ExerciseCombo á server
+            Call<ExerciseCombo> callSync = mWorkoutService.saveExerciseCombo(ec);
+            callSync.enqueue(new Callback<ExerciseCombo>() {
+                @Override
+                public void onResponse(@NonNull Call<ExerciseCombo> call, @NonNull Response<ExerciseCombo> response) {
+                    if (response.isSuccessful()) {
+                        // Get response
+                        try {
+                            loadingDialog.dismiss();
+                            Intent i = new Intent(WorkoutActivity.this, ExerciseComboActivity.class);
+                            i.putExtra("EXERCISECOMBO", response.body());
+                            exerciseComboResultLauncher.launch(i);
+                        } catch (Exception e) {
+                            // UI
+                            Toast.makeText(WorkoutActivity.this,
+                                    e.toString(),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            loadingDialog.dismiss();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ExerciseCombo> call, @NonNull Throwable t) {
+                    Toast.makeText(WorkoutActivity.this,
+                            t.toString(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    loadingDialog.dismiss();
+                }
+            });
         });
 
         findViewById(R.id.workout_edit_button).setOnClickListener(v -> {
@@ -75,11 +112,25 @@ public class WorkoutActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> exerciseComboResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
+                SpotsDialog loadingDialog = new SpotsDialog(this, "Loading");
+                loadingDialog.show();
                 if(result.getResultCode() == RESULT_SUCCESS) {
                     Intent data = result.getData();
+                    assert data != null;
+                    ExerciseCombo ec = (ExerciseCombo) data.getSerializableExtra("EXERCISECOMBO");
 
-                    refreshList();
+                    Workout w = mHomeService.getCurrentWorkout(this);
+                    w.addExerciseCombo(ec);
+                    mHomeService.setCurrentWorkout(w,this);
+
+                    User u = mHomeService.getCurrentUser(this);
+                    u.addWorkout(w);
+                    mHomeService.setCurrentUser(u, this);
+
+                    saveToServer();
                 }
+                refreshList();
+                loadingDialog.dismiss();
             }
     );
 
@@ -88,7 +139,37 @@ public class WorkoutActivity extends AppCompatActivity {
         ExerciseComboRecyclerViewAdapter adapter =
                 (ExerciseComboRecyclerViewAdapter) mECRecyclerView.getAdapter();
         assert adapter != null;
-        adapter.setData(mWorkout.getExerciseCombo());
+        adapter.setData(mHomeService.getCurrentWorkout(this).getExerciseCombo());
         mECRecyclerView.setAdapter(adapter);
+    }
+
+    private void saveToServer() {
+        Workout workout = mHomeService.getCurrentWorkout(this);
+        Call<Workout> callSync = mWorkoutService.saveWorkout(workout);
+
+        SpotsDialog loadingDialog = new SpotsDialog(this, "Saving to server");
+        loadingDialog.show();
+        callSync.enqueue(new Callback<Workout>() {
+            @Override
+            public void onResponse(@NonNull Call<Workout> call, @NonNull Response<Workout> response) {
+                if (response.isSuccessful()) {
+                    // UI
+                    Toast.makeText(WorkoutActivity.this,
+                            "Saving successful",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+                loadingDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Workout> call, @NonNull Throwable t) {
+                Toast.makeText(WorkoutActivity.this,
+                        t.toString(),
+                        Toast.LENGTH_SHORT
+                ).show();
+                loadingDialog.dismiss();
+            }
+        });
     }
 }

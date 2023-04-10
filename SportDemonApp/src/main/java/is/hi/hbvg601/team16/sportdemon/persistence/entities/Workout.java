@@ -28,13 +28,17 @@ public class Workout implements Serializable {
     public Workout() {
     }
 
-    public Workout(String title, String description) {
+    public Workout(String title, String description, User user) {
         this.title = title;
         this.description = description;
+        this.user = user;
     }
 
     public UUID getID() {
         return ID;
+    }
+    public void setID(UUID ID) {
+        this.ID = ID;
     }
 
     public User getUser() {
@@ -70,6 +74,10 @@ public class Workout implements Serializable {
     }
     public void setExerciseCombo(List<ExerciseCombo> exerciseCombo) {
         this.exerciseCombo = exerciseCombo;
+    }
+
+    public void addExerciseCombo(ExerciseCombo ec) {
+        exerciseCombo.add(ec);
     }
 }
 

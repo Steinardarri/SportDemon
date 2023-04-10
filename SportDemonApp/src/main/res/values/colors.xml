@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     /* SportDemon */
-    <color name="ecru">#e6be77</color>>
-    <color name="butterscotch">#dc9238</color>
+    <color name="ecru">#E6BE77</color>>
+    <color name="butterscotch">#dC9238</color>
     <color name="golden_brown">#9C621C</color>
 
     <color name="viridian">#6B9080</color>
     <color name="indigo">#133C55</color>
+    <color name="grape">#673AB7</color>
 
-    <color name="french_gray">#bebdc0</color>
-    <color name="platinum">#ebeae7</color>
-    <color name="night">#0c0e0c</color>
+    <color name="french_gray">#BEBDC0</color>
+    <color name="platinum">#EBEAE7</color>
+    <color name="night">#0C0E0C</color>
 
     /* Default */
     <color name="purple_200">#FFBB86FC</color>
