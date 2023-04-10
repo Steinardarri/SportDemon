@@ -8,6 +8,8 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 
+import retrofit2.Call;
+
 public class WorkoutServiceImplementation implements WorkoutService {
 
     private final NetworkManagerAPI nmAPI;
@@ -17,13 +19,8 @@ public class WorkoutServiceImplementation implements WorkoutService {
     }
 
     @Override
-    public String addWorkout(Workout workout, User user) {
-        return null;
-    }
-
-    @Override
-    public String editWorkout(Workout workout) {
-        return null;
+    public Call<Workout> saveWorkout(Workout workout) {
+        return nmAPI.addWorkout(workout);
     }
 
     @Override
@@ -32,8 +29,8 @@ public class WorkoutServiceImplementation implements WorkoutService {
     }
 
     @Override
-    public String addExerciseCombo(ExerciseCombo ec, Workout workout) {
-        return null;
+    public Call<ExerciseCombo> saveExerciseCombo(ExerciseCombo ec) {
+        return nmAPI.addExerciseCombo(ec);
     }
 
     @Override

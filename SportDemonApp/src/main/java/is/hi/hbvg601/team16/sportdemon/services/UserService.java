@@ -20,10 +20,10 @@ public interface UserService {
     Call<User> createAccount(User user);
 
     /**
-     * @param  user that is to be saved over
-     * @return execute result
+     * @param  user the user that is to be saved over
+     * @return Call to server repo to edit account
      */
-    String editAccount(User user); // Not implemented
+    Call<User> editAccount(User user);
 
     /**
      * @param  id of the user to delete

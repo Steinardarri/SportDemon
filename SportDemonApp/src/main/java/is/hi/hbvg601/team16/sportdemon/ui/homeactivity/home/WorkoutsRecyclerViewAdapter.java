@@ -29,7 +29,7 @@ public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRe
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.workouts_recyclerview_row, parent, false);
+        View view = inflater.inflate(R.layout.card_workout, parent, false);
         return new ViewHolder(view);
     }
 

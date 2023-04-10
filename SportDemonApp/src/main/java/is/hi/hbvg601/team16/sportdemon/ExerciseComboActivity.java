@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.NetworkManagerAPI;
@@ -21,35 +22,34 @@ public class ExerciseComboActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        Workout workout = (Workout) bundle.getSerializable("WORKOUT");
+
         NetworkManagerAPI nmAPI = new NetworkManagerAPI();
         this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
 
-        EditText titleEdit = findViewById(R.id.editTextName);
-        EditText setsEdit = findViewById(R.id.editTextSets);
-        EditText repsEdit = findViewById(R.id.editTextReps);
-        EditText weightEdit = findViewById(R.id.editTextWeight);
-        EditText equipmentEdit = findViewById(R.id.editTextTextEquipment);
-        EditText durationPerSetEdit = findViewById(R.id.editTextDurationPerSet);
-        EditText restBetweenSetsEdit = findViewById(R.id.editTextRestBetweenSets);
+        ExerciseCombo ec = (ExerciseCombo) getIntent().getSerializableExtra("EXERCISECOMBO");
+
+        EditText titleEdit = findViewById(R.id.exerciseName);
+        EditText setsEdit = findViewById(R.id.exerciseSets);
+        EditText repsEdit = findViewById(R.id.exerciseReps);
+        EditText weightEdit = findViewById(R.id.exerciseWeight);
+        EditText equipmentEdit = findViewById(R.id.exerciseEquipment);
+        EditText durationPerSetEdit = findViewById(R.id.exerciseDuration);
+        EditText restBetweenSetsEdit = findViewById(R.id.exerciseRest);
 
         Button submitBtn = findViewById(R.id.btnAddExercise);
         submitBtn.setOnClickListener( v -> {
-            String title = titleEdit.getText().toString();
-            int sets = Integer.parseInt(setsEdit.getText().toString());
-            int reps = Integer.parseInt(repsEdit.getText().toString());
-            double weight = Double.parseDouble(weightEdit.getText().toString());
-            String equipment = equipmentEdit.getText().toString();
-            int durationPerSet = Integer.parseInt(durationPerSetEdit.getText().toString());
-            int restBetweenSets = Integer.parseInt(restBetweenSetsEdit.getText().toString());
+            ec.setTitle(titleEdit.getText().toString());
+            ec.setSets(Integer.parseInt(setsEdit.getText().toString()));
+            ec.setReps(Integer.parseInt(repsEdit.getText().toString()));
+            ec.setWeight(Double.parseDouble(weightEdit.getText().toString()));
+            ec.setEquipment(equipmentEdit.getText().toString());
+            ec.setDurationPerSet(Integer.parseInt(durationPerSetEdit.getText().toString()));
+            ec.setRestBetweenSets(Integer.parseInt(restBetweenSetsEdit.getText().toString()));
 
-            ExerciseCombo exerciseCombo = new ExerciseCombo(title, sets, reps, weight, equipment, durationPerSet, restBetweenSets);
+            Intent skil = new Intent();
+            skil.putExtra("EXERCISECOMBO", ec);
+            setResult(RESULT_OK, skil);
 
-            mWorkoutService.addExerciseCombo(exerciseCombo, workout);
-
-            setResult(RESULT_OK);
             finish();
         });
     }

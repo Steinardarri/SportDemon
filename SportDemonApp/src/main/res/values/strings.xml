@@ -30,4 +30,14 @@
     <string name="play">PLAY</string>
     <string name="workout_edit">Edit</string>
     <string name="workout_add">Add</string>
+    <string name="exercise_name">Exercise name</string>
+    <string name="sets">Sets</string>
+    <string name="repetitions">Repetitions</string>
+    <string name="weight">Weight</string>
+    <string name="equipment">Equipment</string>
+    <string name="duration_per_set">Duration (per set)</string>
+    <string name="rest_between_sets">Rest (between sets)</string>
+    <string name="create_workout">Create Workout</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 </resources>

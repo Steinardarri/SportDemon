@@ -54,7 +54,13 @@ public class SignupActivity extends AppCompatActivity {
             String password = passwordEdit.getText().toString();
             String PasswordConf = passwordConfEdit.getText().toString();
 
-            if (!password.equals(PasswordConf)) {
+            if (email.equals("") || username.equals("") ||
+                password.equals("") || PasswordConf.equals("")) {
+                Toast.makeText(this,
+                        "Please fill all fields",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }else if (!password.equals(PasswordConf)) {
                 Toast.makeText(this,
                         "Passwords Didn't Match",
                         Toast.LENGTH_SHORT
@@ -123,7 +129,7 @@ public class SignupActivity extends AppCompatActivity {
                                         // return
                                         Intent skil = new Intent();
                                         skil.putExtra("USER", response.body());
-                                        setResult(-1, skil);
+                                        setResult(RESULT_OK, skil);
                                         finish();
                                     } else {
                                         // UI

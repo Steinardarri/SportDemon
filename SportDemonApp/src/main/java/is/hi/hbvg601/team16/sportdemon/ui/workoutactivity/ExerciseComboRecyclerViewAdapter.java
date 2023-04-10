@@ -28,7 +28,7 @@ public class ExerciseComboRecyclerViewAdapter
     @NonNull
     @Override
     public exerciseComboViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.workout_card, parent, false);
+        View view = inflater.inflate(R.layout.card_exercise_combo, parent, false);
         return new exerciseComboViewHolder(view);
     }
 
@@ -51,8 +51,8 @@ public class ExerciseComboRecyclerViewAdapter
 
         exerciseComboViewHolder(View itemView) {
             super(itemView);
-            exComboName = (TextView) itemView.findViewById(R.id.exComboName);
-            exComboInfoString = (TextView) itemView.findViewById(R.id.exComboInfoString);
+            exComboName = itemView.findViewById(R.id.exComboName);
+            exComboInfoString = itemView.findViewById(R.id.exComboInfoString);
             itemView.setOnClickListener(this);
         }
 

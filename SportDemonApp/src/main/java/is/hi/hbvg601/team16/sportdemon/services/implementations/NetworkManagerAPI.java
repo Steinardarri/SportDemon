@@ -1,34 +1,24 @@
 package is.hi.hbvg601.team16.sportdemon.services.implementations;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.services.NetworkManager;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
 
 public class NetworkManagerAPI {
 
     private static NetworkManager mAPI;
-
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
     static {
         setupNetworkManagerAPI();
@@ -44,8 +34,8 @@ public class NetworkManagerAPI {
         RxJava3CallAdapterFactory rxAdapter = RxJava3CallAdapterFactory.create();
 
         Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://10.0.2.2:8080") // Local server
-                .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
+                .baseUrl("http://10.0.2.2:8080") // Local server
+//                .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
                 .addConverterFactory(GsonConverterFactory.create(demonGson))
                 .addCallAdapterFactory(rxAdapter)
                 .client(httpClient.build())
@@ -83,8 +73,11 @@ public class NetworkManagerAPI {
 
     // Workout Service
 
+    public Call<ExerciseCombo> addExerciseCombo(ExerciseCombo ec) {
+        return mAPI.addExerciseCombo(ec);
+    }
 
-    // Exercise Service
-
-
+    public Call<Workout> addWorkout(Workout workout) {
+        return mAPI.addWorkout(workout);
+    }
 }

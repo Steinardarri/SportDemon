@@ -1,5 +1,7 @@
 package is.hi.hbvg601.team16.sportdemon;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -20,8 +22,7 @@ public class HomeActivity extends AppCompatActivity {
     @SuppressWarnings("FieldCanBeLocal")
     private ActivityHomeBinding binding;
 
-    private static User mSportUser; // Aðal user loggaður inn
-    public HomeService mHomeService;
+    private HomeService mHomeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +43,6 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_home);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
     }
 
-    public static User getSportUser() {
-        return mSportUser;
-    }
-
-    public static void setSportUser(User sportUser) {
-        mSportUser = sportUser;
-    }
 }
