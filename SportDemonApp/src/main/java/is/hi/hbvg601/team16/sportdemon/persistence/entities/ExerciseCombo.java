@@ -28,8 +28,7 @@ public class ExerciseCombo implements Serializable {
     private int durationPerSet;
     private int restBetweenSets;
 
-    public ExerciseCombo() {
-    }
+    public ExerciseCombo() {}
     public ExerciseCombo(Workout workout, String title, int sets, int reps, double weight,
                          String equipment, int durationPerSet, int restBetweenSets) {
         this.workout = workout;
@@ -45,8 +44,8 @@ public class ExerciseCombo implements Serializable {
     public UUID getId() {
         return id;
     }
-    public void setId(UUID id) {
-        this.id = id;
+    public void setId(UUID ID) {
+        this.id = ID;
     }
 
     public Workout getWorkout() {

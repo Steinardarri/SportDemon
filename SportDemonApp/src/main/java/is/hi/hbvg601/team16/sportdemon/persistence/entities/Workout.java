@@ -18,27 +18,25 @@ import java.util.UUID;
 
 public class Workout implements Serializable {
 
-    private UUID ID;
+    private UUID id;
     private User user;
     private String title;
     private int duration;
     private String description;
     private List<ExerciseCombo> exerciseCombo = new ArrayList<>();
 
-    public Workout() {
-    }
-
+    public Workout() {}
     public Workout(String title, String description, User user) {
         this.title = title;
         this.description = description;
         this.user = user;
     }
 
-    public UUID getID() {
-        return ID;
+    public UUID getId() {
+        return id;
     }
-    public void setID(UUID ID) {
-        this.ID = ID;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public User getUser() {

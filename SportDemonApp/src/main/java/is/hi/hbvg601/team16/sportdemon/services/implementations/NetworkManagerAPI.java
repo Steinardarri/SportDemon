@@ -27,9 +27,7 @@ public class NetworkManagerAPI {
     private static void setupNetworkManagerAPI() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         Gson demonGson = new GsonBuilder()
-                .serializeNulls()
-                .setLenient()
-                .setPrettyPrinting()
+                // Setja stillingar á Gson hér
                 .create();
         RxJava3CallAdapterFactory rxAdapter = RxJava3CallAdapterFactory.create();
 

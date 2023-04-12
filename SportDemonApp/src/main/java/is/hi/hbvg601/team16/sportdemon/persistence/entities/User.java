@@ -20,16 +20,14 @@ import java.util.UUID;
 
 public class User implements Serializable {
 
-    private UUID ID;
+    private UUID id;
     private String username;
     private String password;
     private String email;
     private List<Workout> workoutList = new ArrayList<>();
     private List<WorkoutResult> workoutResultList = new ArrayList<>();
 
-    public User() {
-    }
-
+    public User() {}
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
@@ -40,18 +38,18 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "ID=" + getID() +
+                "ID=" + getId() +
                 ", username='" + getUsername() + '\'' +
                 ", password='" + getPassword() + '\'' +
                 ", email='" + getEmail() + '\'' +
                 '}';
     }
 
-    public UUID getID() {
-        return ID;
+    public UUID getId() {
+        return id;
     }
-    public void setID(UUID ID) {
-        this.ID = ID;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getUsername() {
