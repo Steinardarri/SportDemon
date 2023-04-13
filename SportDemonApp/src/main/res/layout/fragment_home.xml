@@ -10,10 +10,10 @@
 
     <ImageView
         android:id="@+id/home_sportDemonLogo"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="150dp"
         android:contentDescription="@string/app_name"
-        android:src="@mipmap/ic_launcher_sport_demon"
+        android:src="@mipmap/sport_demon_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/workoutRecyclerView"

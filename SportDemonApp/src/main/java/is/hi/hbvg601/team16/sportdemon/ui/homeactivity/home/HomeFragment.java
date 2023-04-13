@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dmax.dialog.SpotsDialog;
 import is.hi.hbvg601.team16.sportdemon.LoginActivity;
@@ -87,23 +88,33 @@ public class HomeFragment extends Fragment {
             User u = mHomeService.getCurrentUser(getContext());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            View vAlert = inflater.inflate(R.layout.dialog_create_workout, null);
+            builder.setView(vAlert);
             builder.setTitle("Create Workout");
-            builder.setView(R.layout.dialog_create_workout);
+
+            EditText nameEdit = vAlert.findViewById(R.id.createWorkoutName);
+            EditText descEdit = vAlert.findViewById(R.id.createWorkoutDesc);
 
             // Set up the buttons
             builder.setPositiveButton("Add", (dialog, which) -> {
-                EditText nameEdit = v.findViewById(R.id.createWorkoutName);
-                EditText descEdit = v.findViewById(R.id.createWorkoutDesc);
                 String name = nameEdit.getText().toString();
                 String desc = descEdit.getText().toString();
+                List<String> uWorkoutTitles = u.getWorkoutList().stream()
+                        .map(Workout::getTitle)
+                        .collect(Collectors.toList());
 
                 if(name.equals("")) {
                     Toast.makeText(getActivity(),
                             "Please give the workout a name",
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_LONG
+                    ).show();
+                } else if(uWorkoutTitles.contains(name)) {
+                    Toast.makeText(getActivity(),
+                            "A workout already has that name",
+                            Toast.LENGTH_LONG
                     ).show();
                 } else {
-                    Workout w = new Workout(name, desc, u);
+                    Workout w = new Workout(name, desc);
 
                     SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Setting up new Workout");
                     loadingDialog.show();
@@ -116,23 +127,26 @@ public class HomeFragment extends Fragment {
                                 try {
                                     mHomeService.setCurrentWorkout(response.body(), getContext());
                                     Intent i = new Intent(getActivity(), WorkoutActivity.class);
+                                    loadingDialog.dismiss();
                                     workoutResultLauncher.launch(i);
                                 } catch (Exception e) {
                                     // UI
+                                    loadingDialog.dismiss();
                                     Toast.makeText(getContext(),
                                             e.toString(),
-                                            Toast.LENGTH_SHORT
+                                            Toast.LENGTH_LONG
                                     ).show();
                                 }
+                            } else {
+                                loadingDialog.dismiss();
                             }
-                            loadingDialog.dismiss();
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<Workout> call, @NonNull Throwable t) {
                             Toast.makeText(getContext(),
                                     t.toString(),
-                                    Toast.LENGTH_SHORT
+                                    Toast.LENGTH_LONG
                             ).show();
                             loadingDialog.dismiss();
                         }
@@ -191,7 +205,8 @@ public class HomeFragment extends Fragment {
                     Intent data = result.getData();
                     assert data != null;
                     User resultUser = (User) data.getSerializableExtra("USER");
-                    // TODO: vantar sum gögn í User hlut sem þetta kall skilar
+                    // TODO: loggaður user hverfur þegar skipt er um view, td Journal.
+                    // Þarf betri útfærslu
 
                     mBinding.textUserName.setText(resultUser.getUsername());
                     mBinding.textUserEmail.setText(resultUser.getEmail());

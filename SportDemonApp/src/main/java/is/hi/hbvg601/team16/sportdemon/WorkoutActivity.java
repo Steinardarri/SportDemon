@@ -3,6 +3,7 @@ package is.hi.hbvg601.team16.sportdemon;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -46,6 +47,8 @@ public class WorkoutActivity extends AppCompatActivity {
         this.mHomeService = new HomeServiceImplementation(nmAPI);
 
         Workout mWorkout = mHomeService.getCurrentWorkout(this);
+        TextView title = findViewById(R.id.workout_title);
+        title.setText(mWorkout.getTitle());
 
         // Setja upp RecyclerView fyrir ExerciseCombos
         RecyclerView mECRecyclerView = findViewById(R.id.workout_recyclerView);
@@ -90,6 +93,12 @@ public class WorkoutActivity extends AppCompatActivity {
                             ).show();
                             loadingDialog.dismiss();
                         }
+                    } else {
+                        Toast.makeText(WorkoutActivity.this,
+                                response.message(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        loadingDialog.dismiss();
                     }
                 }
 

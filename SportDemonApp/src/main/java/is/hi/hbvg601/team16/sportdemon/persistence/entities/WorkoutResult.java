@@ -18,13 +18,12 @@ import java.util.UUID;
 public class WorkoutResult implements Serializable {
 
     private UUID id;
-    private User user;
     private Date date;
-    private Workout data;
+    private String data;
     private byte[] photo;
 
     public WorkoutResult() {}
-    public WorkoutResult(Workout data, byte[] photo) {
+    public WorkoutResult(String data, byte[] photo) {
         this.data = data;
         this.photo = photo;
     }
@@ -36,13 +35,6 @@ public class WorkoutResult implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Date getDate() {
         return date;
     }
@@ -50,10 +42,10 @@ public class WorkoutResult implements Serializable {
         this.date = date;
     }
 
-    public Workout getData() {
+    public String getData() {
         return data;
     }
-    public void setData(Workout data) {
+    public void setData(String data) {
         this.data = data;
     }
 

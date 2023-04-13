@@ -24,9 +24,9 @@
     <string name="login_form_password">Password</string>
     <string name="login_form_title">Log in</string>
     <string name="hyperlink"><a href="activity_signup">Don´t have an account? Click here to sign up!</a></string>
-    <string name="ex_combo_title">Deadlift</string>
-    <string name="title_of_workout">Workout Title</string>
-    <string name="ex_combo_info">40 reps - 3 sets - 200 kg</string>
+    <string name="ex_combo_title" translatable="false">Deadlift</string>
+    <string name="title_of_workout" translatable="false">Workout Title</string>
+    <string name="ex_combo_info" translatable="false">40 reps - 3 sets - 200 kg</string>
     <string name="play">PLAY</string>
     <string name="workout_edit">Edit</string>
     <string name="workout_add">Add</string>

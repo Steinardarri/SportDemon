@@ -49,7 +49,7 @@ public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRe
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView workoutTextView;
+        final TextView workoutTextView;
 
         ViewHolder(View itemView) {
             super(itemView);

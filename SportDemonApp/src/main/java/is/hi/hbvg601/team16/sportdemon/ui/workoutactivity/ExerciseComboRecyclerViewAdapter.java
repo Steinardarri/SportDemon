@@ -46,8 +46,8 @@ public class ExerciseComboRecyclerViewAdapter
 
     // stores and recycles views as they are scrolled off screen
     public class exerciseComboViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView exComboName;
-        TextView exComboInfoString;
+        final TextView exComboName;
+        final TextView exComboInfoString;
 
         exerciseComboViewHolder(View itemView) {
             super(itemView);

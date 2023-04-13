@@ -23,4 +23,17 @@
     <string name="login_form_password">Password</string>
     <string name="login_form_title">Log in</string>
     <string name="hyperlink"><a href="activity_signup">Don´t have an account? Click here to sign up!</a></string>
+    <string name="play">Play</string>
+    <string name="workout_edit">Edit</string>
+    <string name="workout_add">Add</string>
+    <string name="exercise_name">Exercise name</string>
+    <string name="sets">Sets</string>
+    <string name="repetitions">Repetitions</string>
+    <string name="weight">Weight</string>
+    <string name="equipment">Equipment</string>
+    <string name="duration_per_set">Duration (per set)</string>
+    <string name="rest_between_sets">Rest (per set)</string>
+    <string name="create_workout">Create Workout</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 </resources>
