@@ -19,6 +19,7 @@ import java.util.UUID;
 public class Workout implements Serializable {
 
     private UUID id;
+    private UUID user_id;
     private String title;
     private int duration;
     private String description;
@@ -35,6 +36,13 @@ public class Workout implements Serializable {
     }
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getUser_id() {
+        return user_id;
+    }
+    public void setUser_id(UUID user_id) {
+        this.user_id = user_id;
     }
 
     public String getTitle() {

@@ -69,12 +69,13 @@ public class WorkoutActivity extends AppCompatActivity {
         mECRecyclerView.setAdapter(adapter);
 
         findViewById(R.id.workout_add_button).setOnClickListener(v -> {
-            ExerciseCombo ec = new ExerciseCombo();
+            ExerciseCombo newEC = new ExerciseCombo();
+            newEC.setWorkout_id(mWorkout.getId());
 
             SpotsDialog loadingDialog = new SpotsDialog(this, "Setting up new Exercise");
             loadingDialog.show();
             // Setja upp nýtt ExerciseCombo á server
-            Call<ExerciseCombo> callSync = mWorkoutService.saveExerciseCombo(ec);
+            Call<ExerciseCombo> callSync = mWorkoutService.saveExerciseCombo(newEC);
             callSync.enqueue(new Callback<ExerciseCombo>() {
                 @Override
                 public void onResponse(@NonNull Call<ExerciseCombo> call, @NonNull Response<ExerciseCombo> response) {

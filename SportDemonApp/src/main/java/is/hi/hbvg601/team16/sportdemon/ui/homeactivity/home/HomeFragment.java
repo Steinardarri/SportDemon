@@ -1,8 +1,11 @@
 package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.home;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +54,7 @@ public class HomeFragment extends Fragment {
     // Intent code
     private static final int RESULT_SUCCESS = -1;
 
+    @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 //        HomeViewModel homeViewModel = // TODO: Implement Custom ViewModels
@@ -64,14 +68,21 @@ public class HomeFragment extends Fragment {
         this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
         this.mUserService = new UserServiceImplementation(nmAPI);
 
+        User user = mHomeService.getCurrentUser(getContext());
+
         // Setja upp RecyclerView fyrir workouts
         RecyclerView recyclerView = mBinding.workoutRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         List<Workout> workoutList;
-        User user = mHomeService.getCurrentUser(getContext());
         if (user != null) {
+            mBinding.textUserName.setText(user.getUsername());
+            mBinding.textUserEmail.setText(user.getEmail());
+            mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
+            mBinding.homeLoginButton.setText(getResources().getString(R.string.logout));
+
             workoutList = user.getWorkoutList();
         } else {
+            mBinding.addWorkoutButton.setVisibility(View.INVISIBLE);
             workoutList = new ArrayList<>();
         }
         mAdapter = new WorkoutsRecyclerViewAdapter(getContext(), workoutList);
@@ -83,9 +94,8 @@ public class HomeFragment extends Fragment {
                 });
         recyclerView.setAdapter(mAdapter);
 
-        mBinding.addWorkoutButton.setVisibility(View.INVISIBLE);
         mBinding.addWorkoutButton.setOnClickListener(v -> {
-            User u = mHomeService.getCurrentUser(getContext());
+            User currentUser = mHomeService.getCurrentUser(getContext());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             View vAlert = inflater.inflate(R.layout.dialog_create_workout, null);
@@ -99,7 +109,7 @@ public class HomeFragment extends Fragment {
             builder.setPositiveButton("Add", (dialog, which) -> {
                 String name = nameEdit.getText().toString();
                 String desc = descEdit.getText().toString();
-                List<String> uWorkoutTitles = u.getWorkoutList().stream()
+                List<String> uWorkoutTitles = currentUser.getWorkoutList().stream()
                         .map(Workout::getTitle)
                         .collect(Collectors.toList());
 
@@ -114,11 +124,12 @@ public class HomeFragment extends Fragment {
                             Toast.LENGTH_LONG
                     ).show();
                 } else {
-                    Workout w = new Workout(name, desc);
+                    Workout newWorkout = new Workout(name, desc);
+                    newWorkout.setUser_id(currentUser.getId());
 
                     SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Setting up new Workout");
                     loadingDialog.show();
-                    Call<Workout> callSync = mWorkoutService.saveWorkout(w);
+                    Call<Workout> callSync = mWorkoutService.saveWorkout(newWorkout);
                     callSync.enqueue(new Callback<Workout>() {
                         @Override
                         public void onResponse(@NonNull Call<Workout> call, @NonNull Response<Workout> response) {
@@ -138,6 +149,10 @@ public class HomeFragment extends Fragment {
                                     ).show();
                                 }
                             } else {
+                                Toast.makeText(getContext(),
+                                        response.message(),
+                                        Toast.LENGTH_SHORT
+                                ).show();
                                 loadingDialog.dismiss();
                             }
                         }
@@ -162,9 +177,28 @@ public class HomeFragment extends Fragment {
                 signupResultLauncher.launch(new Intent(getActivity(), SignupActivity.class))
         );
 
-        mBinding.homeLoginButton.setOnClickListener(v ->
-                loginResultLauncher.launch(new Intent(getActivity(), LoginActivity.class))
-        );
+        mBinding.homeLoginButton.setOnClickListener(v -> {
+            if (mHomeService.getCurrentUser(getContext()) == null) {
+                // Log in
+                loginResultLauncher.launch(new Intent(getActivity(), LoginActivity.class));
+            } else {
+                // Log out
+                SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Logging out");
+                loadingDialog.show();
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(() -> {
+                    mHomeService.setCurrentUser(null, getContext());
+                    mHomeService.setCurrentWorkout(null, getContext());
+
+                    mBinding.textUserName.setText("");
+                    mBinding.textUserEmail.setText("");
+                    mBinding.homeLoginButton.setText(getResources().getString(R.string.login_form_title));
+                    mBinding.addWorkoutButton.setVisibility(View.INVISIBLE);
+                    refreshList();
+                    loadingDialog.dismiss();
+                },1200);
+            }
+        });
 
         return root;
     }

@@ -36,5 +36,6 @@
     <string name="create_workout">Búa til Æfingu</string>
     <string name="title">Titill</string>
     <string name="description">Lýsing</string>
+    <string name="logout">Útskrá</string>
 
 </resources>
