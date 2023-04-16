@@ -7,7 +7,9 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Headers;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.GET;
 import retrofit2.http.Body;
@@ -18,17 +20,20 @@ public interface NetworkManager {
 
     // User Service
 
-    @GET("/users/id/{id}")
-    Call<User> getUser(@Path("id") UUID id);
-
-    @GET("/users/username/{username}")
-    Call<User> getUser(@Path("username") String username);
-
-    @POST("/signup")
+    @POST("/users/signup")
     Call<User> createAccount(@Body User user);
 
-    @POST("/login")
+    @POST("/users/login")
     Call<User> login(@Body User user); // Sendir User með einungis username og password
+
+    @GET("/users/{id}")
+    Call<User> getUser(@Path("id") UUID id);
+
+    @PUT("/users/{id}")
+    Call<User> updateUser(@Path("id") UUID id);
+
+    @DELETE("/users/{id}")
+    Call<User> deleteUser(@Path("id") UUID id);
 
     // Workout Service
 

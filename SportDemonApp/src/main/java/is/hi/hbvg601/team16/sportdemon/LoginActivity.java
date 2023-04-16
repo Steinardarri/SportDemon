@@ -77,13 +77,18 @@ public class LoginActivity extends AppCompatActivity {
                                 hideLoading();
                             }
                         } catch (Exception e) {
-                            // UI
                             Toast.makeText(LoginActivity.super.getApplicationContext(),
                                     e.toString(),
                                     Toast.LENGTH_SHORT
                             ).show();
                             hideLoading();
                         }
+                    } else {
+                        Toast.makeText(LoginActivity.super.getApplicationContext(),
+                                response.code() + " - " + response.message(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        hideLoading();
                     }
                 }
 

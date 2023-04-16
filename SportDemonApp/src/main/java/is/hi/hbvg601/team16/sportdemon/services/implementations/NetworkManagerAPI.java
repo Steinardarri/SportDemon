@@ -68,9 +68,6 @@ public class NetworkManagerAPI {
     public Call<User> getUser(UUID id) {
         return mAPI.getUser(id);
     }
-    public Call<User> getUser(String username) {
-        return mAPI.getUser(username);
-    }
 
     // Workout Service
 

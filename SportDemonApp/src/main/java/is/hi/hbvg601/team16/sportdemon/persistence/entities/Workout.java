@@ -19,11 +19,11 @@ import java.util.UUID;
 public class Workout implements Serializable {
 
     private UUID id;
-    private UUID user_id;
+    private User user;
     private String title;
     private int duration;
     private String description;
-    private List<ExerciseCombo> exerciseCombo = new ArrayList<>();
+    private transient List<ExerciseCombo> exerciseCombo = new ArrayList<>();
 
     public Workout() {}
     public Workout(String title, String description) {
@@ -38,11 +38,11 @@ public class Workout implements Serializable {
         this.id = id;
     }
 
-    public UUID getUser_id() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
-    public void setUser_id(UUID user_id) {
-        this.user_id = user_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getTitle() {

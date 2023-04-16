@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
                     ).show();
                 } else {
                     Workout newWorkout = new Workout(name, desc);
-                    newWorkout.setUser_id(currentUser.getId());
+                    newWorkout.setUser(currentUser);
 
                     SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Setting up new Workout");
                     loadingDialog.show();
@@ -269,9 +269,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void saveToServer() {
-        // Líklegast óþarfi, einu gögnin sem breytast hjá User eru breytt annarsstaðar
-        // þe. Workout og WorkoutResult, og eins lengi og current user í SportDemon.java
-        // er uppfærður þá er það nóg
         User user = mHomeService.getCurrentUser(getContext());
         Call<User> callSync = mUserService.editAccount(user);
 
@@ -281,9 +278,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if (response.isSuccessful()) {
-                    // UI
                     Toast.makeText(getContext(),
                             "Saving successful",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                } else {
+                    Toast.makeText(getContext(),
+                            response.message(),
                             Toast.LENGTH_SHORT
                     ).show();
                 }

@@ -14,12 +14,11 @@
         android:id="@+id/workout_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/workout_recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.10"
-        app:layout_constraintVertical_chainStyle="packed">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/workout_title"
@@ -30,9 +29,9 @@
             android:text="@string/title_of_workout"
             android:textColor="@color/black"
             android:textSize="32sp"
-            app:layout_constraintHorizontal_bias=".1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,43 +49,26 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workout_recyclerView"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#FFFFFF"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/workout_top"
+        android:layout_marginBottom="16dp"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toTopOf="@+id/workout_buttonLayout"
-        tools:context=".workout">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/workout_recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"/>
-
-        </LinearLayout>
-    </ScrollView>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workout_top" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/workout_buttonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scrollView">
+        app:layout_constraintTop_toBottomOf="@+id/workout_recyclerView">
 
         <Button
             android:id="@+id/workout_add_button"
@@ -98,7 +80,6 @@
             app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <Button
             android:id="@+id/workout_edit_button"

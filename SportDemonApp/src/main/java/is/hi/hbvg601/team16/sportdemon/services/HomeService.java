@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;

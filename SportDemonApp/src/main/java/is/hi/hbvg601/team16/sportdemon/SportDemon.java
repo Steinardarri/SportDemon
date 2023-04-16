@@ -5,7 +5,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 
@@ -66,6 +72,32 @@ public class SportDemon extends Application {
 
         String json = gson.toJson(workout);
         prefsEditor.putString("CurrentWorkout", json);
+        prefsEditor.apply();
+    }
+
+    /**
+     * Sækir vistað exerciseComboList og breytir frá json í List<ExerciseCombo> hlut
+     * Því exerciseComboList í Workout hlut er transient
+     * @return List<ExerciseCombo> fyrir núverandi workout
+     */
+    public List<ExerciseCombo> getCurrentExerciseCombo() {
+        Gson gson = new Gson();
+        Type listOfExerciseCombo = new TypeToken<List<ExerciseCombo>>() {}.getType();
+
+        String json = mPrefs.getString("CurrentECList", "");
+        return gson.fromJson(json, listOfExerciseCombo);
+    }
+    /**
+     * Vistar exerciseCombo lista núverandi workouts sem json hlut í String
+     * Því exerciseComboList í Workout hlut er transient
+     * @param exerciseComboList til að geyma
+     */
+    public void setCurrentExerciseCombo(List<ExerciseCombo> exerciseComboList) {
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+
+        String json = gson.toJson(exerciseComboList);
+        prefsEditor.putString("CurrentECList", json);
         prefsEditor.apply();
     }
 }

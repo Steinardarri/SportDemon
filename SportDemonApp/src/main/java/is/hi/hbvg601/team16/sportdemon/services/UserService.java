@@ -8,12 +8,6 @@ import retrofit2.Call;
 public interface UserService {
 
     /**
-     * @param  user to check if logged in
-     * @return boolean success
-     */
-    boolean isLoggedIn(User user); // Not implemented
-
-    /**
      * @param  user that is to be created
      * @return call to server to create account
      */
@@ -39,19 +33,9 @@ public interface UserService {
     Call<User> login(String username, String password);
 
     /**
-     * @return boolean success
-     */
-    Boolean logout(); // Not implemented
-
-    /**
      * @param  id of the user to get
      * @return call to server
      */
     Call<User> findUserByID(UUID id);
 
-    /**
-     * @param  username of the user to get
-     * @return call to server to find user
-     */
-    Call<User> findUserByUsername(String username);
 }

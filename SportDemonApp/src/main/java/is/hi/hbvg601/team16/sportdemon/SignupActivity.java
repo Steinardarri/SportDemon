@@ -67,21 +67,36 @@ public class SignupActivity extends AppCompatActivity {
                 ).show();
             } else {
                 showLoading();
-                final Boolean[] userNameAvailable = {true}; // Þarf að vera final útaf async
-                Call<User> callSyncName = mUserService.findUserByUsername(username);
-                callSyncName.enqueue(new Callback<User>() {
+
+                User user = new User(username, password, email);
+
+                Call<User> callSync = mUserService.createAccount(user);
+                callSync.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                    public void onResponse(@NonNull Call<User> call,
+                                           @NonNull Response<User> response) {
                         if (response.isSuccessful()) {
                             // Get response
                             try {
-                                if (response.body() != null) { // Notendanafn tekið
+                                if (response.body() != null) {
                                     // UI
                                     Toast.makeText(SignupActivity.super.getApplicationContext(),
-                                            "Username Not Available",
+                                            "Account Created",
                                             Toast.LENGTH_SHORT
                                     ).show();
-                                    userNameAvailable[0] = false;
+                                    hideLoading();
+
+                                    // return
+                                    Intent skil = new Intent();
+                                    skil.putExtra("USER", response.body());
+                                    setResult(RESULT_OK, skil);
+                                    finish();
+                                } else {
+                                    // UI
+                                    Toast.makeText(SignupActivity.super.getApplicationContext(),
+                                            "Username taken",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
                                     hideLoading();
                                 }
                             } catch (Exception e) {
@@ -90,77 +105,25 @@ public class SignupActivity extends AppCompatActivity {
                                         e.toString(),
                                         Toast.LENGTH_SHORT
                                 ).show();
-                                userNameAvailable[0] = false;
                                 hideLoading();
                             }
+                        } else {
+                            Toast.makeText(SignupActivity.super.getApplicationContext(),
+                                    response.code() + " - " + response.message(),
+                                    Toast.LENGTH_SHORT
+                            ).show();
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-                        // UI
                         Toast.makeText(SignupActivity.super.getApplicationContext(),
                                 t.toString(),
                                 Toast.LENGTH_SHORT
                         ).show();
-                        userNameAvailable[0] = false;
                         hideLoading();
                     }
                 });
-
-                if (userNameAvailable[0]) {
-                    User user = new User(username, password, email);
-
-                    Call<User> callSync = mUserService.createAccount(user);
-                    callSync.enqueue(new Callback<User>() {
-                        @Override
-                        public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
-                            if (response.isSuccessful()) {
-                                // Get response
-                                try {
-                                    if (response.body() != null) {
-                                        // UI
-                                        Toast.makeText(SignupActivity.super.getApplicationContext(),
-                                                "Account Created",
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-                                        hideLoading();
-
-                                        // return
-                                        Intent skil = new Intent();
-                                        skil.putExtra("USER", response.body());
-                                        setResult(RESULT_OK, skil);
-                                        finish();
-                                    } else {
-                                        // UI
-                                        Toast.makeText(SignupActivity.super.getApplicationContext(),
-                                                "Error",
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-                                        hideLoading();
-                                    }
-                                } catch (Exception e) {
-                                    // UI
-                                    Toast.makeText(SignupActivity.super.getApplicationContext(),
-                                            e.toString(),
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-                                    hideLoading();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-                            // UI
-                            Toast.makeText(SignupActivity.super.getApplicationContext(),
-                                    t.toString(),
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                            hideLoading();
-                        }
-                    });
-                }
             }
         });
 

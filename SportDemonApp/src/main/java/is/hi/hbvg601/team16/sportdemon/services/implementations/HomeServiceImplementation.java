@@ -2,7 +2,10 @@ package is.hi.hbvg601.team16.sportdemon.services.implementations;
 
 import android.content.Context;
 
+import java.util.List;
+
 import is.hi.hbvg601.team16.sportdemon.SportDemon;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
@@ -37,21 +40,26 @@ public class HomeServiceImplementation implements HomeService {
 
     /**
      * @param  context to bind from
-     * @return current saved user
+     * @return current saved Workout, with EC list
      */
     @Override
     public Workout getCurrentWorkout(Context context) {
         SportDemon data = new SportDemon(context);
-        return data.getCurrentWorkout();
+        Workout w = data.getCurrentWorkout();
+        // Þarf vegna exerciseCombo list er transient
+        w.setExerciseCombo(data.getCurrentExerciseCombo());
+        return w;
     }
 
     /**
-     * @param workout to set as current
+     * @param workout to set as current, also saves it's EC list
      * @param context to bind from
      */
     @Override
     public void setCurrentWorkout(Workout workout, Context context) {
         SportDemon data = new SportDemon(context);
         data.setCurrentWorkout(workout);
+        // Þarf vegna exerciseCombo list er transient
+        if(workout != null) data.setCurrentExerciseCombo(workout.getExerciseCombo());
     }
 }

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
+import io.reactivex.rxjava3.core.Observable;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
@@ -70,7 +71,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         findViewById(R.id.workout_add_button).setOnClickListener(v -> {
             ExerciseCombo newEC = new ExerciseCombo();
-            newEC.setWorkout_id(mWorkout.getId());
+            newEC.setWorkout(mWorkout);
 
             SpotsDialog loadingDialog = new SpotsDialog(this, "Setting up new Exercise");
             loadingDialog.show();
@@ -149,7 +150,8 @@ public class WorkoutActivity extends AppCompatActivity {
         ExerciseComboRecyclerViewAdapter adapter =
                 (ExerciseComboRecyclerViewAdapter) mECRecyclerView.getAdapter();
         assert adapter != null;
-        adapter.setData(mHomeService.getCurrentWorkout(this).getExerciseCombo());
+        Workout w = mHomeService.getCurrentWorkout(this);
+        if(w != null) adapter.setData(w.getExerciseCombo());
         mECRecyclerView.setAdapter(adapter);
     }
 

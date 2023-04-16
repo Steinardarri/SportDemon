@@ -24,8 +24,8 @@ public class User implements Serializable {
     private String username;
     private String password;
     private String email;
-    private List<Workout> workoutList = new ArrayList<>();
-    private List<WorkoutResult> workoutResultList = new ArrayList<>();
+    private transient List<Workout> workoutList = new ArrayList<>();
+    private transient List<WorkoutResult> workoutResultList = new ArrayList<>();
 
     public User() {}
     public User(String username, String password, String email) {

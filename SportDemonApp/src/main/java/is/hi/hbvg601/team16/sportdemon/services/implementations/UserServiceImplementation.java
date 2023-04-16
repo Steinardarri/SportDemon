@@ -24,20 +24,6 @@ public class UserServiceImplementation implements UserService {
     }
 
     /**
-     * @param  username of the user to get
-     * @return User data of the username
-     */
-    @Override
-    public Call<User> findUserByUsername(String username) {
-        return nmAPI.getUser(username);
-    }
-
-    @Override
-    public boolean isLoggedIn(User user) {
-        return false;
-    }
-
-    /**
      * @param  user the user that is to be saved
      * @return Call to server repo to create account
      */
@@ -68,10 +54,5 @@ public class UserServiceImplementation implements UserService {
     @Override
     public Call<User> login(String username, String password) {
         return nmAPI.login(username, password);
-    }
-
-    @Override
-    public Boolean logout() {
-        return null;
     }
 }
