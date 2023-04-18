@@ -14,6 +14,7 @@
         android:orientation="horizontal"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp">
+
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -23,19 +24,17 @@
             android:background="@null"
             android:textStyle="bold"
             android:onClick="previousMonthAction"
-            android:textSize="20sp"></Button>
+            android:textSize="20sp" />
 
-
-    <TextView
-        android:id="@+id/monthYearTV"
-        android:layout_width="0dp"
-        android:layout_weight="2"
-        android:layout_height="wrap_content"
-        android:text="may 2023"
-        android:textSize="20sp"
-        android:textAlignment="center"
-        android:textColor="@color/black"></TextView>
-
+        <TextView
+            android:id="@+id/monthYearTV"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text="may 2023"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
 
         <Button
             android:layout_width="0dp"
@@ -46,7 +45,7 @@
             android:background="@null"
             android:textStyle="bold"
             android:onClick="nextMonthAction"
-            android:textSize="20sp"></Button>
+            android:textSize="20sp" />
 
     </LinearLayout>
     
@@ -54,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -62,7 +61,7 @@
             android:text="SUN"
             android:textColor="@color/french_gray"
             android:textAlignment="center"
-            android:textSize="16sp"></TextView>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -71,7 +70,7 @@
             android:text="MON"
             android:textColor="@color/french_gray"
             android:textAlignment="center"
-            android:textSize="16sp"></TextView>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -80,7 +79,7 @@
             android:text="TUE"
             android:textColor="@color/french_gray"
             android:textAlignment="center"
-            android:textSize="16sp"></TextView>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -89,7 +88,7 @@
             android:text="WED"
             android:textColor="@color/french_gray"
             android:textAlignment="center"
-            android:textSize="16sp"></TextView>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -98,7 +97,7 @@
             android:text="THU"
             android:textColor="@color/french_gray"
             android:textAlignment="center"
-            android:textSize="16sp"></TextView>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -107,7 +106,7 @@
             android:text="FRI"
             android:textColor="@color/french_gray"
             android:textAlignment="center"
-            android:textSize="16sp"></TextView>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -116,12 +115,12 @@
             android:text="SAT"
             android:textColor="@color/french_gray"
             android:textAlignment="center"
-            android:textSize="16sp"></TextView>
+            android:textSize="16sp" />
     </LinearLayout>
-    
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calendarRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent" />
 
 </LinearLayout>
