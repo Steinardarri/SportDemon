@@ -38,5 +38,8 @@
     <string name="description">Lýsing</string>
     <string name="logout">Útskrá</string>
     <string name="passwordWarning">ATH! Ekki nota venjulegu lykilorðin þín. Þau verða send og geymd á opnum texta!</string>
+    <string name="right">Hægri</string>
+    <string name="left">Vinstri</string>
+    <string name="edit_exercise">Breyta Hreyfingu</string>
 
 </resources>

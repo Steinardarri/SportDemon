@@ -30,7 +30,9 @@ android {
         viewBinding true
     }
     packagingOptions {
-        exclude 'META-INF/rxjava.properties'
+        resources {
+            excludes += ['META-INF/rxjava.properties']
+        }
     }
 }
 

@@ -1,9 +1,14 @@
-package is.hi.hbvg601.team16.sportdemon.persistence.entities;
+package is.hi.hbvg601.team16.sportdemon.persistence;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 
 public class LoginData implements Serializable {
 

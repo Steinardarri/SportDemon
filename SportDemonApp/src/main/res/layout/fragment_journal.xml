@@ -16,15 +16,13 @@
         android:layout_marginTop="20dp">
 
         <Button
+            android:id="@+id/journalLeft"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="<-"
-            android:textColor="@color/indigo"
-            android:background="@null"
-            android:textStyle="bold"
             android:onClick="previousMonthAction"
-            android:textSize="20sp" />
+            android:contentDescription="@string/left"
+            app:icon="@android:drawable/ic_media_rew" />
 
         <TextView
             android:id="@+id/monthYearTV"
@@ -37,15 +35,13 @@
             android:textColor="@color/black" />
 
         <Button
+            android:id="@+id/journalRight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="->"
-            android:textColor="@color/indigo"
-            android:background="@null"
-            android:textStyle="bold"
             android:onClick="nextMonthAction"
-            android:textSize="20sp" />
+            android:contentDescription="@string/right"
+            app:icon="@android:drawable/ic_media_ff" />
 
     </LinearLayout>
     

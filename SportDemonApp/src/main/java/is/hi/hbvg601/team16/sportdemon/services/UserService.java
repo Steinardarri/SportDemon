@@ -2,7 +2,7 @@ package is.hi.hbvg601.team16.sportdemon.services;
 
 import java.util.UUID;
 
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.LoginData;
+import is.hi.hbvg601.team16.sportdemon.persistence.LoginData;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import retrofit2.Call;
 

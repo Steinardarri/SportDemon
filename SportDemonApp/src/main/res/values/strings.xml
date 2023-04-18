@@ -37,9 +37,12 @@
     <string name="equipment">Equipment</string>
     <string name="duration_per_set">Duration (per set)</string>
     <string name="rest_between_sets">Rest (between sets)</string>
+    <string name="edit_exercise">Edit Exercise</string>
     <string name="create_workout">Create Workout</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="logout">Log Out</string>
     <string name="passwordWarning">ATTENTION! Do not use your regular passwords, it will be sent and stored in plain text!</string>
+    <string name="right">Right</string>
+    <string name="left">Left</string>
 </resources>

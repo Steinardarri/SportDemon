@@ -2,6 +2,7 @@ package is.hi.hbvg601.team16.sportdemon;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -18,6 +19,7 @@ public class ExerciseComboActivity extends AppCompatActivity {
 
     public WorkoutService mWorkoutService;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +28,11 @@ public class ExerciseComboActivity extends AppCompatActivity {
         NetworkManagerAPI nmAPI = new NetworkManagerAPI();
         this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
 
-        ExerciseCombo ec = (ExerciseCombo) getIntent().getSerializableExtra("EXERCISECOMBO");
 
+        ExerciseCombo ec = (ExerciseCombo) getIntent().getSerializableExtra("EXERCISECOMBO");
+        assert ec != null : "ExerciseCombo is null";
+
+        Button submitBtn = findViewById(R.id.btnAddExercise);
         EditText titleEdit = findViewById(R.id.exerciseName);
         EditText setsEdit = findViewById(R.id.exerciseSets);
         EditText repsEdit = findViewById(R.id.exerciseReps);
@@ -36,7 +41,16 @@ public class ExerciseComboActivity extends AppCompatActivity {
         EditText durationPerSetEdit = findViewById(R.id.exerciseDuration);
         EditText restBetweenSetsEdit = findViewById(R.id.exerciseRest);
 
-        Button submitBtn = findViewById(R.id.btnAddExercise);
+        if (!ec.getTitle().equals("")) submitBtn.setText(R.string.edit_exercise);
+
+        titleEdit.setText(ec.getTitle());
+        setsEdit.setText(""+ec.getSets());
+        repsEdit.setText(""+ec.getReps());
+        weightEdit.setText(""+ec.getWeight());
+        equipmentEdit.setText(ec.getEquipment());
+        durationPerSetEdit.setText(""+ec.getDurationPerSet());
+        restBetweenSetsEdit.setText(""+ec.getRestBetweenSets());
+
         submitBtn.setOnClickListener( v -> {
             ec.setTitle(titleEdit.getText().toString());
             ec.setSets(Integer.parseInt(setsEdit.getText().toString()));

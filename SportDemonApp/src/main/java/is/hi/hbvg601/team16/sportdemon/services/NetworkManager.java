@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import io.reactivex.rxjava3.core.Observable;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.LoginData;
+import is.hi.hbvg601.team16.sportdemon.persistence.LoginData;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
