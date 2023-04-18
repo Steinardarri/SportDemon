@@ -24,8 +24,8 @@ public class User implements Serializable {
     private String username;
     private String password;
     private String email;
-    private transient List<Workout> workoutList = new ArrayList<>();
-    private transient List<WorkoutResult> workoutResultList = new ArrayList<>();
+    private List<Workout> workoutList = new ArrayList<>();
+    private List<WorkoutResult> workoutResultList = new ArrayList<>();
 
     public User() {}
     public User(String username, String password, String email) {
@@ -88,8 +88,21 @@ public class User implements Serializable {
     }
 
     public void addWorkout(Workout w) {
-        List<Workout> wl = getWorkoutList();
-        wl.add(w);
-        setWorkoutList(wl);
+        workoutList.add(w);
     }
+
+    public void editWorkout(Workout newWorkout) {
+        for (Workout w : workoutList){
+            if (w.getId().equals(newWorkout.getId())){
+                int i = workoutList.indexOf(w);
+                workoutList.set(i, newWorkout);
+                break;
+            }
+        }
+    }
+
+    public void addWorkoutResult(WorkoutResult wr) {
+        workoutResultList.add(wr);
+    }
+
 }

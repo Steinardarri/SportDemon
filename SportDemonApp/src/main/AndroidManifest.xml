@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SportDemon"
         android:usesCleartextTraffic="true"
+        android:screenOrientation="portrait"
         tools:targetApi="33">
         <activity
             android:name=".HomeActivity"

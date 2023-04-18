@@ -74,30 +74,4 @@ public class SportDemon extends Application {
         prefsEditor.putString("CurrentWorkout", json);
         prefsEditor.apply();
     }
-
-    /**
-     * Sækir vistað exerciseComboList og breytir frá json í List<ExerciseCombo> hlut
-     * Því exerciseComboList í Workout hlut er transient
-     * @return List<ExerciseCombo> fyrir núverandi workout
-     */
-    public List<ExerciseCombo> getCurrentExerciseCombo() {
-        Gson gson = new Gson();
-        Type listOfExerciseCombo = new TypeToken<List<ExerciseCombo>>() {}.getType();
-
-        String json = mPrefs.getString("CurrentECList", "");
-        return gson.fromJson(json, listOfExerciseCombo);
-    }
-    /**
-     * Vistar exerciseCombo lista núverandi workouts sem json hlut í String
-     * Því exerciseComboList í Workout hlut er transient
-     * @param exerciseComboList til að geyma
-     */
-    public void setCurrentExerciseCombo(List<ExerciseCombo> exerciseComboList) {
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        Gson gson = new Gson();
-
-        String json = gson.toJson(exerciseComboList);
-        prefsEditor.putString("CurrentECList", json);
-        prefsEditor.apply();
-    }
 }

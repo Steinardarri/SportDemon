@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder;
 
 import java.util.UUID;
 
+import io.reactivex.rxjava3.core.Observable;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.LoginData;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.services.NetworkManager;
@@ -54,13 +56,13 @@ public class NetworkManagerAPI {
 
     /**
      * @param user sem á að vista
-     * @return call til server repo, til að executa í activity
+     * @return call til server repo, til að execute-a í activity
      */
     public Call<User> createAccount(User user) {
         return mAPI.createAccount(user);
     }
 
-    public Call<User> login(String username, String password) {
+    public Call<LoginData> login(String username, String password) {
         User user = new User(username, password, "");
         return mAPI.login(user);
     }
@@ -71,11 +73,34 @@ public class NetworkManagerAPI {
 
     // Workout Service
 
+    public Call<Workout> addWorkout(Workout workout) {
+        return mAPI.addWorkout(workout);
+    }
+
+    public Call<Workout> findWorkoutByID(UUID id) {
+        return mAPI.getWorkout(id);
+    }
+
+    public Call<Void> updateWorkout(Workout workout) {
+        return mAPI.updateWorkout(workout.getId(), workout);
+    }
+
+    public Observable<Void> updateWorkoutObservable(Workout workout) {
+        return mAPI.updateWorkoutObservable(workout.getId(), workout);
+    }
+
+    // ExerciseCombo Service
+
     public Call<ExerciseCombo> addExerciseCombo(ExerciseCombo ec) {
         return mAPI.addExerciseCombo(ec);
     }
 
-    public Call<Workout> addWorkout(Workout workout) {
-        return mAPI.addWorkout(workout);
+    public Call<Void> updateExerciseCombo(ExerciseCombo exerciseCombo) {
+        return mAPI.updateExerciseCombo(exerciseCombo.getId(), exerciseCombo);
     }
+
+    public Observable<Void> updateExerciseComboObservable(ExerciseCombo exerciseCombo) {
+        return mAPI.updateExerciseComboObservable(exerciseCombo.getId(), exerciseCombo);
+    }
+
 }

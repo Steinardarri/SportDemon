@@ -19,7 +19,7 @@ import java.util.UUID;
 public class ExerciseCombo implements Serializable {
 
     private UUID id;
-    private Workout workout;
+    private UUID workout;
     private String title;
     private int sets;
     private int reps;
@@ -47,10 +47,10 @@ public class ExerciseCombo implements Serializable {
         this.id = ID;
     }
 
-    public Workout getWorkout() {
+    public UUID getWorkout() {
         return workout;
     }
-    public void setWorkout(Workout workout) {
+    public void setWorkout(UUID workout) {
         this.workout = workout;
     }
 

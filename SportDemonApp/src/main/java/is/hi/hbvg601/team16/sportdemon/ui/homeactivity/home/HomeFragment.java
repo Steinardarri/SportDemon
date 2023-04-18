@@ -1,6 +1,5 @@
 package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.home;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,12 +31,11 @@ import is.hi.hbvg601.team16.sportdemon.databinding.FragmentHomeBinding;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
-import is.hi.hbvg601.team16.sportdemon.services.UserService;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.HomeServiceImplementation;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.NetworkManagerAPI;
-import is.hi.hbvg601.team16.sportdemon.services.implementations.UserServiceImplementation;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.WorkoutServiceImplementation;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,12 +47,10 @@ public class HomeFragment extends Fragment {
 
     private HomeService mHomeService;
     private WorkoutService mWorkoutService;
-    private UserService mUserService;
 
     // Intent code
     private static final int RESULT_SUCCESS = -1;
 
-    @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 //        HomeViewModel homeViewModel = // TODO: Implement Custom ViewModels
@@ -66,7 +62,6 @@ public class HomeFragment extends Fragment {
         NetworkManagerAPI nmAPI = new NetworkManagerAPI();
         this.mHomeService = new HomeServiceImplementation(nmAPI);
         this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
-        this.mUserService = new UserServiceImplementation(nmAPI);
 
         User user = mHomeService.getCurrentUser(getContext());
 
@@ -105,7 +100,6 @@ public class HomeFragment extends Fragment {
             EditText nameEdit = vAlert.findViewById(R.id.createWorkoutName);
             EditText descEdit = vAlert.findViewById(R.id.createWorkoutDesc);
 
-            // Set up the buttons
             builder.setPositiveButton("Add", (dialog, which) -> {
                 String name = nameEdit.getText().toString();
                 String desc = descEdit.getText().toString();
@@ -125,7 +119,7 @@ public class HomeFragment extends Fragment {
                     ).show();
                 } else {
                     Workout newWorkout = new Workout(name, desc);
-                    newWorkout.setUser(currentUser);
+                    newWorkout.setUser(currentUser.getId());
 
                     SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Setting up new Workout");
                     loadingDialog.show();
@@ -137,6 +131,7 @@ public class HomeFragment extends Fragment {
                                 // Get response
                                 try {
                                     mHomeService.setCurrentWorkout(response.body(), getContext());
+                                    mHomeService.addWorkoutToUser(response.body(), getContext());
                                     Intent i = new Intent(getActivity(), WorkoutActivity.class);
                                     loadingDialog.dismiss();
                                     workoutResultLauncher.launch(i);
@@ -150,7 +145,7 @@ public class HomeFragment extends Fragment {
                                 }
                             } else {
                                 Toast.makeText(getContext(),
-                                        response.message(),
+                                        response.code()+" - "+ response,
                                         Toast.LENGTH_SHORT
                                 ).show();
                                 loadingDialog.dismiss();
@@ -209,6 +204,7 @@ public class HomeFragment extends Fragment {
         mBinding = null;
         mAdapter = null;
         mHomeService = null;
+        mWorkoutService = null;
     }
 
     private final ActivityResultLauncher<Intent> workoutResultLauncher = registerForActivityResult(
@@ -226,8 +222,6 @@ public class HomeFragment extends Fragment {
             result -> {
                 if (result.getResultCode() == RESULT_SUCCESS) {
                     Intent data = result.getData();
-                    // TODO: Hugsanlega logga beint inn eftir að hafa búið til account
-                    // Annars gera ekkert og skilja eftir autt
                 }
             }
     );
@@ -238,13 +232,13 @@ public class HomeFragment extends Fragment {
                 if (result.getResultCode() == RESULT_SUCCESS) {
                     Intent data = result.getData();
                     assert data != null;
+
                     User resultUser = (User) data.getSerializableExtra("USER");
-                    // TODO: loggaður user hverfur þegar skipt er um view, td Journal.
-                    // Þarf betri útfærslu
 
                     mBinding.textUserName.setText(resultUser.getUsername());
                     mBinding.textUserEmail.setText(resultUser.getEmail());
                     mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
+                    mBinding.homeLoginButton.setText(getResources().getString(R.string.logout));
 
                     // Vista nýjan user sem aðal
                     mHomeService.setCurrentUser(resultUser, getContext());
@@ -268,37 +262,4 @@ public class HomeFragment extends Fragment {
         mBinding.workoutRecyclerView.setAdapter(adapter);
     }
 
-    private void saveToServer() {
-        User user = mHomeService.getCurrentUser(getContext());
-        Call<User> callSync = mUserService.editAccount(user);
-
-        SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Saving to server");
-        loadingDialog.show();
-        callSync.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(getContext(),
-                            "Saving successful",
-                            Toast.LENGTH_SHORT
-                    ).show();
-                } else {
-                    Toast.makeText(getContext(),
-                            response.message(),
-                            Toast.LENGTH_SHORT
-                    ).show();
-                }
-                loadingDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-                Toast.makeText(getContext(),
-                        t.toString(),
-                        Toast.LENGTH_SHORT
-                ).show();
-                loadingDialog.dismiss();
-            }
-        });
-    }
 }

@@ -2,6 +2,7 @@ package is.hi.hbvg601.team16.sportdemon.services.implementations;
 
 import java.util.UUID;
 
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.LoginData;
 import is.hi.hbvg601.team16.sportdemon.services.UserService;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import retrofit2.Call;
@@ -52,7 +53,7 @@ public class UserServiceImplementation implements UserService {
      * @return Call to server repo to login
      */
     @Override
-    public Call<User> login(String username, String password) {
+    public Call<LoginData> login(String username, String password) {
         return nmAPI.login(username, password);
     }
 }

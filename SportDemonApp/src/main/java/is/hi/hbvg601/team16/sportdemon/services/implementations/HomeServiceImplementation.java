@@ -2,8 +2,6 @@ package is.hi.hbvg601.team16.sportdemon.services.implementations;
 
 import android.content.Context;
 
-import java.util.List;
-
 import is.hi.hbvg601.team16.sportdemon.SportDemon;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
@@ -45,10 +43,7 @@ public class HomeServiceImplementation implements HomeService {
     @Override
     public Workout getCurrentWorkout(Context context) {
         SportDemon data = new SportDemon(context);
-        Workout w = data.getCurrentWorkout();
-        // Þarf vegna exerciseCombo list er transient
-        w.setExerciseCombo(data.getCurrentExerciseCombo());
-        return w;
+        return data.getCurrentWorkout();
     }
 
     /**
@@ -59,7 +54,31 @@ public class HomeServiceImplementation implements HomeService {
     public void setCurrentWorkout(Workout workout, Context context) {
         SportDemon data = new SportDemon(context);
         data.setCurrentWorkout(workout);
-        // Þarf vegna exerciseCombo list er transient
-        if(workout != null) data.setCurrentExerciseCombo(workout.getExerciseCombo());
     }
+
+    @Override
+    public void addExerciseComboToCurrentWorkout(ExerciseCombo ec, Context context) {
+        SportDemon data = new SportDemon(context);
+        Workout w = data.getCurrentWorkout();
+        w.addExerciseCombo(ec);
+        data.setCurrentWorkout(w);
+    }
+
+    @Override
+    public void addWorkoutToUser(Workout workout, Context context) {
+        SportDemon data = new SportDemon(context);
+        User u = data.getCurrentUser();
+        u.addWorkout(workout);
+        data.setCurrentUser(u);
+    }
+
+    @Override
+    public void editCurrentWorkoutInUser(Context context) {
+        SportDemon data = new SportDemon(context);
+        User u = data.getCurrentUser();
+        Workout w = data.getCurrentWorkout();
+        u.editWorkout(w);
+        data.setCurrentUser(u);
+    }
+
 }

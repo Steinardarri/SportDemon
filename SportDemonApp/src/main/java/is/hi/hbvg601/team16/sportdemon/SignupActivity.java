@@ -109,7 +109,7 @@ public class SignupActivity extends AppCompatActivity {
                             }
                         } else {
                             Toast.makeText(SignupActivity.super.getApplicationContext(),
-                                    response.code() + " - " + response.message(),
+                                    response.code()+" - "+response,
                                     Toast.LENGTH_SHORT
                             ).show();
                         }
@@ -129,6 +129,12 @@ public class SignupActivity extends AppCompatActivity {
 
         Button returnBtn = findViewById(R.id.signup_return_button);
         returnBtn.setOnClickListener(v -> finish());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUserService = null;
     }
 
     public void showLoading() {

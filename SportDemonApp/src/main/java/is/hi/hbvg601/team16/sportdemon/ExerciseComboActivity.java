@@ -53,4 +53,10 @@ public class ExerciseComboActivity extends AppCompatActivity {
             finish();
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWorkoutService = null;
+    }
 }

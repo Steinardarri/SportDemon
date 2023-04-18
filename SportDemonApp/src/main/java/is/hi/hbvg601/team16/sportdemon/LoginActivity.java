@@ -12,7 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.LoginData;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.services.UserService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.NetworkManagerAPI;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.UserServiceImplementation;
@@ -47,11 +54,11 @@ public class LoginActivity extends AppCompatActivity {
             String password = passwordEdit.getText().toString();
 
             showLoading();
-            Call<User> callSync = mUserService.login(username, password);
+            Call<LoginData> callSync = mUserService.login(username, password);
 
-            callSync.enqueue(new Callback<User>() {
+            callSync.enqueue(new Callback<LoginData>() {
                 @Override
-                public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                public void onResponse(@NonNull Call<LoginData> call, @NonNull Response<LoginData> response) {
                     if (response.isSuccessful()) {
                         // Get response
                         try {
@@ -63,9 +70,25 @@ public class LoginActivity extends AppCompatActivity {
                                 ).show();
                                 hideLoading();
 
-                                // return
+                                // Vinnsla úr öllum gögnum
+                                LoginData loginData = response.body();
+                                User loginUser = loginData.getUser();
+
+                                List<Workout> workoutList = loginData.getWorkoutList();
+                                // exerciseComboMap inniheldur key value pair þar sem
+                                // key er id Workouts og value er ExerciseCombo listi þess
+                                Map<UUID, List<ExerciseCombo>> exerciseComboMap =
+                                        loginData.getExerciseComboMap();
+                                // Fyllum Workout hlutina með ExerciseCombo lista frá mappinu
+                                for (Workout workout : workoutList) {
+                                    workout.setExerciseComboList(exerciseComboMap.get(workout.getId()));
+                                }
+
+                                loginUser.setWorkoutList(workoutList);
+                                loginUser.setWorkoutResultList(loginData.getWorkoutResultList());
+
                                 Intent skil = new Intent();
-                                skil.putExtra("USER", response.body());
+                                skil.putExtra("USER", loginUser);
                                 setResult(RESULT_OK, skil);
                                 finish();
                             } else {
@@ -85,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast.makeText(LoginActivity.super.getApplicationContext(),
-                                response.code() + " - " + response.message(),
+                                response.code()+" - "+response,
                                 Toast.LENGTH_SHORT
                         ).show();
                         hideLoading();
@@ -93,8 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-                    // UI
+                public void onFailure(@NonNull Call<LoginData> call, @NonNull Throwable t) {
                     Toast.makeText(LoginActivity.super.getApplicationContext(),
                             t.toString(),
                             Toast.LENGTH_SHORT
@@ -103,6 +125,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUserService = null;
     }
 
     public void showLoading() {

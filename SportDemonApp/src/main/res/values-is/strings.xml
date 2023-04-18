@@ -37,5 +37,6 @@
     <string name="title">Titill</string>
     <string name="description">Lýsing</string>
     <string name="logout">Útskrá</string>
+    <string name="passwordWarning">ATH! Ekki nota venjulegu lykilorðin þín. Þau verða send og geymd á opnum texta!</string>
 
 </resources>
