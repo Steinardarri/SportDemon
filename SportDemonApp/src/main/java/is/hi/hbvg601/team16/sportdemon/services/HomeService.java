@@ -32,6 +32,10 @@ public interface HomeService {
 
     void addExerciseComboToCurrentWorkout(ExerciseCombo ec, Context context);
 
+    void editExerciseComboInCurrentWorkout(ExerciseCombo ec, Context context);
+
+    void removeExerciseComboInCurrentWorkout(ExerciseCombo ec, Context context);
+
     void addWorkoutToUser(Workout workout, Context context);
 
     void editCurrentWorkoutInUser(Context context);

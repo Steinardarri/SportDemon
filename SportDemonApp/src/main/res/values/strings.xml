@@ -45,6 +45,4 @@
     <string name="passwordWarning">ATTENTION! Do not use your regular passwords, it will be sent and stored in plain text!</string>
     <string name="right">Right</string>
     <string name="left">Left</string>
-    <string name="tracker_ex_combo_title">ExCombo Title</string>
-    <string name="tracker_item">Bekkpressa</string>
 </resources>

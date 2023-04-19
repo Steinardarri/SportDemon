@@ -2,9 +2,7 @@ package is.hi.hbvg601.team16.sportdemon.services.implementations;
 
 import java.util.UUID;
 
-import io.reactivex.rxjava3.core.Observable;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
@@ -54,14 +52,14 @@ public class WorkoutServiceImplementation implements WorkoutService {
     }
 
     @Override
-    public Call<Void> removeExerciseCombo(ExerciseCombo ec, Workout workout) {
-        return null;
+    public Call<Void> removeExerciseCombo(ExerciseCombo ec) {
+        return nmAPI.deleteExerciseCombo(ec.getId());
     }
 
     // WorkoutResult
 
     @Override
-    public Call<WorkoutResult> saveWorkoutResult(WorkoutResult wr, User user) {
+    public Call<WorkoutResult> saveWorkoutResult(WorkoutResult wr) {
         return null;
     }
 

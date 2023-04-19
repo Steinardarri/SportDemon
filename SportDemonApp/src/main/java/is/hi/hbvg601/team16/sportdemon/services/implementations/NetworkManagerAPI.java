@@ -103,4 +103,8 @@ public class NetworkManagerAPI {
         return mAPI.updateExerciseComboObservable(exerciseCombo.getId(), exerciseCombo);
     }
 
+    public Call<Void> deleteExerciseCombo(UUID id) {
+        return mAPI.deleteExerciseCombo(id);
+    }
+
 }

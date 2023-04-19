@@ -101,6 +101,15 @@ public class User implements Serializable {
         }
     }
 
+    public void removeWorkout(Workout workout) {
+        for (Workout w : workoutList){
+            if (w.getId().equals(workout.getId())){
+                workoutList.remove(w);
+                break;
+            }
+        }
+    }
+
     public void addWorkoutResult(WorkoutResult wr) {
         workoutResultList.add(wr);
     }

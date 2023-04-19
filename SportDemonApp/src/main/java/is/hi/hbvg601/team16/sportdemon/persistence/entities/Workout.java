@@ -76,6 +76,26 @@ public class Workout implements Serializable {
     public void addExerciseCombo(ExerciseCombo ec) {
         exerciseComboList.add(ec);
     }
+
+    public void editExerciseCombo(ExerciseCombo newEC) {
+        for (ExerciseCombo ec : exerciseComboList){
+            if (ec.getId().equals(newEC.getId())){
+                int i = exerciseComboList.indexOf(ec);
+                exerciseComboList.set(i, newEC);
+                break;
+            }
+        }
+    }
+
+    public void removeExerciseCombo(ExerciseCombo ec) {
+        for (ExerciseCombo oldEC : exerciseComboList){
+            if (oldEC.getId().equals(ec.getId())){
+                exerciseComboList.remove(oldEC);
+                break;
+            }
+        }
+    }
+
 }
 
 

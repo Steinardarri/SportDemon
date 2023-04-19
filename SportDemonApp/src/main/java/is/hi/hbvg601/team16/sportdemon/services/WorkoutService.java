@@ -2,9 +2,7 @@ package is.hi.hbvg601.team16.sportdemon.services;
 
 import java.util.UUID;
 
-import io.reactivex.rxjava3.core.Observable;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 
@@ -18,9 +16,9 @@ public interface WorkoutService {
 
     Call<ExerciseCombo> saveExerciseCombo(ExerciseCombo ec);
 
-    Call<Void> removeExerciseCombo(ExerciseCombo ec, Workout workout);
+    Call<Void> removeExerciseCombo(ExerciseCombo ec);
 
-    Call<WorkoutResult> saveWorkoutResult(WorkoutResult wr, User user);
+    Call<WorkoutResult> saveWorkoutResult(WorkoutResult wr);
 
     Call<Void> deleteWorkoutResult(UUID id);
 

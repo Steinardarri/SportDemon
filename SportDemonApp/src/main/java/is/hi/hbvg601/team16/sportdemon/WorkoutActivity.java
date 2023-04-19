@@ -1,15 +1,19 @@
 package is.hi.hbvg601.team16.sportdemon;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -77,8 +81,95 @@ public class WorkoutActivity extends AppCompatActivity {
             exerciseComboResultLauncher.launch(i);
         });
 
-        findViewById(R.id.workout_edit_button).setOnClickListener(v -> {
-            // TODO edit button
+        findViewById(R.id.workout_remove_button).setOnClickListener( v -> {
+            Button button = findViewById(R.id.workout_remove_button);
+            if(!v.isActivated()) {
+                button.setText(this.getString(R.string.cancel));
+                v.setActivated(true);
+                adapter.setClickListener(
+                        (View v2, int position, List<ExerciseCombo> data) -> {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                            alert.setTitle("Delete Exercise");
+                            alert.setMessage("Are you sure you want to delete?");
+                            alert.setPositiveButton("Yes", (dialog, which) -> {
+                                SpotsDialog loadingDialog = new SpotsDialog(this, "Removing Exercise");
+                                loadingDialog.show();
+
+                                ExerciseCombo ec = data.get(position);
+
+                                Call<Void> callSync = mWorkoutService.removeExerciseCombo(ec);
+                                callSync.enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                        if (response.isSuccessful()) {
+                                            // Get response
+                                            try {
+                                                // Local
+                                                mHomeService.removeExerciseComboInCurrentWorkout(ec, WorkoutActivity.this);
+                                                mHomeService.editCurrentWorkoutInUser(WorkoutActivity.this);
+
+                                                Toast.makeText(WorkoutActivity.this,
+                                                        "Exercise removed successfully",
+                                                        Toast.LENGTH_LONG
+                                                ).show();
+
+                                                refreshList();
+
+                                                loadingDialog.dismiss();
+                                                dialog.dismiss();
+                                            } catch (Exception e) {
+                                                // UI
+                                                Toast.makeText(WorkoutActivity.this,
+                                                        e.toString(),
+                                                        Toast.LENGTH_LONG
+                                                ).show();
+                                                loadingDialog.dismiss();
+                                                dialog.dismiss();
+                                            }
+                                        } else {
+                                            Toast.makeText(WorkoutActivity.this,
+                                                    response.code()+" - "+ response,
+                                                    Toast.LENGTH_SHORT
+                                            ).show();
+                                            loadingDialog.dismiss();
+                                            dialog.dismiss();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                        Toast.makeText(WorkoutActivity.this,
+                                                t.toString(),
+                                                Toast.LENGTH_LONG
+                                        ).show();
+                                        loadingDialog.dismiss();
+                                        dialog.dismiss();
+                                    }
+                                });
+                            });
+                            alert.setNegativeButton("NO", (dialog, which) -> {
+                                // close dialog
+                                dialog.cancel();
+                            });
+                            alert.show();
+                        });
+
+                mECRecyclerView.setAdapter(adapter);
+                mECRecyclerView.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.crimson, null));
+            } else {
+                v.setActivated(false);
+                button.setText(this.getString(R.string.remove));
+                adapter.setClickListener(
+                        (View v2, int position, List<ExerciseCombo> data) -> {
+                            Intent i = new Intent(
+                                    WorkoutActivity.this, ExerciseComboActivity.class
+                            );
+                            i.putExtra("EXERCISECOMBO", data.get(position));
+                            exerciseComboResultLauncher.launch(i);
+                        });
+                mECRecyclerView.setAdapter(adapter);
+                mECRecyclerView.setBackgroundColor(Color.TRANSPARENT);
+            }
         });
     }
 
@@ -95,9 +186,15 @@ public class WorkoutActivity extends AppCompatActivity {
                 if(result.getResultCode() == RESULT_SUCCESS) {
                     Intent data = result.getData();
                     assert data != null;
-                    ExerciseCombo ec = (ExerciseCombo) data.getSerializableExtra("EXERCISECOMBO");
 
-                    mHomeService.addExerciseComboToCurrentWorkout(ec, this);
+                    ExerciseCombo ec = (ExerciseCombo) data.getSerializableExtra("EXERCISECOMBO");
+                    boolean edit = data.getBooleanExtra("EDIT", false);
+
+                    if (edit) {
+                        mHomeService.editExerciseComboInCurrentWorkout(ec, this);
+                    } else {
+                        mHomeService.addExerciseComboToCurrentWorkout(ec, this);
+                    }
                     mHomeService.editCurrentWorkoutInUser(this);
                 }
                 refreshList();

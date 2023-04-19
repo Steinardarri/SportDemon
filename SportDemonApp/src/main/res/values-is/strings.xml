@@ -41,5 +41,6 @@
     <string name="right">Hægri</string>
     <string name="left">Vinstri</string>
     <string name="edit_exercise">Breyta Hreyfingu</string>
-
+    <string name="remove">Fjarlægja</string>
+    <string name="cancel">Hætta</string>
 </resources>

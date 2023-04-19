@@ -65,6 +65,22 @@ public class HomeServiceImplementation implements HomeService {
     }
 
     @Override
+    public void editExerciseComboInCurrentWorkout(ExerciseCombo newEC, Context context) {
+        SportDemon data = new SportDemon(context);
+        Workout w = data.getCurrentWorkout();
+        w.editExerciseCombo(newEC);
+        data.setCurrentWorkout(w);
+    }
+
+    @Override
+    public void removeExerciseComboInCurrentWorkout(ExerciseCombo ec, Context context) {
+        SportDemon data = new SportDemon(context);
+        Workout w = data.getCurrentWorkout();
+        w.removeExerciseCombo(ec);
+        data.setCurrentWorkout(w);
+    }
+
+    @Override
     public void addWorkoutToUser(Workout workout, Context context) {
         SportDemon data = new SportDemon(context);
         User u = data.getCurrentUser();

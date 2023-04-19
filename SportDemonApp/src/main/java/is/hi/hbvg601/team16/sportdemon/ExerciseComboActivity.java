@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import dmax.dialog.SpotsDialog;
@@ -32,6 +33,8 @@ public class ExerciseComboActivity extends AppCompatActivity {
         NetworkManagerAPI nmAPI = new NetworkManagerAPI();
         this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
 
+        boolean isAnEdit = false;
+
 
         ExerciseCombo ec = (ExerciseCombo) getIntent().getSerializableExtra("EXERCISECOMBO");
         assert ec != null : "ExerciseCombo is null";
@@ -47,6 +50,9 @@ public class ExerciseComboActivity extends AppCompatActivity {
 
         // Ef ekki nýtt, þá sýna edit
         if (ec.getTitle() != null) {
+            isAnEdit = true;
+            TextView title = findViewById(R.id.exerciseTitle);
+            title.setText(R.string.edit_exercise);
             submitBtn.setText(R.string.edit_exercise);
             titleEdit.setText(ec.getTitle());
             setsEdit.setText(""+ec.getSets());
@@ -57,7 +63,8 @@ public class ExerciseComboActivity extends AppCompatActivity {
             restBetweenSetsEdit.setText(""+ec.getRestBetweenSets());
         }
 
-        submitBtn.setOnClickListener( v -> {
+        boolean finalIsAnEdit = isAnEdit;
+        submitBtn.setOnClickListener(v -> {
             ec.setTitle(titleEdit.getText().toString());
             ec.setSets(Integer.parseInt(setsEdit.getText().toString()));
             ec.setReps(Integer.parseInt(repsEdit.getText().toString()));
@@ -79,6 +86,7 @@ public class ExerciseComboActivity extends AppCompatActivity {
                             Intent skil = new Intent();
 
                             skil.putExtra("EXERCISECOMBO", ec);
+                            skil.putExtra("EDIT", finalIsAnEdit);
                             setResult(RESULT_OK, skil);
 
                             loadingDialog.dismiss();
