@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/exerciseReps"
+        app:layout_constraintBottom_toTopOf="@+id/reps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:maxWidth="300dp"
             android:maxLines="1"
-            android:text="@string/tracker_ex_combo_title"
+            android:text="@string/title"
             android:textColor="@color/black"
             android:textSize="32sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -45,26 +45,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/exerciseReps"
+    <TextView
+        android:id="@+id/reps"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="Reps"
+        android:textSize="60sp"
         app:layout_constraintBottom_toTopOf="@+id/tracker_recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/workout_top">
-
-        <TextView
-            android:id="@+id/reps"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:text="Reps"
-            android:textSize="40dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@id/workout_top" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tracker_recyclerView"
@@ -76,7 +68,7 @@
         app:layout_constraintBottom_toTopOf="@+id/exerciseSets"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/exerciseReps" />
+        app:layout_constraintTop_toBottomOf="@id/reps" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/exerciseSets"
@@ -93,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="80dp"
             android:text="1/4"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -107,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="80dp"
             android:text="3/10"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
