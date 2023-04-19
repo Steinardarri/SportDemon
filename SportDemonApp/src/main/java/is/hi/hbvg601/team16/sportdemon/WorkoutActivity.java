@@ -74,47 +74,9 @@ public class WorkoutActivity extends AppCompatActivity {
         findViewById(R.id.workout_add_button).setOnClickListener(v -> {
             ExerciseCombo newEC = new ExerciseCombo();
             newEC.setWorkout(mWorkout.getId());
-
-            SpotsDialog loadingDialog = new SpotsDialog(this, "Setting up new Exercise");
-            loadingDialog.show();
-            // Setja upp nýtt ExerciseCombo á server
-            Call<ExerciseCombo> callSync = mWorkoutService.saveExerciseCombo(newEC);
-            callSync.enqueue(new Callback<ExerciseCombo>() {
-                @Override
-                public void onResponse(@NonNull Call<ExerciseCombo> call, @NonNull Response<ExerciseCombo> response) {
-                    if (response.isSuccessful()) {
-                        // Get response
-                        try {
-                            loadingDialog.dismiss();
-                            Intent i = new Intent(WorkoutActivity.this, ExerciseComboActivity.class);
-                            i.putExtra("EXERCISECOMBO", response.body());
-                            exerciseComboResultLauncher.launch(i);
-                        } catch (Exception e) {
-                            // UI
-                            Toast.makeText(WorkoutActivity.this,
-                                    e.toString(),
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                            loadingDialog.dismiss();
-                        }
-                    } else {
-                        Toast.makeText(WorkoutActivity.this,
-                                response.code()+" - "+response,
-                                Toast.LENGTH_SHORT
-                        ).show();
-                        loadingDialog.dismiss();
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ExerciseCombo> call, @NonNull Throwable t) {
-                    Toast.makeText(WorkoutActivity.this,
-                            t.toString(),
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    loadingDialog.dismiss();
-                }
-            });
+            Intent i = new Intent(WorkoutActivity.this, ExerciseComboActivity.class);
+            i.putExtra("EXERCISECOMBO", newEC);
+            exerciseComboResultLauncher.launch(i);
         });
 
         findViewById(R.id.workout_edit_button).setOnClickListener(v -> {
