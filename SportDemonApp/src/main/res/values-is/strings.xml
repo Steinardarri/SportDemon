@@ -22,7 +22,7 @@
     <string name="login_form_username">Notendanafn</string>
     <string name="login_form_password">Lykilorð</string>
     <string name="login_form_title">Innskráining</string>
-    <string name="hyperlink"><a href="activity_signup">Ertu ekki með aðgang? Nýskráðu þig! </a></string>
+    <string name="signup">Ertu ekki með aðgang? Nýskráðu þig!</string>
     <string name="play">Spila</string>
     <string name="workout_edit">Breyta</string>
     <string name="workout_add">Bæta</string>

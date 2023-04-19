@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -34,6 +36,9 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ConstraintLayout form;
 
+    // Intent code
+    private static final int RESULT_SUCCESS = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         form = findViewById(R.id.login_form);
 
         Button loginBtn = findViewById(R.id.login_button);
+        Button signupBtn = findViewById(R.id.link_signup);
+
         loginBtn.setOnClickListener(v -> {
             String username = usernameEdit.getText().toString();
             String password = passwordEdit.getText().toString();
@@ -125,6 +132,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         });
+
+        signupBtn.setOnClickListener(v ->
+                signupResultLauncher.launch(new Intent(this, SignupActivity.class))
+        );
+
     }
 
     @Override
@@ -132,6 +144,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onDestroy();
         mUserService = null;
     }
+
+    private final ActivityResultLauncher<Intent> signupResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_SUCCESS) {
+                    Intent data = result.getData();
+                }
+            }
+    );
 
     public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);

@@ -168,10 +168,6 @@ public class HomeFragment extends Fragment {
             builder.show();
         });
 
-        mBinding.homeSignupButton.setOnClickListener(v ->
-                signupResultLauncher.launch(new Intent(getActivity(), SignupActivity.class))
-        );
-
         mBinding.homeLoginButton.setOnClickListener(v -> {
             if (mHomeService.getCurrentUser(getContext()) == null) {
                 // Log in
@@ -214,15 +210,6 @@ public class HomeFragment extends Fragment {
                     Intent data = result.getData();
                 }
                 refreshList();
-            }
-    );
-
-    private final ActivityResultLauncher<Intent> signupResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_SUCCESS) {
-                    Intent data = result.getData();
-                }
             }
     );
 
