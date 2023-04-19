@@ -108,17 +108,17 @@ public class ExerciseCombo implements Serializable {
     public String toString() {
         String info = "";
         info += ""    + getReps() + " reps" +
-                " - " + getSets() + " sets";
+                "  " + getSets() + " sets";
         String magn = "";
         if (getWeight() > 0 && getDurationPerSet() > 0) {
             magn += getWeight() + " kg";
-            magn += " - ";
+            magn += "  ";
             magn += getDurationPerSet() + " sek á set";
         }
         else if (getWeight() > 0) magn += getWeight() + " kg";
         else if (getDurationPerSet() > 0) magn += getDurationPerSet() + " sek á set";
-        if (!magn.equals("")) info += " - " + magn;
-        if (!getEquipment().equals("")) info += " - " + getEquipment();
+        if (!magn.equals("")) info += "  " + magn;
+        if (!getEquipment().equals("")) info += "  " + getEquipment();
 
         return info;
     }
