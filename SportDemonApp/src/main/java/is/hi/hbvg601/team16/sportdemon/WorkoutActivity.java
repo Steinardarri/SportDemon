@@ -13,10 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.disposables.Disposable;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
@@ -101,8 +99,6 @@ public class WorkoutActivity extends AppCompatActivity {
 
                     mHomeService.addExerciseComboToCurrentWorkout(ec, this);
                     mHomeService.editCurrentWorkoutInUser(this);
-
-                    saveECToServer(ec);
                 }
                 refreshList();
             }
@@ -116,41 +112,6 @@ public class WorkoutActivity extends AppCompatActivity {
         Workout w = mHomeService.getCurrentWorkout(this);
         if(w != null) adapter.setData(w.getExerciseComboList());
         mECRecyclerView.setAdapter(adapter);
-    }
-
-    private void saveECToServer(ExerciseCombo ec) {
-
-        Call<Void> callSync = mWorkoutService.updateExerciseCombo(ec);
-
-        SpotsDialog loadingDialog = new SpotsDialog(this, "Saving to server");
-        loadingDialog.show();
-
-        callSync.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(WorkoutActivity.this,
-                            "Saving Successful",
-                            Toast.LENGTH_SHORT
-                    ).show();
-                } else {
-                    Toast.makeText(WorkoutActivity.this,
-                            response.code()+" - "+response,
-                            Toast.LENGTH_SHORT
-                    ).show();
-                }
-                loadingDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Toast.makeText(WorkoutActivity.this,
-                        t.toString(),
-                        Toast.LENGTH_SHORT
-                ).show();
-                loadingDialog.dismiss();
-            }
-        });
     }
 
     private void saveWorkoutToServer(Workout w) {
