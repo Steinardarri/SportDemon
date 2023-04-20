@@ -13,15 +13,26 @@
         android:gravity="center"
         android:text="@string/title_of_workout"
         android:textAlignment="center"
-        android:textColor="@color/grape"
+        android:textColor="?attr/colorTertiary"
         android:textSize="20sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/workoutDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/description_of_workout"
+        android:textAlignment="center"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/border"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         android:background="@color/butterscotch"/>
 
 </LinearLayout>

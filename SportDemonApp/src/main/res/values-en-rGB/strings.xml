@@ -43,4 +43,6 @@
     <string name="edit_exercise">Edit Exercise</string>
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
+    <string name="ECRest">Rest between exercises</string>
+    <string name="remove_workout">Remove workout</string>
 </resources>

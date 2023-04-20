@@ -43,4 +43,6 @@
     <string name="edit_exercise">Breyta Hreyfingu</string>
     <string name="remove">Fjarlægja</string>
     <string name="cancel">Hætta</string>
+    <string name="ECRest">Hvíld milli hreyfinga</string>
+    <string name="remove_workout">Fjarlægja æfingu</string>
 </resources>

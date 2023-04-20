@@ -12,7 +12,8 @@
         <item name="colorOnSecondary">@color/platinum</item>
 
         <!-- Tertiary brand color -->
-        <item name="colorOnTertiary">@color/grape</item>
+        <item name="colorTertiary">@color/grape</item>
+        <item name="colorOnTertiary">@color/french_gray</item>
 
         <!-- Status bar color -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>

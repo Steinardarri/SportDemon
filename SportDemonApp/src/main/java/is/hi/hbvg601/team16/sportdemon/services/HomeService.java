@@ -13,21 +13,11 @@ public interface HomeService {
      * @return current saved user
      */
     User getCurrentUser(Context context);
-    /**
-     * @param user to set as current
-     * @param context to bind from
-     */
+
     void setCurrentUser(User user, Context context);
 
-    /**
-     * @param  context to bind from
-     * @return current saved workout
-     */
     Workout getCurrentWorkout(Context context);
-    /**
-     * @param workout to set as current
-     * @param context to bind from
-     */
+
     void setCurrentWorkout(Workout workout, Context context);
 
     void addExerciseComboToCurrentWorkout(ExerciseCombo ec, Context context);
@@ -39,5 +29,7 @@ public interface HomeService {
     void addWorkoutToUser(Workout workout, Context context);
 
     void editCurrentWorkoutInUser(Context context);
+
+    void removeWorkoutFromUser(Workout workout, Context context);
 
 }

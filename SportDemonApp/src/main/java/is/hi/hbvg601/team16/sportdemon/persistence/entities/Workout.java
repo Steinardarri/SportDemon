@@ -21,14 +21,16 @@ public class Workout implements Serializable {
     private UUID id;
     private UUID user;
     private String title;
-    private int duration;
     private String description;
+    private int restBetweenEC;
+    private int duration;
     private List<ExerciseCombo> exerciseComboList = new ArrayList<>();
 
     public Workout() {}
-    public Workout(String title, String description) {
+    public Workout(String title, String description, int rest) {
         this.title = title;
         this.description = description;
+        this.restBetweenEC = rest;
     }
 
     public UUID getId() {
@@ -52,18 +54,25 @@ public class Workout implements Serializable {
         this.title = title;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
     public String getDescription() {
         return description;
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getRestBetweenEC() {
+        return restBetweenEC;
+    }
+    public void setRestBetweenEC(int restBetweenEC) {
+        this.restBetweenEC = restBetweenEC;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public List<ExerciseCombo> getExerciseComboList() {

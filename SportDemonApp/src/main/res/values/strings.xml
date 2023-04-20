@@ -47,4 +47,7 @@
     <string name="left">Left</string>
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
+    <string name="ECRest">Rest Between Exercises</string>
+    <string name="description_of_workout" translatable="false">Description of Workout. Lorem ipsum dolor sit amet, consectetur adipiscing elit</string>
+    <string name="remove_workout">Remove workout</string>
 </resources>

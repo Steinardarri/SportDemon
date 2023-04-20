@@ -37,7 +37,10 @@ public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRe
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String workoutTitle = data.get(position).getTitle();
-        holder.workoutTextView.setText(workoutTitle);
+        String workoutDescription = data.get(position).getDescription();
+
+        holder.workoutTitleTextView.setText(workoutTitle);
+        holder.workoutDescriptionTextView.setText(workoutDescription);
     }
 
     // total number of rows
@@ -49,11 +52,13 @@ public class WorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutsRe
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final TextView workoutTextView;
+        final TextView workoutTitleTextView;
+        final TextView workoutDescriptionTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            workoutTextView = itemView.findViewById(R.id.workoutTitle);
+            workoutTitleTextView = itemView.findViewById(R.id.workoutTitle);
+            workoutDescriptionTextView = itemView.findViewById(R.id.workoutDescription);
             itemView.setOnClickListener(this);
         }
 

@@ -89,6 +89,10 @@ public class NetworkManagerAPI {
         return mAPI.updateWorkoutObservable(workout.getId(), workout);
     }
 
+    public Call<Void> deleteWorkout(UUID id) {
+        return mAPI.deleteWorkout(id);
+    }
+
     // ExerciseCombo Service
 
     public Call<ExerciseCombo> addExerciseCombo(ExerciseCombo ec) {
@@ -105,6 +109,12 @@ public class NetworkManagerAPI {
 
     public Call<Void> deleteExerciseCombo(UUID id) {
         return mAPI.deleteExerciseCombo(id);
+    }
+
+    // Workout Result Service
+
+    public Call<Void> deleteWorkoutResult(UUID id) {
+        return mAPI.deleteWorkoutResult(id);
     }
 
 }

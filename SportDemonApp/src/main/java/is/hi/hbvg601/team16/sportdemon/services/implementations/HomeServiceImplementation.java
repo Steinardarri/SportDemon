@@ -97,4 +97,12 @@ public class HomeServiceImplementation implements HomeService {
         data.setCurrentUser(u);
     }
 
+    @Override
+    public void removeWorkoutFromUser(Workout workout, Context context) {
+        SportDemon data = new SportDemon(context);
+        User u = data.getCurrentUser();
+        u.removeWorkout(workout);
+        data.setCurrentUser(u);
+    }
+
 }

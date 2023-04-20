@@ -2,6 +2,7 @@ package is.hi.hbvg601.team16.sportdemon.ui.homeactivity.home;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,7 +26,6 @@ import java.util.stream.Collectors;
 import dmax.dialog.SpotsDialog;
 import is.hi.hbvg601.team16.sportdemon.LoginActivity;
 import is.hi.hbvg601.team16.sportdemon.R;
-import is.hi.hbvg601.team16.sportdemon.SignupActivity;
 import is.hi.hbvg601.team16.sportdemon.WorkoutActivity;
 import is.hi.hbvg601.team16.sportdemon.databinding.FragmentHomeBinding;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
@@ -43,6 +43,8 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding mBinding;
+
+    private RecyclerView mRecyclerView;
     private WorkoutsRecyclerViewAdapter mAdapter;
 
     private HomeService mHomeService;
@@ -66,18 +68,20 @@ public class HomeFragment extends Fragment {
         User user = mHomeService.getCurrentUser(getContext());
 
         // Setja upp RecyclerView fyrir workouts
-        RecyclerView recyclerView = mBinding.workoutRecyclerView;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        this.mRecyclerView = mBinding.workoutRecyclerView;
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         List<Workout> workoutList;
         if (user != null) {
             mBinding.textUserName.setText(user.getUsername());
             mBinding.textUserEmail.setText(user.getEmail());
             mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
+            mBinding.removeWorkoutButton.setVisibility(View.VISIBLE);
             mBinding.homeLoginButton.setText(getResources().getString(R.string.logout));
 
             workoutList = user.getWorkoutList();
         } else {
             mBinding.addWorkoutButton.setVisibility(View.INVISIBLE);
+            mBinding.removeWorkoutButton.setVisibility(View.INVISIBLE);
             workoutList = new ArrayList<>();
         }
         mAdapter = new WorkoutsRecyclerViewAdapter(getContext(), workoutList);
@@ -87,7 +91,7 @@ public class HomeFragment extends Fragment {
                     Intent i = new Intent(getActivity(), WorkoutActivity.class);
                     workoutResultLauncher.launch(i);
                 });
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
         mBinding.addWorkoutButton.setOnClickListener(v -> {
             User currentUser = mHomeService.getCurrentUser(getContext());
@@ -99,10 +103,13 @@ public class HomeFragment extends Fragment {
 
             EditText nameEdit = vAlert.findViewById(R.id.createWorkoutName);
             EditText descEdit = vAlert.findViewById(R.id.createWorkoutDesc);
+            EditText restEdit = vAlert.findViewById(R.id.createWorkoutECRest);
 
             builder.setPositiveButton("Add", (dialog, which) -> {
                 String name = nameEdit.getText().toString();
                 String desc = descEdit.getText().toString();
+                int rest = Integer.parseInt(restEdit.getText().toString());
+
                 List<String> uWorkoutTitles = currentUser.getWorkoutList().stream()
                         .map(Workout::getTitle)
                         .collect(Collectors.toList());
@@ -118,7 +125,7 @@ public class HomeFragment extends Fragment {
                             Toast.LENGTH_LONG
                     ).show();
                 } else {
-                    Workout newWorkout = new Workout(name, desc);
+                    Workout newWorkout = new Workout(name, desc, rest);
                     newWorkout.setUser(currentUser.getId());
 
                     SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Setting up new Workout");
@@ -168,6 +175,8 @@ public class HomeFragment extends Fragment {
             builder.show();
         });
 
+        mBinding.removeWorkoutButton.setOnClickListener( v -> removeOnList(v,false));
+
         mBinding.homeLoginButton.setOnClickListener(v -> {
             if (mHomeService.getCurrentUser(getContext()) == null) {
                 // Log in
@@ -185,6 +194,8 @@ public class HomeFragment extends Fragment {
                     mBinding.textUserEmail.setText("");
                     mBinding.homeLoginButton.setText(getResources().getString(R.string.login_form_title));
                     mBinding.addWorkoutButton.setVisibility(View.INVISIBLE);
+                    mBinding.removeWorkoutButton.setVisibility(View.INVISIBLE);
+                    removeOnList(mBinding.removeWorkoutButton, true);
                     refreshList();
                     loadingDialog.dismiss();
                 },1200);
@@ -197,6 +208,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mRecyclerView = null;
         mBinding = null;
         mAdapter = null;
         mHomeService = null;
@@ -233,6 +245,93 @@ public class HomeFragment extends Fragment {
                 }
             }
     );
+
+    private void removeOnList(View v, boolean off) {
+        if (off || v.isActivated()) {
+            v.setActivated(false);
+            mAdapter.setClickListener(
+                    (View v2, int position, List<Workout> data) -> {
+                        mHomeService.setCurrentWorkout(data.get(position), getContext());
+                        Intent i = new Intent(getActivity(), WorkoutActivity.class);
+                        workoutResultLauncher.launch(i);
+                    });
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setBackgroundColor(Color.TRANSPARENT);
+        } else {
+            v.setActivated(true);
+            mAdapter.setClickListener(
+                    (View v2, int position, List<Workout> data) -> {
+                        Workout w = data.get(position);
+
+                        androidx.appcompat.app.AlertDialog.Builder alert =
+                                new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                        alert.setTitle("Delete \"" + w.getTitle() + "\"?");
+                        alert.setMessage("Are you sure you want to delete?");
+
+                        alert.setPositiveButton("Yes", (dialog, which) -> {
+                            SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Removing Exercise");
+                            loadingDialog.show();
+
+                            Call<Void> callSync = mWorkoutService.deleteWorkout(w);
+                            callSync.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                    if (response.isSuccessful()) {
+                                        // Get response
+                                        try {
+                                            // Local
+                                            mHomeService.removeWorkoutFromUser(w, getContext());
+
+                                            Toast.makeText(getContext(),
+                                                    "Workout removed successfully",
+                                                    Toast.LENGTH_LONG
+                                            ).show();
+
+                                            refreshList();
+
+                                            loadingDialog.dismiss();
+                                            dialog.dismiss();
+                                        } catch (Exception e) {
+                                            // UI
+                                            Toast.makeText(getContext(),
+                                                    e.toString(),
+                                                    Toast.LENGTH_LONG
+                                            ).show();
+                                            loadingDialog.dismiss();
+                                            dialog.dismiss();
+                                        }
+                                    } else {
+                                        Toast.makeText(getContext(),
+                                                response.code()+" - "+ response,
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+                                        loadingDialog.dismiss();
+                                        dialog.dismiss();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                    Toast.makeText(getContext(),
+                                            t.toString(),
+                                            Toast.LENGTH_LONG
+                                    ).show();
+                                    loadingDialog.dismiss();
+                                    dialog.dismiss();
+                                }
+                            });
+                        });
+                        alert.setNegativeButton("NO", (dialog, which) -> {
+                            // close dialog
+                            dialog.cancel();
+                        });
+                        alert.show();
+                    });
+
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setBackgroundColor(Color.argb(63,255,0,0));
+        }
+    }
 
     private void refreshList() {
         WorkoutsRecyclerViewAdapter adapter =

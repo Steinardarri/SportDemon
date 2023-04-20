@@ -13,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,7 +58,6 @@ public class WorkoutActivity extends AppCompatActivity {
         RecyclerView mECRecyclerView = findViewById(R.id.workout_recyclerView);
         mECRecyclerView.setLayoutManager(new LinearLayoutManager(WorkoutActivity.this));
 
-
         ExerciseComboRecyclerViewAdapter adapter = new ExerciseComboRecyclerViewAdapter(
                 WorkoutActivity.this, mWorkout.getExerciseComboList()
         );
@@ -88,16 +86,17 @@ public class WorkoutActivity extends AppCompatActivity {
                 v.setActivated(true);
                 adapter.setClickListener(
                         (View v2, int position, List<ExerciseCombo> data) -> {
+                            ExerciseCombo ec = data.get(position);
+
                             AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                            alert.setTitle("Delete Exercise");
+                            alert.setTitle("Delete \"" + ec.getTitle() + "\"?");
                             alert.setMessage("Are you sure you want to delete?");
+
                             alert.setPositiveButton("Yes", (dialog, which) -> {
                                 SpotsDialog loadingDialog = new SpotsDialog(this, "Removing Exercise");
                                 loadingDialog.show();
 
-                                ExerciseCombo ec = data.get(position);
-
-                                Call<Void> callSync = mWorkoutService.removeExerciseCombo(ec);
+                                Call<Void> callSync = mWorkoutService.deleteExerciseCombo(ec);
                                 callSync.enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
@@ -155,7 +154,7 @@ public class WorkoutActivity extends AppCompatActivity {
                         });
 
                 mECRecyclerView.setAdapter(adapter);
-                mECRecyclerView.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.crimson, null));
+                mECRecyclerView.setBackgroundColor(Color.argb(63,255,0,0));
             } else {
                 v.setActivated(false);
                 button.setText(this.getString(R.string.remove));
