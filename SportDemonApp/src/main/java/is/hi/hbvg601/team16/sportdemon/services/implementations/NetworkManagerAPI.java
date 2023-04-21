@@ -1,31 +1,27 @@
 package is.hi.hbvg601.team16.sportdemon.services.implementations;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.rxjava3.core.Observable;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
+import is.hi.hbvg601.team16.sportdemon.persistence.LoginData;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.NetworkManager;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
 
 public class NetworkManagerAPI {
 
     private static NetworkManager mAPI;
-
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
     static {
         setupNetworkManagerAPI();
@@ -34,14 +30,19 @@ public class NetworkManagerAPI {
     private static void setupNetworkManagerAPI() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         Gson demonGson = new GsonBuilder()
+                // Setja stillingar á Gson hér
                 .serializeNulls()
+                .setLenient()
                 .setPrettyPrinting()
+                .setDateFormat("yyyy-MM-dd hh:mm")
                 .create();
+        RxJava3CallAdapterFactory rxAdapter = RxJava3CallAdapterFactory.create();
 
         Retrofit retrofit = new Retrofit.Builder()
 //                .baseUrl("http://10.0.2.2:8080") // Local server
-                .baseUrl("https://sportdemonserver.up.railway.app") // Railway Server
+                .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
                 .addConverterFactory(GsonConverterFactory.create(demonGson))
+                .addCallAdapterFactory(rxAdapter)
                 .client(httpClient.build())
                 .build();
 
@@ -57,111 +58,73 @@ public class NetworkManagerAPI {
 
     /**
      * @param user sem á að vista
-     * @return String með 'Failure' eða 'Success', eftir því hvernig tókst að vista
+     * @return call til server repo, til að execute-a í activity
      */
-    public String createAccount(User user) {
-        AtomicReference<Response<User>> response = new AtomicReference<>();
-        AtomicReference<String> returnString = new AtomicReference<>();
-
-        executor.execute(() -> {
-            //Background work here
-            Call<User> callSync = mAPI.createAccount(user);
-            try {
-                response.set(callSync.execute());
-                System.out.println(response.get().body());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-            handler.post(() -> {
-                //UI Thread work here
-                if(response.get().body() == null) {
-                    returnString.set("Failure");
-                } else {
-                    returnString.set("Success");
-                }
-            });
-        });
-
-        return returnString.get();
+    public Call<User> createAccount(User user) {
+        return mAPI.createAccount(user);
     }
 
-    public User login(String username, String password) {
-        AtomicReference<Response<User>> response = new AtomicReference<>();
-        AtomicReference<User> returnUser = new AtomicReference<>(null);
-
-        executor.execute(() -> {
-            //Background work here
-            User u = new User(username, password,"");
-            Call<User> callSync = mAPI.login(u);
-            try {
-                response.set(callSync.execute());
-                System.out.println(response.get().body());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-            handler.post(() -> {
-                //UI Thread work here
-                returnUser.set(response.get().body());
-            });
-        });
-
-        return returnUser.get();
+    public Call<LoginData> login(String username, String password) {
+        User user = new User(username, password, "");
+        return mAPI.login(user);
     }
 
-    public User getUser(UUID id) {
-        AtomicReference<Response<User>> response = new AtomicReference<>();
-        AtomicReference<User> returnUser = new AtomicReference<>(null);
-
-        executor.execute(() -> {
-            //Background work here
-            Call<User> callSync = mAPI.getUser(id);
-            try {
-                response.set(callSync.execute());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-            handler.post(() -> {
-                //UI Thread work here
-                if (response.get() != null) {
-                    returnUser.set(response.get().body());
-                }
-            });
-        });
-
-        return returnUser.get();
-    }
-
-    public User getUser(String username) {
-        AtomicReference<Response<User>> response = new AtomicReference<>();
-        AtomicReference<User> returnUser = new AtomicReference<>(null);
-
-        executor.execute(() -> {
-            //Background work here
-            Call<User> callSync = mAPI.getUser(username);
-            try {
-                response.set(callSync.execute());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-            handler.post(() -> {
-                //UI Thread work here
-                if (response.get() != null) {
-                    returnUser.set(response.get().body());
-                }
-            });
-        });
-
-        return returnUser.get();
+    public Call<User> getUser(UUID id) {
+        return mAPI.getUser(id);
     }
 
     // Workout Service
 
+    public Call<Workout> addWorkout(Workout workout) {
+        return mAPI.addWorkout(workout);
+    }
 
-    // Exercise Service
+    public Call<Workout> findWorkoutByID(UUID id) {
+        return mAPI.getWorkout(id);
+    }
 
+    public Call<Void> updateWorkout(Workout workout) {
+        return mAPI.updateWorkout(workout.getId(), workout);
+    }
+
+    public Observable<Void> updateWorkoutObservable(Workout workout) {
+        return mAPI.updateWorkoutObservable(workout.getId(), workout);
+    }
+
+    public Call<Void> deleteWorkout(UUID id) {
+        return mAPI.deleteWorkout(id);
+    }
+
+    // ExerciseCombo Service
+
+    public Call<ExerciseCombo> addExerciseCombo(ExerciseCombo ec) {
+        return mAPI.addExerciseCombo(ec);
+    }
+
+    public Call<Void> updateExerciseCombo(ExerciseCombo exerciseCombo) {
+        return mAPI.updateExerciseCombo(exerciseCombo.getId(), exerciseCombo);
+    }
+
+    public Observable<Void> updateExerciseComboObservable(ExerciseCombo exerciseCombo) {
+        return mAPI.updateExerciseComboObservable(exerciseCombo.getId(), exerciseCombo);
+    }
+
+    public Call<Void> deleteExerciseCombo(UUID id) {
+        return mAPI.deleteExerciseCombo(id);
+    }
+
+    // Workout Result Service
+
+    public Call<WorkoutResult> getWorkoutResult(UUID id) {
+        return mAPI.getWorkoutResult(id);
+    }
+
+    public Call<WorkoutResult> addWorkoutResult(WorkoutResult wr) {
+        return mAPI.addWorkoutResult(wr);
+    }
+
+    public Call<Void> deleteWorkoutResult(UUID id) {
+        return mAPI.deleteWorkoutResult(id);
+    }
 
 }

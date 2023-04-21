@@ -2,27 +2,23 @@ package is.hi.hbvg601.team16.sportdemon.services;
 
 import java.util.UUID;
 
+import is.hi.hbvg601.team16.sportdemon.persistence.LoginData;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
+import retrofit2.Call;
 
 public interface UserService {
 
     /**
-     * @param  user to check if logged in
-     * @return boolean success
-     */
-    boolean isLoggedIn(User user); // Not implemented
-
-    /**
      * @param  user that is to be created
-     * @return execute result
+     * @return call to server to create account
      */
-    String createAccount(User user);
+    Call<User> createAccount(User user);
 
     /**
-     * @param  user that is to be saved over
-     * @return execute result
+     * @param  user the user that is to be saved over
+     * @return Call to server repo to edit account
      */
-    String editAccount(User user); // Not implemented
+    Call<User> editAccount(User user);
 
     /**
      * @param  id of the user to delete
@@ -33,24 +29,14 @@ public interface UserService {
     /**
      * @param  username of the account to login
      * @param  password of the account to login
-     * @return execute result
+     * @return call to server to login
      */
-    User login(String username, String password);
-
-    /**
-     * @return boolean success
-     */
-    Boolean logout(); // Not implemented
+    Call<LoginData> login(String username, String password);
 
     /**
      * @param  id of the user to get
-     * @return User data of the id
+     * @return call to server
      */
-    User findUserByID(UUID id);
+    Call<User> findUserByID(UUID id);
 
-    /**
-     * @param  username of the user to get
-     * @return User data of the username
-     */
-    User findUserByUsername(String username);
 }

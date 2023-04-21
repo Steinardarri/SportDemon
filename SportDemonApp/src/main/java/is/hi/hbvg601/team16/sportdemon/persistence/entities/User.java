@@ -20,16 +20,14 @@ import java.util.UUID;
 
 public class User implements Serializable {
 
-    private UUID ID;
+    private UUID id;
     private String username;
     private String password;
     private String email;
-    private List<Workout> workoutList;
-    private List<WorkoutResult> workoutResultList;
+    private List<Workout> workoutList = new ArrayList<>();
+    private List<WorkoutResult> workoutResultList = new ArrayList<>();
 
-    public User() {
-    }
-
+    public User() {}
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
@@ -40,15 +38,18 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "ID=" + ID +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
+                "ID=" + getId() +
+                ", username='" + getUsername() + '\'' +
+                ", password='" + getPassword() + '\'' +
+                ", email='" + getEmail() + '\'' +
                 '}';
     }
 
-    public UUID getID() {
-        return ID;
+    public UUID getId() {
+        return id;
+    }
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -85,4 +86,41 @@ public class User implements Serializable {
     public void setWorkoutResultList(List<WorkoutResult> workoutResultList) {
         this.workoutResultList = workoutResultList;
     }
+
+    public void addWorkout(Workout w) {
+        workoutList.add(w);
+    }
+
+    public void editWorkout(Workout newWorkout) {
+        for (Workout w : workoutList){
+            if (w.getId().equals(newWorkout.getId())){
+                int i = workoutList.indexOf(w);
+                workoutList.set(i, newWorkout);
+                break;
+            }
+        }
+    }
+
+    public void removeWorkout(Workout workout) {
+        for (Workout w : workoutList){
+            if (w.getId().equals(workout.getId())){
+                workoutList.remove(w);
+                break;
+            }
+        }
+    }
+
+    public void addWorkoutResult(WorkoutResult wr) {
+        workoutResultList.add(wr);
+    }
+
+    public void removeWorkoutResult(WorkoutResult wr) {
+        for (WorkoutResult wrO : workoutResultList){
+            if (wrO.getId().equals(wr.getId())){
+                workoutResultList.remove(wr);
+                break;
+            }
+        }
+    }
+
 }

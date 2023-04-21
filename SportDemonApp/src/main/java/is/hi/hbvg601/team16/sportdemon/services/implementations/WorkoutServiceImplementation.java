@@ -3,10 +3,11 @@ package is.hi.hbvg601.team16.sportdemon.services.implementations;
 import java.util.UUID;
 
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
+
+import retrofit2.Call;
 
 public class WorkoutServiceImplementation implements WorkoutService {
 
@@ -16,43 +17,55 @@ public class WorkoutServiceImplementation implements WorkoutService {
         this.nmAPI = networkManager;
     }
 
+    // Workout
+
     @Override
-    public String addWorkout(Workout workout, User user) {
-        return null;
+    public Call<Workout> saveWorkout(Workout workout) {
+        return nmAPI.addWorkout(workout);
     }
 
     @Override
-    public String editWorkout(Workout workout) {
-        return null;
+    public Call<Void> updateWorkout(Workout workout) {
+        return nmAPI.updateWorkout(workout);
     }
 
     @Override
-    public String deleteWorkout(UUID id) {
-        return null;
+    public Call<Void> deleteWorkout(Workout workout) {
+        return nmAPI.deleteWorkout(workout.getId());
     }
 
     @Override
-    public String addExerciseCombo(ExerciseCombo ec, Workout workout) {
-        return null;
+    public Call<Workout> findWorkoutByID(UUID id) {
+        return nmAPI.findWorkoutByID(id);
+    }
+
+    // ExerciseCombo
+
+    @Override
+    public Call<ExerciseCombo> saveExerciseCombo(ExerciseCombo ec) {
+        return nmAPI.addExerciseCombo(ec);
     }
 
     @Override
-    public String removeExerciseCombo(ExerciseCombo ec, Workout workout) {
-        return null;
+    public Call<Void> updateExerciseCombo(ExerciseCombo exerciseCombo) {
+        return nmAPI.updateExerciseCombo(exerciseCombo);
     }
 
     @Override
-    public String saveWorkoutResult(WorkoutResult wr, User user) {
-        return null;
+    public Call<Void> deleteExerciseCombo(ExerciseCombo ec) {
+        return nmAPI.deleteExerciseCombo(ec.getId());
+    }
+
+    // Workout Result
+
+    @Override
+    public Call<WorkoutResult> findWorkoutResultByID(UUID id) {
+        return nmAPI.getWorkoutResult(id);
     }
 
     @Override
-    public String deleteWorkoutResult(UUID id) {
-        return null;
+    public Call<WorkoutResult> saveWorkoutResult(WorkoutResult wr) {
+        return nmAPI.addWorkoutResult(wr);
     }
 
-    @Override
-    public Workout findWorkoutByID(UUID id) {
-        return null;
-    }
 }

@@ -1,5 +1,7 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -17,7 +19,7 @@ import java.util.UUID;
 public class ExerciseCombo implements Serializable {
 
     private UUID id;
-
+    private UUID workout;
     private String title;
     private int sets;
     private int reps;
@@ -26,9 +28,9 @@ public class ExerciseCombo implements Serializable {
     private int durationPerSet;
     private int restBetweenSets;
 
-    public ExerciseCombo() {
-    }
-    public ExerciseCombo(String title, int sets, int reps, double weight, String equipment, int durationPerSet, int restBetweenSets) {
+    public ExerciseCombo() {}
+    public ExerciseCombo(String title, int sets, int reps, double weight,
+                         String equipment, int durationPerSet, int restBetweenSets) {
         this.title = title;
         this.sets = sets;
         this.reps = reps;
@@ -36,11 +38,27 @@ public class ExerciseCombo implements Serializable {
         this.equipment = equipment;
         this.durationPerSet = durationPerSet;
         this.restBetweenSets = restBetweenSets;
-
     }
 
     public UUID getId() {
         return id;
+    }
+    public void setId(UUID ID) {
+        this.id = ID;
+    }
+
+    public UUID getWorkout() {
+        return workout;
+    }
+    public void setWorkout(UUID workout) {
+        this.workout = workout;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getSets() {
@@ -85,4 +103,23 @@ public class ExerciseCombo implements Serializable {
         this.restBetweenSets = restBetweenSets;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        String info = "";
+        info += ""    + getReps() + " reps" +
+                "  " + getSets() + " sets";
+        String magn = "";
+        if (getWeight() > 0 && getDurationPerSet() > 0) {
+            magn += getWeight() + " kg";
+            magn += "  ";
+            magn += getDurationPerSet() + " sek á set";
+        }
+        else if (getWeight() > 0) magn += getWeight() + " kg";
+        else if (getDurationPerSet() > 0) magn += getDurationPerSet() + " sek á set";
+        if (!magn.equals("")) info += "  " + magn;
+        if (!getEquipment().equals("")) info += "  " + getEquipment();
+
+        return info;
+    }
 }

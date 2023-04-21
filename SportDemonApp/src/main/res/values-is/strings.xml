@@ -22,6 +22,29 @@
     <string name="login_form_username">Notendanafn</string>
     <string name="login_form_password">Lykilorð</string>
     <string name="login_form_title">Innskráining</string>
-    <string name="hyperlink"><a href="activity_signup">Ertu ekki með aðgang? Nýskráðu þig! </a></string>
-
+    <string name="signup">Ertu ekki með aðgang? Nýskráðu þig!</string>
+    <string name="play">Spila</string>
+    <string name="workout_edit">Breyta</string>
+    <string name="workout_add">Bæta</string>
+    <string name="exercise_name">Nafn hreyfingar</string>
+    <string name="sets">Sett</string>
+    <string name="repetitions">Endurtekningar</string>
+    <string name="weight">Þyngd</string>
+    <string name="equipment">Æfingatól</string>
+    <string name="duration_per_set">Tími (á sett)</string>
+    <string name="rest_between_sets">Hvíld (á sett)</string>
+    <string name="create_workout">Búa til Æfingu</string>
+    <string name="title">Titill</string>
+    <string name="description">Lýsing</string>
+    <string name="logout">Útskrá</string>
+    <string name="passwordWarning">ATH! Ekki nota venjulegu lykilorðin þín. Þau verða send og geymd á opnum texta!</string>
+    <string name="right">Hægri</string>
+    <string name="left">Vinstri</string>
+    <string name="edit_exercise">Breyta Hreyfingu</string>
+    <string name="remove">Fjarlægja</string>
+    <string name="cancel">Hætta</string>
+    <string name="ECRest">Hvíld milli hreyfinga</string>
+    <string name="remove_workout">Fjarlægja æfingu</string>
+    <string name="photo">Ljósmynd</string>
+    <string name="take_photo">Ýttu hér fyrir neðan ef þú vilt taka ljósmynd!</string>
 </resources>

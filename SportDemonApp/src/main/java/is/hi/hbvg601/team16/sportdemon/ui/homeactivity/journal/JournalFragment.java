@@ -24,8 +24,6 @@ public class JournalFragment extends Fragment {
         binding = FragmentJournalBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textJournal;
-        journalViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

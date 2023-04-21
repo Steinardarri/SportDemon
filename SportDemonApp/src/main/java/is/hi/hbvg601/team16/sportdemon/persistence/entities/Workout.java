@@ -1,5 +1,7 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,29 +20,32 @@ import java.util.UUID;
 
 public class Workout implements Serializable {
 
-    private UUID ID;
-    private User user;
+    private UUID id;
+    private UUID user;
     private String title;
-    private int duration;
     private String description;
-    private List<ExerciseCombo> exerciseCombo = new ArrayList<>();
+    private int restBetweenEC;
+    private int duration;
+    private List<ExerciseCombo> exerciseComboList = new ArrayList<>();
 
-    public Workout() {
-    }
-
-    public Workout(String title, String description) {
+    public Workout() {}
+    public Workout(String title, String description, int rest) {
         this.title = title;
         this.description = description;
+        this.restBetweenEC = rest;
     }
 
-    public UUID getID() {
-        return ID;
+    public UUID getId() {
+        return id;
+    }
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public User getUser() {
+    public UUID getUser() {
         return user;
     }
-    public void setUser(User user) {
+    public void setUser(UUID user) {
         this.user = user;
     }
 
@@ -51,13 +56,6 @@ public class Workout implements Serializable {
         this.title = title;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -65,11 +63,62 @@ public class Workout implements Serializable {
         this.description = description;
     }
 
-    public List<ExerciseCombo> getExerciseCombo() {
-        return exerciseCombo;
+    public int getRestBetweenEC() {
+        return restBetweenEC;
     }
-    public void setExerciseCombo(List<ExerciseCombo> exerciseCombo) {
-        this.exerciseCombo = exerciseCombo;
+    public void setRestBetweenEC(int restBetweenEC) {
+        this.restBetweenEC = restBetweenEC;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public List<ExerciseCombo> getExerciseComboList() {
+        return exerciseComboList;
+    }
+    public void setExerciseComboList(List<ExerciseCombo> exerciseComboList) {
+        this.exerciseComboList = exerciseComboList;
+    }
+
+    public void addExerciseCombo(ExerciseCombo ec) {
+        exerciseComboList.add(ec);
+    }
+
+    public void editExerciseCombo(ExerciseCombo newEC) {
+        for (ExerciseCombo ec : exerciseComboList){
+            if (ec.getId().equals(newEC.getId())){
+                int i = exerciseComboList.indexOf(ec);
+                exerciseComboList.set(i, newEC);
+                break;
+            }
+        }
+    }
+
+    public void removeExerciseCombo(ExerciseCombo ec) {
+        for (ExerciseCombo oldEC : exerciseComboList){
+            if (oldEC.getId().equals(ec.getId())){
+                exerciseComboList.remove(oldEC);
+                break;
+            }
+        }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder workout = new StringBuilder("Workout Summary:\n");
+        workout.append("\n-------\n");
+        for (ExerciseCombo ec : exerciseComboList) {
+            workout .append(ec.getTitle())
+                    .append("\n")
+                    .append(ec)
+                    .append("\n-------\n");
+        }
+        return workout.toString();
     }
 }
 
