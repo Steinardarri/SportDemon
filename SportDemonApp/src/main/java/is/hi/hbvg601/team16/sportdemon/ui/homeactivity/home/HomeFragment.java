@@ -234,7 +234,7 @@ public class HomeFragment extends Fragment {
                         public void onResponse(@NonNull Call<WorkoutResult> call, @NonNull Response<WorkoutResult> response) {
                             if (response.isSuccessful()) {
                                 // Get response
-                                try {
+//                                try {
                                     WorkoutResult workoutResult = response.body();
                                     mHomeService.addWorkoutResultToUser(workoutResult, getContext());
 
@@ -243,20 +243,20 @@ public class HomeFragment extends Fragment {
                                             "Workout Result Saved",
                                             Toast.LENGTH_LONG
                                     ).show();
-                                } catch (Exception e) {
-                                    // UI
-                                    loadingDialog.dismiss();
-                                    Toast.makeText(getContext(),
-                                            e.toString(),
-                                            Toast.LENGTH_LONG
-                                    ).show();
-                                }
+//                                } catch (Exception e) {
+////                                    // UI
+////                                    loadingDialog.dismiss();
+////                                    Toast.makeText(getContext(),
+////                                            e.toString(),
+////                                            Toast.LENGTH_LONG
+////                                    ).show();
+//                                }
                             } else {
-                                Toast.makeText(getContext(),
-                                        response.code()+" - "+ response,
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                                loadingDialog.dismiss();
+//                                Toast.makeText(getContext(),
+//                                        response.code()+" - "+ response,
+//                                        Toast.LENGTH_SHORT
+//                                ).show();
+//                                loadingDialog.dismiss();
                             }
                         }
 

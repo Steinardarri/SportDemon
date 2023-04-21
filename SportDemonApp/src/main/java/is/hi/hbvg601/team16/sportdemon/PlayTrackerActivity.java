@@ -242,10 +242,9 @@ public class PlayTrackerActivity extends AppCompatActivity {
 
                 mBackBtn.setOnClickListener(null); // Nenni ekki að útfæra
                 mForwardBtn.setOnClickListener(this::goToNextExercise);
+            } else {
+                if (mTimeLeftInMillis > 0) startTimer();
             }
-
-            if (mTimeLeftInMillis > 0) startTimer();
-
         } else {  // Pause
             if (mTimeLeftInMillis > 0) { // Disable if no ongoing timer
                 mPlaying = false;
