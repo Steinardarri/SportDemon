@@ -5,6 +5,7 @@ import android.content.Context;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 
 public interface HomeService {
 
@@ -31,5 +32,9 @@ public interface HomeService {
     void editCurrentWorkoutInUser(Context context);
 
     void removeWorkoutFromUser(Workout workout, Context context);
+
+    void addWorkoutResultToUser(WorkoutResult wr, Context context);
+
+    void removeWorkoutResultFromUser(WorkoutResult wr, Context context);
 
 }

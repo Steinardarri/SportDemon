@@ -30,6 +30,7 @@ import is.hi.hbvg601.team16.sportdemon.WorkoutActivity;
 import is.hi.hbvg601.team16.sportdemon.databinding.FragmentHomeBinding;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.HomeServiceImplementation;
@@ -52,6 +53,7 @@ public class HomeFragment extends Fragment {
 
     // Intent code
     private static final int RESULT_SUCCESS = -1;
+    private static final int RESULT_WORKOUT_FINISHED = 12;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -218,9 +220,57 @@ public class HomeFragment extends Fragment {
     private final ActivityResultLauncher<Intent> workoutResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == RESULT_SUCCESS) {
+                if (result.getResultCode() == RESULT_WORKOUT_FINISHED) {
                     Intent data = result.getData();
+                    assert data != null : "No data given";
+
+                    WorkoutResult wr = (WorkoutResult) data.getSerializableExtra("WORKOUTRESULT");
+
+                    SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Saving Workout Result");
+                    loadingDialog.show();
+                    Call<WorkoutResult> callSync = mWorkoutService.saveWorkoutResult(wr);
+                    callSync.enqueue(new Callback<WorkoutResult>() {
+                        @Override
+                        public void onResponse(@NonNull Call<WorkoutResult> call, @NonNull Response<WorkoutResult> response) {
+                            if (response.isSuccessful()) {
+                                // Get response
+                                try {
+                                    WorkoutResult workoutResult = response.body();
+                                    mHomeService.addWorkoutResultToUser(workoutResult, getContext());
+
+                                    loadingDialog.dismiss();
+                                    Toast.makeText(getContext(),
+                                            "Workout Result Saved",
+                                            Toast.LENGTH_LONG
+                                    ).show();
+                                } catch (Exception e) {
+                                    // UI
+                                    loadingDialog.dismiss();
+                                    Toast.makeText(getContext(),
+                                            e.toString(),
+                                            Toast.LENGTH_LONG
+                                    ).show();
+                                }
+                            } else {
+                                Toast.makeText(getContext(),
+                                        response.code()+" - "+ response,
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                                loadingDialog.dismiss();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<WorkoutResult> call, @NonNull Throwable t) {
+                            Toast.makeText(getContext(),
+                                    t.toString(),
+                                    Toast.LENGTH_LONG
+                            ).show();
+                            loadingDialog.dismiss();
+                        }
+                    });
                 }
+
                 refreshList();
             }
     );
@@ -237,6 +287,7 @@ public class HomeFragment extends Fragment {
                     mBinding.textUserName.setText(resultUser.getUsername());
                     mBinding.textUserEmail.setText(resultUser.getEmail());
                     mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
+                    mBinding.removeWorkoutButton.setVisibility(View.VISIBLE);
                     mBinding.homeLoginButton.setText(getResources().getString(R.string.logout));
 
                     // Vista nýjan user sem aðal
@@ -329,7 +380,7 @@ public class HomeFragment extends Fragment {
                     });
 
             mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.setBackgroundColor(Color.argb(63,255,0,0));
+            mRecyclerView.setBackgroundColor(Color.argb(31,255,0,0));
         }
     }
 

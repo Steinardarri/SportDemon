@@ -68,7 +68,7 @@
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="@string/reps"
-        android:textSize="60sp"
+        android:textSize="96sp"
         app:layout_constraintBottom_toTopOf="@+id/tracker_recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -99,30 +99,28 @@
         <TextView
             android:id="@+id/sets"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:text="@string/_1_4"
-            android:textSize="30sp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:text="@string/_1_4"
+            android:textSize="48sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/excombo"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:text="@string/_3_10"
-            android:textSize="30sp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:text="@string/_3_10"
+            android:textSize="48sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".8"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

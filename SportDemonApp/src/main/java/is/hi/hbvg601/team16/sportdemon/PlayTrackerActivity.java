@@ -25,10 +25,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.javatuples.Quartet;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +41,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import dmax.dialog.SpotsDialog;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
@@ -48,13 +54,14 @@ public class PlayTrackerActivity extends AppCompatActivity {
     private MediaPlayer mFinished;
 
     private boolean mStarted = false;
+    private boolean mPlaying = false;
     private CountDownTimer mMainTimer;
     private long mTimeLeftInMillis;
 
     private Workout mWorkout;
     //               timer, exercise text, setsText, #exComboText
     private List<Quartet<Integer, String, String, String>> mTrackerList;
-    private int mTrackerIndex;
+    private int mTrackerIndex = -1; // Index is incremented before being used
 
     private Button mPlayBtn;
     private Button mBackBtn;
@@ -66,8 +73,11 @@ public class PlayTrackerActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
 
-    private ActivityResultLauncher<Uri> takePictureLauncher;
+    private AlertDialog.Builder mFinishedDialogBuilder;
+    private ActivityResultLauncher<Uri> mTakePictureLauncher;
     private Uri mPhotoUri;
+    private ImageView mPhotoView;
+    private final AtomicBoolean imageTaken = new AtomicBoolean(false);
 
     // Codes
     private final int CAMERA_PERMISSION_CODE = 100;
@@ -80,8 +90,8 @@ public class PlayTrackerActivity extends AppCompatActivity {
         mWorkout = (Workout) getIntent().getSerializableExtra("WORKOUT");
         assert mWorkout != null : "Workout is null";
 
-        mWhistle = MediaPlayer.create(this, R.raw.whistle);
-        mFinished = MediaPlayer.create(this, R.raw.finished);
+        mWhistle = MediaPlayer.create(PlayTrackerActivity.this, R.raw.whistle);
+        mFinished = MediaPlayer.create(PlayTrackerActivity.this, R.raw.finished);
 
         mRecyclerView = findViewById(R.id.tracker_recyclerView);
         mWorkoutTitleText = findViewById(R.id.workout_title);
@@ -102,6 +112,7 @@ public class PlayTrackerActivity extends AppCompatActivity {
         for (ExerciseCombo ec : ecl) {
             // Exercise Combo
             for (int i = 0; i < ec.getSets(); i++) {
+                // Exercise
                 Optional<Integer> duration = Optional.of(ec.getDurationPerSet());
                 int durationInt = duration.get() > -1 ? duration.get() : 0; // Set 0 if null or
                 // negative
@@ -118,6 +129,16 @@ public class PlayTrackerActivity extends AppCompatActivity {
                         i + 1 + "/" + ec.getSets(),
                         ecIndex + "/" + ecl.size()
                 ));
+
+                // Set Rest
+                if (i != ec.getSets()-1) { // Skip if last set
+                    int restInt = ec.getRestBetweenSets();
+                    String restText = "Set Rest";
+                    mTrackerList.add(new Quartet<>(restInt, restText,
+                            i + 1 + "/" + ec.getSets(),
+                            ecIndex + "/" + ecl.size()
+                    ));
+                }
             }
 
             // Rest between Exercise Combos
@@ -133,17 +154,38 @@ public class PlayTrackerActivity extends AppCompatActivity {
         // Remove last rest, not needed
         mTrackerList.remove(mTrackerList.size() - 1);
 
+        // Set up RecycleView
+        List<String> rows = mTrackerList.stream()
+                .map(Quartet::getValue1)
+                .collect(Collectors.toList());
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(PlayTrackerActivity.this));
         PlayTrackerRecyclerViewAdapter adapter = new PlayTrackerRecyclerViewAdapter(
-                this,
-                mTrackerList.stream()
-                        .map(Quartet::getValue1)
-                        .collect(Collectors.toList())
+                PlayTrackerActivity.this, rows
         );
-//        adapter.setClickListener();
+        adapter.setClickListener(null);
         mRecyclerView.setAdapter(adapter);
+
+        Quartet<Integer, String, String, String> firstExerciseQuartet
+                = mTrackerList.get(0);
+
+        mTimeLeftInMillis = firstExerciseQuartet.getValue0() * 1000;
+        mWorkText.setText("");
+        mSetsText.setText(firstExerciseQuartet.getValue2());
+        mExComboText.setText(firstExerciseQuartet.getValue3());
 
         mPlayBtn.setOnClickListener(this::playWorkout);
 
+        // Workout Result Dialog
+        mFinishedDialogBuilder = new AlertDialog.Builder(PlayTrackerActivity.this);
+
+        mTakePictureLauncher =
+                registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
+                    if (result) {
+                        mPhotoView.setImageURI(mPhotoUri);
+                        imageTaken.set(true);
+                    }
+                });
     }
 
     @Override
@@ -166,15 +208,14 @@ public class PlayTrackerActivity extends AppCompatActivity {
     @SuppressLint("InflateParams")
     private void playWorkout(View v) {
 
-        if (!v.isActivated()) { // Play
-            v.setActivated(true);
+        if (!mPlaying) { // Play
+            mPlaying = true;
             mPlayBtn.setBackground(ResourcesCompat
                     .getDrawable(getResources(), R.drawable.pause_button, null));
 
             if (!mStarted) { // Initialize
-                mTrackerIndex = 0;
 
-                Dialog startDialog = new Dialog(this);
+                Dialog startDialog = new Dialog(PlayTrackerActivity.this);
                 startDialog.setContentView(getLayoutInflater()
                         .inflate(R.layout.dialog_start_workout, null));
                 startDialog.setCancelable(false);
@@ -194,18 +235,10 @@ public class PlayTrackerActivity extends AppCompatActivity {
                     public void onFinish() {
                         mWhistle.start();
                         startDialog.dismiss();
+                        mStarted = true;
+                        goToNextExercise(null);
                     }
                 }.start();
-
-                mStarted = true;
-
-                Quartet<Integer, String, String, String> currentExerciseQuartet
-                        = mTrackerList.get(mTrackerIndex);
-
-                mTimeLeftInMillis = currentExerciseQuartet.getValue0() * 1000;
-                mWorkText.setText(currentExerciseQuartet.getValue1());
-                mSetsText.setText(currentExerciseQuartet.getValue2());
-                mExComboText.setText(currentExerciseQuartet.getValue3());
 
                 mBackBtn.setOnClickListener(null); // Nenni ekki að útfæra
                 mForwardBtn.setOnClickListener(this::goToNextExercise);
@@ -215,7 +248,7 @@ public class PlayTrackerActivity extends AppCompatActivity {
 
         } else {  // Pause
             if (mTimeLeftInMillis > 0) { // Disable if no ongoing timer
-                v.setActivated(false);
+                mPlaying = false;
 
                 pauseTimer();
 
@@ -226,20 +259,26 @@ public class PlayTrackerActivity extends AppCompatActivity {
     }
 
     private void goToNextExercise(View v) {
+        if (mMainTimer != null) pauseTimer();
         mTrackerIndex++;
-        if (mTrackerIndex > mTrackerList.size()) workoutFinished();
+        if (mTrackerIndex >= mTrackerList.size()) workoutFinished(true);
+        else {
+            Quartet<Integer, String, String, String> currentExerciseQuartet
+                    = mTrackerList.get(mTrackerIndex);
 
-        Quartet<Integer, String, String, String> currentExerciseQuartet
-                = mTrackerList.get(mTrackerIndex);
+            mRecyclerView.smoothScrollToPosition(mTrackerIndex);
+            PlayTrackerRecyclerViewAdapter adapter =
+                    (PlayTrackerRecyclerViewAdapter) mRecyclerView.getAdapter();
+            assert adapter != null;
+            adapter.setSelectedIndex(mTrackerIndex);
 
-        mRecyclerView.smoothScrollToPosition(mTrackerIndex);
+            mTimeLeftInMillis = currentExerciseQuartet.getValue0() * 1000;
+            mWorkText.setText(currentExerciseQuartet.getValue1());
+            mSetsText.setText(currentExerciseQuartet.getValue2());
+            mExComboText.setText(currentExerciseQuartet.getValue3());
 
-        mTimeLeftInMillis = currentExerciseQuartet.getValue0() * 1000;
-        mWorkText.setText(currentExerciseQuartet.getValue1());
-        mSetsText.setText(currentExerciseQuartet.getValue2());
-        mExComboText.setText(currentExerciseQuartet.getValue3());
-
-        if (mTimeLeftInMillis > 0) startTimer();
+            if (mTimeLeftInMillis > 0) startTimer();
+        }
     }
 
     private void startTimer() {
@@ -261,6 +300,8 @@ public class PlayTrackerActivity extends AppCompatActivity {
 
     private void pauseTimer() {
         mMainTimer.cancel();
+        // Ceil to next second
+        mTimeLeftInMillis = (long) Math.ceil(mTimeLeftInMillis / 1000.0) * 1000;
     }
 
     private void updateCountDownText() {
@@ -273,26 +314,27 @@ public class PlayTrackerActivity extends AppCompatActivity {
         mWorkText.setText(timeLeftFormatted);
     }
 
-    private void workoutFinished() {
-        mFinished.start();
+    private void workoutFinished(boolean playSound) {
+        if (playSound) mFinished.start();
 
-        AtomicBoolean imageTaken = new AtomicBoolean(false);
+        mPlayBtn.setOnClickListener(null);
+        mBackBtn.setOnClickListener(null);
+        mForwardBtn.setOnClickListener(null);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View vAlert = getLayoutInflater().inflate(R.layout.dialog_finish_workout, null);
-        builder.setView(vAlert);
-        builder.setTitle("Save Workout Result?");
+        mFinishedDialogBuilder.setView(vAlert);
+        mFinishedDialogBuilder.setTitle("Save Workout Result?");
 
         TextView workoutResult = vAlert.findViewById(R.id.workoutResultText);
         FrameLayout frameLayout = vAlert.findViewById(R.id.resultPhotoFrame);
-        ImageView photoView = vAlert.findViewById(R.id.takenPhoto);
+        mPhotoView = vAlert.findViewById(R.id.takenPhoto);
 
         workoutResult.setText(mWorkout.toString());
 
         frameLayout.setOnClickListener(view -> {
             if (!imageTaken.get()) {
                 if (ContextCompat.checkSelfPermission(
-                        this,
+                        PlayTrackerActivity.this,
                         android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     // Take Picture
                     ContentValues values = new ContentValues();
@@ -301,38 +343,64 @@ public class PlayTrackerActivity extends AppCompatActivity {
                     mPhotoUri = getContentResolver()
                             .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-                    takePictureLauncher.launch(mPhotoUri);
+                    mTakePictureLauncher.launch(mPhotoUri);
 
                 } else {
-                    ActivityCompat.requestPermissions(this,
+                    ActivityCompat.requestPermissions(PlayTrackerActivity.this,
                             new String[]{android.Manifest.permission.CAMERA},
                             CAMERA_PERMISSION_CODE);
                 }
             }
         });
 
-        takePictureLauncher =
-                registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
-                    if (result) {
-                        photoView.setImageURI(mPhotoUri);
-                    }
-                });
+        mFinishedDialogBuilder.setPositiveButton("Save", (dialog, which) -> {
+            SpotsDialog loadingDialog = new SpotsDialog(this, "Preparing Data");
+            loadingDialog.show();
 
-        builder.setPositiveButton("Save", (dialog, which) -> {
-            WorkoutResult wr = new WorkoutResult(mWorkout.toString(), mPhotoUri);
+            // Get photo data to save
+            InputStream iStream;
+            byte[] photo;
+            try {
+                iStream = getContentResolver().openInputStream(mPhotoUri);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                photo = getBytes(iStream);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            WorkoutResult wr = new WorkoutResult(mWorkout.getUser(), mWorkout.toString(), photo);
 
             Intent skil = new Intent();
             skil.putExtra("WORKOUTRESULT", wr);
             setResult(RESULT_OK, skil);
 
+            loadingDialog.dismiss();
             finish();
         });
 
-        builder.setNegativeButton("Skip", (dialog, which) -> {
+        mFinishedDialogBuilder.setNegativeButton("Skip", (dialog, which) -> {
             setResult(RESULT_CANCELED);
             finish();
         });
 
+        mFinishedDialogBuilder.show();
+
+        if (!playSound) frameLayout.performClick();
+    }
+
+    private byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 
     @Override
@@ -342,9 +410,9 @@ public class PlayTrackerActivity extends AppCompatActivity {
 
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                workoutFinished();
+                workoutFinished(false);
             } else {
-                Toast.makeText(this,
+                Toast.makeText(PlayTrackerActivity.this,
                         "Camera permission required",
                         Toast.LENGTH_SHORT
                 ).show();

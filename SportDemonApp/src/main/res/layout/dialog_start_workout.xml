@@ -6,4 +6,6 @@
           android:layout_margin="15dp"
           android:ems="12"
           android:text="@string/number"
-          android:textAlignment="center" />
+          android:textAlignment="center"
+          android:textSize="60sp"
+          android:textStyle="bold" />

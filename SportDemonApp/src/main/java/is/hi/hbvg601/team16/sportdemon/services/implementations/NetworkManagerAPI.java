@@ -10,6 +10,7 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.LoginData;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.NetworkManager;
 
 import okhttp3.OkHttpClient;
@@ -33,12 +34,13 @@ public class NetworkManagerAPI {
                 .serializeNulls()
                 .setLenient()
                 .setPrettyPrinting()
+                .setDateFormat("yyyy-MM-dd hh:mm")
                 .create();
         RxJava3CallAdapterFactory rxAdapter = RxJava3CallAdapterFactory.create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080") // Local server
-//                .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
+//                .baseUrl("http://10.0.2.2:8080") // Local server
+                .baseUrl("https://sportdemonserver-production.up.railway.app") // Railway Server
                 .addConverterFactory(GsonConverterFactory.create(demonGson))
                 .addCallAdapterFactory(rxAdapter)
                 .client(httpClient.build())
@@ -112,6 +114,14 @@ public class NetworkManagerAPI {
     }
 
     // Workout Result Service
+
+    public Call<WorkoutResult> getWorkoutResult(UUID id) {
+        return mAPI.getWorkoutResult(id);
+    }
+
+    public Call<WorkoutResult> addWorkoutResult(WorkoutResult wr) {
+        return mAPI.addWorkoutResult(wr);
+    }
 
     public Call<Void> deleteWorkoutResult(UUID id) {
         return mAPI.deleteWorkoutResult(id);

@@ -5,6 +5,7 @@ import java.util.UUID;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import retrofit2.Call;
 
 public interface WorkoutService {
@@ -26,5 +27,11 @@ public interface WorkoutService {
     Call<Void> updateExerciseCombo(ExerciseCombo ec);
 
     Call<Void> deleteExerciseCombo(ExerciseCombo ec);
+
+    // Workout Result
+
+    Call<WorkoutResult> findWorkoutResultByID(UUID id);
+
+    Call<WorkoutResult> saveWorkoutResult(WorkoutResult wr);
 
 }

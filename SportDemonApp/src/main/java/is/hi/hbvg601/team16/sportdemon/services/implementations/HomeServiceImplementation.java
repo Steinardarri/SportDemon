@@ -6,6 +6,7 @@ import is.hi.hbvg601.team16.sportdemon.SportDemon;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
 
 public class HomeServiceImplementation implements HomeService {
@@ -105,4 +106,19 @@ public class HomeServiceImplementation implements HomeService {
         data.setCurrentUser(u);
     }
 
+    @Override
+    public void addWorkoutResultToUser(WorkoutResult wr, Context context) {
+        SportDemon data = new SportDemon(context);
+        User u = data.getCurrentUser();
+        u.addWorkoutResult(wr);
+        data.setCurrentUser(u);
+    }
+
+    @Override
+    public void removeWorkoutResultFromUser(WorkoutResult wr, Context context) {
+        SportDemon data = new SportDemon(context);
+        User u = data.getCurrentUser();
+        u.removeWorkoutResult(wr);
+        data.setCurrentUser(u);
+    }
 }
