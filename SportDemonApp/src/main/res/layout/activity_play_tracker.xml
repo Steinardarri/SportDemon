@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/reps"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,19 +24,34 @@
             android:maxWidth="300dp"
             android:maxLines="1"
             android:text="@string/title"
-            android:textColor="@color/black"
-            android:textSize="32sp"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="48sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ProgressBar
+            android:id="@+id/workoutProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:progressTint="?attr/colorSecondaryVariant"
+            android:indeterminateTint="?attr/colorSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
-            android:id="@+id/workout_play_button"
+            android:id="@+id/tracker_play_button"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:background="@drawable/pause_button"
+            android:background="@drawable/play_button"
             android:contentDescription="@string/play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,12 +62,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/reps"
+        android:id="@+id/exerciseTitle"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:text="Reps"
+        android:text="@string/reps"
         android:textSize="60sp"
         app:layout_constraintBottom_toTopOf="@+id/tracker_recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +84,7 @@
         app:layout_constraintBottom_toTopOf="@+id/exerciseSets"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reps" />
+        app:layout_constraintTop_toBottomOf="@id/exerciseTitle" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/exerciseSets"
@@ -84,7 +100,7 @@
             android:id="@+id/sets"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
-            android:text="1/4"
+            android:text="@string/_1_4"
             android:textSize="30sp"
             android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -98,7 +114,7 @@
             android:id="@+id/excombo"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
-            android:text="3/10"
+            android:text="@string/_3_10"
             android:textSize="30sp"
             android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -124,6 +140,7 @@
             android:id="@+id/tracker_button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/left"
             app:icon="@android:drawable/ic_media_rew"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -136,6 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:contentDescription="@string/right"
             app:icon="@android:drawable/ic_media_ff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

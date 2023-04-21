@@ -50,4 +50,10 @@
     <string name="ECRest">Rest Between Exercises</string>
     <string name="description_of_workout" translatable="false">Description of Workout. Lorem ipsum dolor sit amet, consectetur adipiscing elit</string>
     <string name="remove_workout">Remove workout</string>
+    <string name="reps" translatable="false">Reps</string>
+    <string name="_1_4" translatable="false">1/4</string>
+    <string name="_3_10" translatable="false">3/10</string>
+    <string name="number" translatable="false">Number</string>
+    <string name="photo">Photo</string>
+    <string name="take_photo">Click space below if you want to save a photo!</string>
 </resources>

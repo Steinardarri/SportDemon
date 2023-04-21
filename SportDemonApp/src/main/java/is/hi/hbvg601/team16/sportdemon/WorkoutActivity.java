@@ -20,6 +20,7 @@ import java.util.List;
 
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.HomeServiceImplementation;
@@ -170,6 +171,13 @@ public class WorkoutActivity extends AppCompatActivity {
                 mECRecyclerView.setBackgroundColor(Color.TRANSPARENT);
             }
         });
+
+        findViewById(R.id.workout_play_button).setOnClickListener( v -> {
+            Intent i = new Intent(WorkoutActivity.this, ExerciseComboActivity.class);
+            i.putExtra("WORKOUT", mHomeService.getCurrentWorkout(WorkoutActivity.this));
+            playTrackerResultLauncher.launch(i);
+        });
+
     }
 
     @Override
@@ -197,6 +205,20 @@ public class WorkoutActivity extends AppCompatActivity {
                     mHomeService.editCurrentWorkoutInUser(this);
                 }
                 refreshList();
+            }
+    );
+
+    private final ActivityResultLauncher<Intent> playTrackerResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if(result.getResultCode() == RESULT_SUCCESS) {
+                    Intent data = result.getData();
+                    assert data != null : "No Workout Result data given";
+
+                    // Inniheldur Workout Result á "WORKOUTRESULT"
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
             }
     );
 

@@ -45,4 +45,6 @@
     <string name="cancel">Cancel</string>
     <string name="ECRest">Rest between exercises</string>
     <string name="remove_workout">Remove workout</string>
+    <string name="photo">Photo</string>
+    <string name="take_photo">Click space below if you want to save a photo!</string>
 </resources>

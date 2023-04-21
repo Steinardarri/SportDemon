@@ -263,8 +263,8 @@ public class HomeFragment extends Fragment {
                     (View v2, int position, List<Workout> data) -> {
                         Workout w = data.get(position);
 
-                        androidx.appcompat.app.AlertDialog.Builder alert =
-                                new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                        AlertDialog.Builder alert =
+                                new AlertDialog.Builder(requireContext());
                         alert.setTitle("Delete \"" + w.getTitle() + "\"?");
                         alert.setMessage("Are you sure you want to delete?");
 

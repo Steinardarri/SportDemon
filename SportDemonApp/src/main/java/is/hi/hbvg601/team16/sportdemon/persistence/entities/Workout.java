@@ -1,5 +1,7 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +107,15 @@ public class Workout implements Serializable {
         }
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder workout = new StringBuilder("Workout Summary:\n");
+        for (ExerciseCombo ec : exerciseComboList) {
+            workout.append("\n-------\n").append(ec.toString());
+        }
+        return workout.toString();
+    }
 }
 
 

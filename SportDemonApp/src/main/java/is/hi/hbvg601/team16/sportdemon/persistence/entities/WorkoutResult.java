@@ -1,5 +1,7 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -21,12 +23,12 @@ public class WorkoutResult implements Serializable {
     private UUID user;
     private Date date;
     private String data;
-    private byte[] photo;
+    private Uri photoUri;
 
     public WorkoutResult() {}
-    public WorkoutResult(String data, byte[] photo) {
+    public WorkoutResult(String data, Uri photoUri) {
         this.data = data;
-        this.photo = photo;
+        this.photoUri = photoUri;
     }
 
     public UUID getId() {
@@ -57,10 +59,10 @@ public class WorkoutResult implements Serializable {
         this.data = data;
     }
 
-    public byte[] getPhoto() {
-        return photo;
+    public Uri getPhotoUri() {
+        return photoUri;
     }
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
+    public void setPhotoUri(Uri photoUri) {
+        this.photoUri = photoUri;
     }
 }
