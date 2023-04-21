@@ -114,4 +114,13 @@ public class User implements Serializable {
         workoutResultList.add(wr);
     }
 
+    public void removeWorkoutResult(WorkoutResult wr) {
+        for (WorkoutResult wrO : workoutResultList){
+            if (wrO.getId().equals(wr.getId())){
+                workoutResultList.remove(wr);
+                break;
+            }
+        }
+    }
+
 }

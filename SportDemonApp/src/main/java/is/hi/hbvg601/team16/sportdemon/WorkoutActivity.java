@@ -20,7 +20,6 @@ import java.util.List;
 
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.HomeServiceImplementation;
@@ -41,6 +40,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
     // Intent code
     private static final int RESULT_SUCCESS = -1;
+    private static final int RESULT_WORKOUT_FINISHED = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +94,10 @@ public class WorkoutActivity extends AppCompatActivity {
                             alert.setMessage("Are you sure you want to delete?");
 
                             alert.setPositiveButton("Yes", (dialog, which) -> {
-                                SpotsDialog loadingDialog = new SpotsDialog(this, "Removing Exercise");
+                                SpotsDialog loadingDialog = new SpotsDialog(
+                                        this,
+                                        "Removing Exercise"
+                                );
                                 loadingDialog.show();
 
                                 Call<Void> callSync = mWorkoutService.deleteExerciseCombo(ec);
@@ -155,7 +158,7 @@ public class WorkoutActivity extends AppCompatActivity {
                         });
 
                 mECRecyclerView.setAdapter(adapter);
-                mECRecyclerView.setBackgroundColor(Color.argb(63,255,0,0));
+                mECRecyclerView.setBackgroundColor(Color.argb(31,255,0,0));
             } else {
                 v.setActivated(false);
                 button.setText(this.getString(R.string.remove));
@@ -173,7 +176,7 @@ public class WorkoutActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.workout_play_button).setOnClickListener( v -> {
-            Intent i = new Intent(WorkoutActivity.this, ExerciseComboActivity.class);
+            Intent i = new Intent(WorkoutActivity.this, PlayTrackerActivity.class);
             i.putExtra("WORKOUT", mHomeService.getCurrentWorkout(WorkoutActivity.this));
             playTrackerResultLauncher.launch(i);
         });
@@ -216,7 +219,10 @@ public class WorkoutActivity extends AppCompatActivity {
                     assert data != null : "No Workout Result data given";
 
                     // Inniheldur Workout Result á "WORKOUTRESULT"
-                    setResult(RESULT_OK, data);
+                    setResult(RESULT_WORKOUT_FINISHED, data);
+                    finish();
+                } else {
+                    setResult(RESULT_CANCELED);
                     finish();
                 }
             }

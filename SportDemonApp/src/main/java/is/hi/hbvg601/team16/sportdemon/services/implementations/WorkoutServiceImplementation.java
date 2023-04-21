@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 
 import retrofit2.Call;
@@ -53,6 +54,18 @@ public class WorkoutServiceImplementation implements WorkoutService {
     @Override
     public Call<Void> deleteExerciseCombo(ExerciseCombo ec) {
         return nmAPI.deleteExerciseCombo(ec.getId());
+    }
+
+    // Workout Result
+
+    @Override
+    public Call<WorkoutResult> findWorkoutResultByID(UUID id) {
+        return nmAPI.getWorkoutResult(id);
+    }
+
+    @Override
+    public Call<WorkoutResult> saveWorkoutResult(WorkoutResult wr) {
+        return nmAPI.addWorkoutResult(wr);
     }
 
 }

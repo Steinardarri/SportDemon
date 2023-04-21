@@ -1,6 +1,7 @@
 package is.hi.hbvg601.team16.sportdemon.ui.playtrackeractivity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,11 @@ import java.util.List;
 import is.hi.hbvg601.team16.sportdemon.R;
 
 public class PlayTrackerRecyclerViewAdapter
-        extends RecyclerView.Adapter<PlayTrackerRecyclerViewAdapter.exerciseViewHolder> {
+        extends RecyclerView.Adapter<PlayTrackerRecyclerViewAdapter.rowViewHolder> {
     List<String> data;
     private final LayoutInflater inflater;
     private ItemClickListener mClickListener;
+    private int selectedIndex = -1;
 
     public PlayTrackerRecyclerViewAdapter(Context context, List<String> data) {
         this.inflater = LayoutInflater.from(context);
@@ -26,15 +28,26 @@ public class PlayTrackerRecyclerViewAdapter
 
     @NonNull
     @Override
-    public exerciseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public rowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.card_tracker_list, parent, false);
-        return new exerciseViewHolder(view);
+        return new rowViewHolder(view);
+    }
+
+    public void setSelectedIndex(int index) {
+        selectedIndex = index;
+        notifyItemChanged(index);
     }
 
     @Override
     public void
-    onBindViewHolder(final exerciseViewHolder viewHolder, final int position) {
-        viewHolder.exercise.setText(data.get(position));
+    onBindViewHolder(final rowViewHolder viewHolder, final int position) {
+        TextView row = viewHolder.mTrackerRow;
+        row.setText(data.get(position));
+        if (position == selectedIndex) {
+            row.setBackgroundColor(Color.argb(63,19, 60, 85));
+        } else {
+            row.setBackgroundColor(Color.TRANSPARENT);
+        }
     }
 
     @Override
@@ -43,12 +56,12 @@ public class PlayTrackerRecyclerViewAdapter
     }
 
     // stores and recycles views as they are scrolled off screen
-    public class exerciseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final TextView exercise;
+    public class rowViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView mTrackerRow;
 
-        exerciseViewHolder(View itemView) {
+        rowViewHolder(View itemView) {
             super(itemView);
-            exercise = itemView.findViewById(R.id.exComboName);
+            mTrackerRow = itemView.findViewById(R.id.tracker_item);
             itemView.setOnClickListener(this);
         }
 

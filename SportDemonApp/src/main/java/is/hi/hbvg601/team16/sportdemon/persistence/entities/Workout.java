@@ -111,8 +111,12 @@ public class Workout implements Serializable {
     @Override
     public String toString() {
         StringBuilder workout = new StringBuilder("Workout Summary:\n");
+        workout.append("\n-------\n");
         for (ExerciseCombo ec : exerciseComboList) {
-            workout.append("\n-------\n").append(ec.toString());
+            workout .append(ec.getTitle())
+                    .append("\n")
+                    .append(ec)
+                    .append("\n-------\n");
         }
         return workout.toString();
     }
