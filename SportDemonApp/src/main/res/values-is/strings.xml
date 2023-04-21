@@ -45,4 +45,6 @@
     <string name="cancel">Hætta</string>
     <string name="ECRest">Hvíld milli hreyfinga</string>
     <string name="remove_workout">Fjarlægja æfingu</string>
+    <string name="photo">Ljósmynd</string>
+    <string name="take_photo">Ýttu hér fyrir neðan ef þú vilt taka ljósmynd!</string>
 </resources>
