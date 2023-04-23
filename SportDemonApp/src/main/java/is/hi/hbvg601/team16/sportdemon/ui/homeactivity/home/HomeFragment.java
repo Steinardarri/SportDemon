@@ -75,7 +75,6 @@ public class HomeFragment extends Fragment {
         List<Workout> workoutList;
         if (user != null) {
             mBinding.textUserName.setText(user.getUsername());
-            mBinding.textUserEmail.setText(user.getEmail());
             mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
             mBinding.removeWorkoutButton.setVisibility(View.VISIBLE);
             mBinding.homeLoginButton.setText(getResources().getString(R.string.logout));
@@ -193,7 +192,6 @@ public class HomeFragment extends Fragment {
                     mHomeService.setCurrentWorkout(null, getContext());
 
                     mBinding.textUserName.setText("");
-                    mBinding.textUserEmail.setText("");
                     mBinding.homeLoginButton.setText(getResources().getString(R.string.login_form_title));
                     mBinding.addWorkoutButton.setVisibility(View.INVISIBLE);
                     mBinding.removeWorkoutButton.setVisibility(View.INVISIBLE);
@@ -256,16 +254,16 @@ public class HomeFragment extends Fragment {
 //                                        response.code()+" - "+ response,
 //                                        Toast.LENGTH_SHORT
 //                                ).show();
-//                                loadingDialog.dismiss();
+                                loadingDialog.dismiss();
                             }
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<WorkoutResult> call, @NonNull Throwable t) {
-                            Toast.makeText(getContext(),
-                                    t.toString(),
-                                    Toast.LENGTH_LONG
-                            ).show();
+//                            Toast.makeText(getContext(),
+//                                    t.toString(),
+//                                    Toast.LENGTH_LONG
+//                            ).show();
                             loadingDialog.dismiss();
                         }
                     });
@@ -285,7 +283,6 @@ public class HomeFragment extends Fragment {
                     User resultUser = (User) data.getSerializableExtra("USER");
 
                     mBinding.textUserName.setText(resultUser.getUsername());
-                    mBinding.textUserEmail.setText(resultUser.getEmail());
                     mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
                     mBinding.removeWorkoutButton.setVisibility(View.VISIBLE);
                     mBinding.homeLoginButton.setText(getResources().getString(R.string.logout));
