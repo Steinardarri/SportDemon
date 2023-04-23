@@ -14,4 +14,4 @@ Fannar Skúli Birgisson   - fsb2@hi.is
 
 Magnea Mist Ólafsdóttir  - mmo3@hi.is
 
-Steinar Darri Þorgilsson - sth319@hi.is!
+Steinar Darri Þorgilsson - sth319@hi.is
