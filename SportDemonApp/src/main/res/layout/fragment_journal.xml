@@ -27,12 +27,12 @@
         <TextView
             android:id="@+id/monthYearTV"
             android:layout_width="0dp"
-            android:layout_weight="2"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:text="may 2023"
-            android:textSize="20sp"
             android:textAlignment="center"
-            android:textColor="@color/black" />
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/journalRight"
@@ -55,8 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="SUN"
-            android:textColor="@color/french_gray"
             android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="16sp" />
 
         <TextView
@@ -64,8 +64,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="MON"
-            android:textColor="@color/french_gray"
             android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="16sp" />
 
         <TextView
@@ -73,8 +73,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="TUE"
-            android:textColor="@color/french_gray"
             android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="16sp" />
 
         <TextView
@@ -82,8 +82,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="WED"
-            android:textColor="@color/french_gray"
             android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="16sp" />
 
         <TextView
@@ -91,8 +91,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="THU"
-            android:textColor="@color/french_gray"
             android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="16sp" />
 
         <TextView
@@ -100,8 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="FRI"
-            android:textColor="@color/french_gray"
             android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="16sp" />
 
         <TextView
@@ -109,8 +109,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="SAT"
-            android:textColor="@color/french_gray"
             android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="16sp" />
     </LinearLayout>
 

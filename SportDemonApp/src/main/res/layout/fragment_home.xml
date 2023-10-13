@@ -57,7 +57,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:layout_marginBottom="0dp"
         android:background="?android:attr/panelBackground"
         android:contentDescription="@string/remove_workout"
         android:gravity="center"

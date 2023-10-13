@@ -26,22 +26,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SportDemon"
         android:usesCleartextTraffic="true"
-        android:screenOrientation="portrait"
         tools:targetApi="33">
         <activity
             android:name=".HomeActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignupActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".WorkoutActivity" />
-        <activity android:name=".ExerciseComboActivity" />
-        <activity android:name=".PlayTrackerActivity" />
+        <activity android:name=".SignupActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout" />
+        <activity android:name=".LoginActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout" />
+        <activity android:name=".WorkoutActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout" />
+        <activity android:name=".ExerciseComboActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout" />
+        <activity android:name=".PlayTrackerActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout" />
     </application>
 
 </manifest>

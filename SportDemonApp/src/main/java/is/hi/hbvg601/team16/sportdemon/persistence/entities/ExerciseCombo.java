@@ -1,6 +1,8 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -16,8 +18,11 @@ import java.util.UUID;
  *  Description  : A class that generates the Workout entity.
  *****************************************************************************/
 
+@Entity
 public class ExerciseCombo implements Serializable {
 
+    @PrimaryKey
+    @NonNull
     private UUID id;
     private UUID workout;
     private String title;
@@ -28,9 +33,13 @@ public class ExerciseCombo implements Serializable {
     private int durationPerSet;
     private int restBetweenSets;
 
-    public ExerciseCombo() {}
+    public ExerciseCombo() {
+        this.id = UUID.randomUUID();
+    }
     public ExerciseCombo(String title, int sets, int reps, double weight,
                          String equipment, int durationPerSet, int restBetweenSets) {
+        this.id = UUID.randomUUID();
+
         this.title = title;
         this.sets = sets;
         this.reps = reps;
@@ -40,11 +49,12 @@ public class ExerciseCombo implements Serializable {
         this.restBetweenSets = restBetweenSets;
     }
 
+    @NonNull
     public UUID getId() {
         return id;
     }
-    public void setId(UUID ID) {
-        this.id = ID;
+    void setId(@NonNull UUID id) {
+        this.id = id;
     }
 
     public UUID getWorkout() {

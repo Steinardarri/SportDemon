@@ -27,7 +27,7 @@
             android:maxWidth="300dp"
             android:maxLines="1"
             android:text="@string/title_of_workout"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="32sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

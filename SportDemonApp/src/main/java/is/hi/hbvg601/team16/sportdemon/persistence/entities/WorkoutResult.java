@@ -1,5 +1,9 @@
 package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.sql.Date;
@@ -16,17 +20,22 @@ import java.util.UUID;
  *  Description  : A class that generates the WorkoutResult entity.
  *****************************************************************************/
 
+@Entity
 public class WorkoutResult implements Serializable {
 
+    @PrimaryKey
+    @NonNull
     private UUID id;
-    private UUID user;
     private Date date;
     private String data;
     private byte[] photo;
 
-    public WorkoutResult() {}
-    public WorkoutResult(UUID user, String data, byte[] photo) {
-        this.user = user;
+    public WorkoutResult() {
+        this.id = UUID.randomUUID();
+    }
+    public WorkoutResult(String data, byte[] photo) {
+        this.id = UUID.randomUUID();
+
         this.data = data;
         this.photo = photo;
 
@@ -34,18 +43,12 @@ public class WorkoutResult implements Serializable {
         this.date = new java.sql.Date(today.getTimeInMillis());
     }
 
+    @NonNull
     public UUID getId() {
         return id;
     }
-    public void setId(UUID id) {
+    void setId(@NonNull UUID id) {
         this.id = id;
-    }
-
-    public UUID getUser() {
-        return user;
-    }
-    public void setUser(UUID user) {
-        this.user = user;
     }
 
     public Date getDate() {
