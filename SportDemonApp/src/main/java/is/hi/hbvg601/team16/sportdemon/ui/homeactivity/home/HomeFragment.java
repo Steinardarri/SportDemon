@@ -24,6 +24,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dmax.dialog.SpotsDialog;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import is.hi.hbvg601.team16.sportdemon.LoginActivity;
 import is.hi.hbvg601.team16.sportdemon.R;
 import is.hi.hbvg601.team16.sportdemon.WorkoutActivity;
@@ -34,12 +40,7 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.HomeServiceImplementation;
-import is.hi.hbvg601.team16.sportdemon.services.implementations.NetworkManagerAPI;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.WorkoutServiceImplementation;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
 
@@ -63,40 +64,56 @@ public class HomeFragment extends Fragment {
         mBinding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = mBinding.getRoot();
 
-        NetworkManagerAPI nmAPI = new NetworkManagerAPI();
-        this.mHomeService = new HomeServiceImplementation(nmAPI);
-        this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
+        this.mHomeService = new HomeServiceImplementation(getContext());
+        this.mWorkoutService = new WorkoutServiceImplementation(getContext());
 
-        User user = mHomeService.getCurrentUser(getContext());
+        SpotsDialog homeLoadingDialog = new SpotsDialog(getContext(), "Loading");
 
         // Setja upp RecyclerView fyrir workouts
+
         this.mRecyclerView = mBinding.workoutRecyclerView;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        List<Workout> workoutList;
-        if (user != null) {
-            mBinding.textUserName.setText(user.getUsername());
-            mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
-            mBinding.removeWorkoutButton.setVisibility(View.VISIBLE);
-            mBinding.homeLoginButton.setText(getResources().getString(R.string.logout));
 
-            workoutList = user.getWorkoutList();
-        } else {
-            mBinding.addWorkoutButton.setVisibility(View.INVISIBLE);
-            mBinding.removeWorkoutButton.setVisibility(View.INVISIBLE);
-            workoutList = new ArrayList<>();
-        }
-        mAdapter = new WorkoutsRecyclerViewAdapter(getContext(), workoutList);
-        mAdapter.setClickListener(
-                (View v, int position, List<Workout> data) -> {
-                    mHomeService.setCurrentWorkout(data.get(position), getContext());
-                    Intent i = new Intent(getActivity(), WorkoutActivity.class);
-                    workoutResultLauncher.launch(i);
+        mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
+        mBinding.removeWorkoutButton.setVisibility(View.VISIBLE);
+
+        mWorkoutService.getAllWorkouts()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<List<Workout>>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+                        homeLoadingDialog.show();
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<Workout> workouts) {
+                        mAdapter = new WorkoutsRecyclerViewAdapter(getContext(), workouts);
+                        mAdapter.setClickListener(
+                                (View v, int position, List<Workout> data) -> {
+                                    mHomeService.setCurrentWorkout(data.get(position));
+                                    Intent i = new Intent(getActivity(), WorkoutActivity.class);
+                                    workoutResultLauncher.launch(i);
+                                });
+                        mRecyclerView.setAdapter(mAdapter);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        Toast.makeText(getContext(),
+                                e.toString(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                        homeLoadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        homeLoadingDialog.dismiss();
+                    }
                 });
-        mRecyclerView.setAdapter(mAdapter);
 
         mBinding.addWorkoutButton.setOnClickListener(v -> {
-            User currentUser = mHomeService.getCurrentUser(getContext());
-
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             View vAlert = inflater.inflate(R.layout.dialog_create_workout, null);
             builder.setView(vAlert);
@@ -111,7 +128,8 @@ public class HomeFragment extends Fragment {
                 String desc = descEdit.getText().toString();
                 int rest = Integer.parseInt(restEdit.getText().toString());
 
-                List<String> uWorkoutTitles = currentUser.getWorkoutList().stream()
+                List<String> uWorkoutTitles = mAdapter.getData()
+                        .stream()
                         .map(Workout::getTitle)
                         .collect(Collectors.toList());
 
@@ -127,80 +145,75 @@ public class HomeFragment extends Fragment {
                     ).show();
                 } else {
                     Workout newWorkout = new Workout(name, desc, rest);
-                    newWorkout.setUser(currentUser.getId());
 
                     SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Setting up new Workout");
                     loadingDialog.show();
-                    Call<Workout> callSync = mWorkoutService.saveWorkout(newWorkout);
-                    callSync.enqueue(new Callback<Workout>() {
-                        @Override
-                        public void onResponse(@NonNull Call<Workout> call, @NonNull Response<Workout> response) {
-                            if (response.isSuccessful()) {
-                                // Get response
-                                try {
-                                    mHomeService.setCurrentWorkout(response.body(), getContext());
-                                    mHomeService.addWorkoutToUser(response.body(), getContext());
-                                    Intent i = new Intent(getActivity(), WorkoutActivity.class);
-                                    loadingDialog.dismiss();
-                                    workoutResultLauncher.launch(i);
-                                } catch (Exception e) {
-                                    // UI
-                                    loadingDialog.dismiss();
-                                    Toast.makeText(getContext(),
-                                            e.toString(),
-                                            Toast.LENGTH_LONG
-                                    ).show();
-                                }
-                            } else {
+
+                    mWorkoutService.saveWorkout(newWorkout)
+                            .subscribeOn(Schedulers.io())
+                            .doOnSuccess(workout -> {
+                                mHomeService.setCurrentWorkout(workout);
+                                mHomeService.addWorkoutToUser(workout);
+                                Intent i = new Intent(getActivity(), WorkoutActivity.class);
+                                loadingDialog.dismiss();
+                                workoutResultLauncher.launch(i);
+                            })
+                            .doOnError(error -> {
                                 Toast.makeText(getContext(),
-                                        response.code()+" - "+ response,
+                                        error.getMessage(),
                                         Toast.LENGTH_SHORT
                                 ).show();
                                 loadingDialog.dismiss();
-                            }
-                        }
+                            })
+                            .subscribe();
 
-                        @Override
-                        public void onFailure(@NonNull Call<Workout> call, @NonNull Throwable t) {
-                            Toast.makeText(getContext(),
-                                    t.toString(),
-                                    Toast.LENGTH_LONG
-                            ).show();
-                            loadingDialog.dismiss();
-                        }
-                    });
+//                    Call<Workout> callSync = mWorkoutService.saveWorkout(newWorkout);
+//                    callSync.enqueue(new Callback<Workout>() {
+//                        @Override
+//                        public void onResponse(@NonNull Call<Workout> call, @NonNull Response<Workout> response) {
+//                            if (response.isSuccessful()) {
+//                                // Get response
+//                                try {
+//                                    mHomeService.setCurrentWorkout(response.body());
+//                                    mHomeService.addWorkoutToUser(response.body());
+//                                    Intent i = new Intent(getActivity(), WorkoutActivity.class);
+//                                    loadingDialog.dismiss();
+//                                    workoutResultLauncher.launch(i);
+//                                } catch (Exception e) {
+//                                    // UI
+//                                    loadingDialog.dismiss();
+//                                    Toast.makeText(getContext(),
+//                                            e.toString(),
+//                                            Toast.LENGTH_LONG
+//                                    ).show();
+//                                }
+//                            } else {
+//                                Toast.makeText(getContext(),
+//                                        response.code()+" - "+ response,
+//                                        Toast.LENGTH_SHORT
+//                                ).show();
+//                                loadingDialog.dismiss();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(@NonNull Call<Workout> call, @NonNull Throwable t) {
+//                            Toast.makeText(getContext(),
+//                                    t.toString(),
+//                                    Toast.LENGTH_LONG
+//                            ).show();
+//                            loadingDialog.dismiss();
+//                        }
+//                    });
                 }
             });
+
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
             builder.show();
         });
 
         mBinding.removeWorkoutButton.setOnClickListener( v -> removeOnList(v,false));
-
-        mBinding.homeLoginButton.setOnClickListener(v -> {
-            if (mHomeService.getCurrentUser(getContext()) == null) {
-                // Log in
-                loginResultLauncher.launch(new Intent(getActivity(), LoginActivity.class));
-            } else {
-                // Log out
-                SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Logging out");
-                loadingDialog.show();
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(() -> {
-                    mHomeService.setCurrentUser(null, getContext());
-                    mHomeService.setCurrentWorkout(null, getContext());
-
-                    mBinding.textUserName.setText("");
-                    mBinding.homeLoginButton.setText(getResources().getString(R.string.login_form_title));
-                    mBinding.addWorkoutButton.setVisibility(View.INVISIBLE);
-                    mBinding.removeWorkoutButton.setVisibility(View.INVISIBLE);
-                    removeOnList(mBinding.removeWorkoutButton, true);
-                    refreshList();
-                    loadingDialog.dismiss();
-                },1200);
-            }
-        });
 
         return root;
     }
@@ -226,71 +239,70 @@ public class HomeFragment extends Fragment {
 
                     SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Saving Workout Result");
                     loadingDialog.show();
-                    Call<WorkoutResult> callSync = mWorkoutService.saveWorkoutResult(wr);
-                    callSync.enqueue(new Callback<WorkoutResult>() {
-                        @Override
-                        public void onResponse(@NonNull Call<WorkoutResult> call, @NonNull Response<WorkoutResult> response) {
-                            if (response.isSuccessful()) {
-                                // Get response
-//                                try {
-                                    WorkoutResult workoutResult = response.body();
-                                    mHomeService.addWorkoutResultToUser(workoutResult, getContext());
 
-                                    loadingDialog.dismiss();
-                                    Toast.makeText(getContext(),
-                                            "Workout Result Saved",
-                                            Toast.LENGTH_LONG
-                                    ).show();
-//                                } catch (Exception e) {
-////                                    // UI
-////                                    loadingDialog.dismiss();
-////                                    Toast.makeText(getContext(),
-////                                            e.toString(),
-////                                            Toast.LENGTH_LONG
-////                                    ).show();
-//                                }
-                            } else {
-//                                Toast.makeText(getContext(),
-//                                        response.code()+" - "+ response,
-//                                        Toast.LENGTH_SHORT
-//                                ).show();
+                    mWorkoutService.saveWorkoutResult(wr)
+                            .subscribeOn(Schedulers.io())
+                            .doOnSuccess(workoutResult -> {
+                                mHomeService.addWorkoutResultToUser(workoutResult);
                                 loadingDialog.dismiss();
-                            }
-                        }
+                                Toast.makeText(getContext(),
+                                        "Workout Result Saved",
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            })
+                            .doOnError(error -> {
+                                Toast.makeText(getContext(),
+                                        error.getMessage(),
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                                loadingDialog.dismiss();
+                            })
+                            .subscribe();
 
-                        @Override
-                        public void onFailure(@NonNull Call<WorkoutResult> call, @NonNull Throwable t) {
-//                            Toast.makeText(getContext(),
-//                                    t.toString(),
-//                                    Toast.LENGTH_LONG
-//                            ).show();
-                            loadingDialog.dismiss();
-                        }
-                    });
+//                    Call<WorkoutResult> callSync = mWorkoutService.saveWorkoutResult(wr);
+//                    callSync.enqueue(new Callback<WorkoutResult>() {
+//                        @Override
+//                        public void onResponse(@NonNull Call<WorkoutResult> call, @NonNull Response<WorkoutResult> response) {
+//                            if (response.isSuccessful()) {
+//                                // Get response
+////                                try {
+//                                    WorkoutResult workoutResult = response.body();
+//                                    mHomeService.addWorkoutResultToUser(workoutResult);
+//
+//                                    loadingDialog.dismiss();
+//                                    Toast.makeText(getContext(),
+//                                            "Workout Result Saved",
+//                                            Toast.LENGTH_LONG
+//                                    ).show();
+////                                } catch (Exception e) {
+//////                                    // UI
+//////                                    loadingDialog.dismiss();
+//////                                    Toast.makeText(getContext(),
+//////                                            e.toString(),
+//////                                            Toast.LENGTH_LONG
+//////                                    ).show();
+////                                }
+//                            } else {
+////                                Toast.makeText(getContext(),
+////                                        response.code()+" - "+ response,
+////                                        Toast.LENGTH_SHORT
+////                                ).show();
+//                                loadingDialog.dismiss();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(@NonNull Call<WorkoutResult> call, @NonNull Throwable t) {
+////                            Toast.makeText(getContext(),
+////                                    t.toString(),
+////                                    Toast.LENGTH_LONG
+////                            ).show();
+//                            loadingDialog.dismiss();
+//                        }
+//                    });
                 }
 
-                refreshList();
-            }
-    );
-
-    private final ActivityResultLauncher<Intent> loginResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_SUCCESS) {
-                    Intent data = result.getData();
-                    assert data != null;
-
-                    User resultUser = (User) data.getSerializableExtra("USER");
-
-                    mBinding.textUserName.setText(resultUser.getUsername());
-                    mBinding.addWorkoutButton.setVisibility(View.VISIBLE);
-                    mBinding.removeWorkoutButton.setVisibility(View.VISIBLE);
-                    mBinding.homeLoginButton.setText(getResources().getString(R.string.logout));
-
-                    // Vista nýjan user sem aðal
-                    mHomeService.setCurrentUser(resultUser, getContext());
-                    refreshList();
-                }
+//                refreshList();
             }
     );
 
@@ -299,7 +311,7 @@ public class HomeFragment extends Fragment {
             v.setActivated(false);
             mAdapter.setClickListener(
                     (View v2, int position, List<Workout> data) -> {
-                        mHomeService.setCurrentWorkout(data.get(position), getContext());
+                        mHomeService.setCurrentWorkout(data.get(position));
                         Intent i = new Intent(getActivity(), WorkoutActivity.class);
                         workoutResultLauncher.launch(i);
                     });
@@ -320,54 +332,77 @@ public class HomeFragment extends Fragment {
                             SpotsDialog loadingDialog = new SpotsDialog(getContext(), "Removing Exercise");
                             loadingDialog.show();
 
-                            Call<Void> callSync = mWorkoutService.deleteWorkout(w);
-                            callSync.enqueue(new Callback<Void>() {
-                                @Override
-                                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                                    if (response.isSuccessful()) {
-                                        // Get response
-                                        try {
-                                            // Local
-                                            mHomeService.removeWorkoutFromUser(w, getContext());
-
-                                            Toast.makeText(getContext(),
-                                                    "Workout removed successfully",
-                                                    Toast.LENGTH_LONG
-                                            ).show();
-
-                                            refreshList();
-
-                                            loadingDialog.dismiss();
-                                            dialog.dismiss();
-                                        } catch (Exception e) {
-                                            // UI
-                                            Toast.makeText(getContext(),
-                                                    e.toString(),
-                                                    Toast.LENGTH_LONG
-                                            ).show();
-                                            loadingDialog.dismiss();
-                                            dialog.dismiss();
-                                        }
-                                    } else {
+                            mWorkoutService.deleteWorkout(w)
+                                    .subscribeOn(Schedulers.io())
+                                    .doOnComplete(() -> {
+                                        // Local
+                                        mHomeService.removeWorkoutFromUser(w);
                                         Toast.makeText(getContext(),
-                                                response.code()+" - "+ response,
+                                                "Workout removed successfully",
+                                                Toast.LENGTH_LONG
+                                        ).show();
+//                                            refreshList();
+                                        loadingDialog.dismiss();
+                                        dialog.dismiss();
+                                    })
+                                    .doOnError(error -> {
+                                        Toast.makeText(getContext(),
+                                                error.getMessage(),
                                                 Toast.LENGTH_SHORT
                                         ).show();
                                         loadingDialog.dismiss();
                                         dialog.dismiss();
-                                    }
-                                }
+                                    })
+                                    .subscribe();
 
-                                @Override
-                                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                                    Toast.makeText(getContext(),
-                                            t.toString(),
-                                            Toast.LENGTH_LONG
-                                    ).show();
-                                    loadingDialog.dismiss();
-                                    dialog.dismiss();
-                                }
-                            });
+//                            Call<Void> callSync = mWorkoutService.deleteWorkout(w);
+//                            callSync.enqueue(new Callback<Void>() {
+//                                @Override
+//                                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+//                                    if (response.isSuccessful()) {
+//                                        // Get response
+//                                        try {
+//                                            // Local
+//                                            mHomeService.removeWorkoutFromUser(w);
+//
+//                                            Toast.makeText(getContext(),
+//                                                    "Workout removed successfully",
+//                                                    Toast.LENGTH_LONG
+//                                            ).show();
+//
+////                                            refreshList();
+//
+//                                            loadingDialog.dismiss();
+//                                            dialog.dismiss();
+//                                        } catch (Exception e) {
+//                                            // UI
+//                                            Toast.makeText(getContext(),
+//                                                    e.toString(),
+//                                                    Toast.LENGTH_LONG
+//                                            ).show();
+//                                            loadingDialog.dismiss();
+//                                            dialog.dismiss();
+//                                        }
+//                                    } else {
+//                                        Toast.makeText(getContext(),
+//                                                response.code()+" - "+ response,
+//                                                Toast.LENGTH_SHORT
+//                                        ).show();
+//                                        loadingDialog.dismiss();
+//                                        dialog.dismiss();
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+//                                    Toast.makeText(getContext(),
+//                                            t.toString(),
+//                                            Toast.LENGTH_LONG
+//                                    ).show();
+//                                    loadingDialog.dismiss();
+//                                    dialog.dismiss();
+//                                }
+//                            });
                         });
                         alert.setNegativeButton("NO", (dialog, which) -> {
                             // close dialog
@@ -381,19 +416,14 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void refreshList() {
-        WorkoutsRecyclerViewAdapter adapter =
-                (WorkoutsRecyclerViewAdapter) mBinding.workoutRecyclerView.getAdapter();
-        assert adapter != null;
-        List<Workout> workoutList;
-        User user = mHomeService.getCurrentUser(getContext());
-        if (user != null) {
-            workoutList = user.getWorkoutList();
-        } else {
-            workoutList = new ArrayList<>();
-        }
-        adapter.setData(workoutList);
-        mBinding.workoutRecyclerView.setAdapter(adapter);
-    }
+//    private void refreshList() {
+//        // Ætti ekki að þurfa ef flowable virkar rétt
+//        WorkoutsRecyclerViewAdapter adapter =
+//                (WorkoutsRecyclerViewAdapter) mBinding.workoutRecyclerView.getAdapter();
+//        assert adapter != null;
+//        mWorkoutService.getAllWorkouts()
+//        adapter.setData(workoutList);
+//        mBinding.workoutRecyclerView.setAdapter(adapter);
+//    }
 
 }

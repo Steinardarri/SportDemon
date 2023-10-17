@@ -1,7 +1,16 @@
 package is.hi.hbvg601.team16.sportdemon.services.implementations;
 
+import android.content.Context;
+
+import androidx.room.Room;
+
+import java.util.List;
 import java.util.UUID;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
+import is.hi.hbvg601.team16.sportdemon.persistence.SportDemonDatabase;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
@@ -11,17 +20,18 @@ import retrofit2.Call;
 
 public class WorkoutServiceImplementation implements WorkoutService {
 
-    private final NetworkManagerAPI nmAPI;
+    SportDemonDatabase db;
 
-    public WorkoutServiceImplementation(NetworkManagerAPI networkManager){
-        this.nmAPI = networkManager;
+    public WorkoutServiceImplementation(Context context){
+        this.db = Room.databaseBuilder(context,
+                SportDemonDatabase.class, "SportDemonDatabase").build();
     }
 
     // Workout
 
     @Override
-    public Call<Workout> saveWorkout(Workout workout) {
-        return nmAPI.addWorkout(workout);
+    public Single<Workout> saveWorkout(Workout workout) {
+        return db.workoutDAO().insertWorkout(workout);
     }
 
     @Override
@@ -30,13 +40,18 @@ public class WorkoutServiceImplementation implements WorkoutService {
     }
 
     @Override
-    public Call<Void> deleteWorkout(Workout workout) {
-        return nmAPI.deleteWorkout(workout.getId());
+    public Completable deleteWorkout(Workout workout) {
+        return db.workoutDAO().deleteWorkout(workout);
     }
 
     @Override
     public Call<Workout> findWorkoutByID(UUID id) {
         return nmAPI.findWorkoutByID(id);
+    }
+
+    @Override
+    public Flowable<List<Workout>> getAllWorkouts() {
+        return db.workoutDAO().getWorkouts();
     }
 
     // ExerciseCombo
@@ -64,8 +79,8 @@ public class WorkoutServiceImplementation implements WorkoutService {
     }
 
     @Override
-    public Call<WorkoutResult> saveWorkoutResult(WorkoutResult wr) {
-        return nmAPI.addWorkoutResult(wr);
+    public Single<WorkoutResult> saveWorkoutResult(WorkoutResult wr) {
+        return db.workoutResultDAO().insertWorkoutResult(wr);
     }
 
 }

@@ -49,9 +49,9 @@ public class WorkoutActivity extends AppCompatActivity {
 
         NetworkManagerAPI nmAPI = new NetworkManagerAPI();
         this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
-        this.mHomeService = new HomeServiceImplementation(nmAPI);
+        this.mHomeService = new HomeServiceImplementation(this);
 
-        Workout mWorkout = mHomeService.getCurrentWorkout(this);
+        Workout mWorkout = mHomeService.getCurrentWorkout();
         TextView title = findViewById(R.id.workout_title);
         title.setText(mWorkout.getTitle());
 
@@ -108,8 +108,8 @@ public class WorkoutActivity extends AppCompatActivity {
                                             // Get response
                                             try {
                                                 // Local
-                                                mHomeService.removeExerciseComboInCurrentWorkout(ec, WorkoutActivity.this);
-                                                mHomeService.editCurrentWorkoutInUser(WorkoutActivity.this);
+                                                mHomeService.removeExerciseComboInCurrentWorkout(ec);
+                                                mHomeService.editCurrentWorkoutInUser();
 
                                                 Toast.makeText(WorkoutActivity.this,
                                                         "Exercise removed successfully",
@@ -177,7 +177,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         findViewById(R.id.workout_play_button).setOnClickListener( v -> {
             Intent i = new Intent(WorkoutActivity.this, PlayTrackerActivity.class);
-            i.putExtra("WORKOUT", mHomeService.getCurrentWorkout(WorkoutActivity.this));
+            i.putExtra("WORKOUT", mHomeService.getCurrentWorkout());
             playTrackerResultLauncher.launch(i);
         });
 
@@ -201,11 +201,11 @@ public class WorkoutActivity extends AppCompatActivity {
                     boolean edit = data.getBooleanExtra("EDIT", false);
 
                     if (edit) {
-                        mHomeService.editExerciseComboInCurrentWorkout(ec, this);
+                        mHomeService.editExerciseComboInCurrentWorkout(ec);
                     } else {
-                        mHomeService.addExerciseComboToCurrentWorkout(ec, this);
+                        mHomeService.addExerciseComboToCurrentWorkout(ec);
                     }
-                    mHomeService.editCurrentWorkoutInUser(this);
+                    mHomeService.editCurrentWorkoutInUser();
                 }
                 refreshList();
             }
@@ -233,7 +233,7 @@ public class WorkoutActivity extends AppCompatActivity {
         ExerciseComboRecyclerViewAdapter adapter =
                 (ExerciseComboRecyclerViewAdapter) mECRecyclerView.getAdapter();
         assert adapter != null;
-        Workout w = mHomeService.getCurrentWorkout(this);
+        Workout w = mHomeService.getCurrentWorkout();
         if(w != null) adapter.setData(w.getExerciseComboList());
         mECRecyclerView.setAdapter(adapter);
     }

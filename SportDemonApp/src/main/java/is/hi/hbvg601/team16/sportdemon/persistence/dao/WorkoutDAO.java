@@ -10,6 +10,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 
@@ -17,15 +18,15 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 public interface WorkoutDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insertWorkout(Workout workout);
+    Single<Workout> insertWorkout(Workout workout);
 
     @Update
-    Completable updateWorkout(Workout workout);
+    void updateWorkout(Workout workout);
 
     @Delete
     Completable deleteWorkout(Workout workout);
 
     @Query("SELECT * from workout")
-    Single<List<Workout>> getAll();
+    Flowable<List<Workout>> getWorkouts();
 
 }

@@ -2,6 +2,8 @@ package is.hi.hbvg601.team16.sportdemon.services;
 
 import android.content.Context;
 
+import java.util.List;
+
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
@@ -10,31 +12,30 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 public interface HomeService {
 
     /**
-     * @param  context to bind from
      * @return current saved user
      */
-    User getCurrentUser(Context context);
+    User getCurrentUser();
 
-    void setCurrentUser(User user, Context context);
+    void setCurrentUser(User user);
 
-    Workout getCurrentWorkout(Context context);
+    Workout getCurrentWorkout();
 
-    void setCurrentWorkout(Workout workout, Context context);
+    void setCurrentWorkout(Workout workout);
 
-    void addExerciseComboToCurrentWorkout(ExerciseCombo ec, Context context);
+    void addExerciseComboToCurrentWorkout(ExerciseCombo ec);
 
-    void editExerciseComboInCurrentWorkout(ExerciseCombo ec, Context context);
+    void editExerciseComboInCurrentWorkout(ExerciseCombo ec);
 
-    void removeExerciseComboInCurrentWorkout(ExerciseCombo ec, Context context);
+    void removeExerciseComboInCurrentWorkout(ExerciseCombo ec);
 
-    void addWorkoutToUser(Workout workout, Context context);
+    void addWorkoutToUser(Workout workout);
 
-    void editCurrentWorkoutInUser(Context context);
+    void editCurrentWorkoutInUser();
 
-    void removeWorkoutFromUser(Workout workout, Context context);
+    void removeWorkoutFromUser(Workout workout);
 
-    void addWorkoutResultToUser(WorkoutResult wr, Context context);
+    void addWorkoutResultToUser(WorkoutResult wr);
 
-    void removeWorkoutResultFromUser(WorkoutResult wr, Context context);
+    void removeWorkoutResultFromUser(WorkoutResult wr);
 
 }

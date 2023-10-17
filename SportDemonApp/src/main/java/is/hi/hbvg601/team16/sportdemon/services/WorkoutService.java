@@ -1,7 +1,11 @@
 package is.hi.hbvg601.team16.sportdemon.services;
 
+import java.util.List;
 import java.util.UUID;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 
@@ -12,13 +16,15 @@ public interface WorkoutService {
 
     // Workout
 
-    Call<Workout> saveWorkout(Workout workout);
+    Single<Workout> saveWorkout(Workout workout);
 
     Call<Void> updateWorkout(Workout workout);
 
-    Call<Void> deleteWorkout(Workout workout);
+    Completable deleteWorkout(Workout workout);
 
     Call<Workout> findWorkoutByID(UUID id);
+
+    Flowable<List<Workout>> getAllWorkouts();
 
     // Exercise
 
@@ -32,6 +38,6 @@ public interface WorkoutService {
 
     Call<WorkoutResult> findWorkoutResultByID(UUID id);
 
-    Call<WorkoutResult> saveWorkoutResult(WorkoutResult wr);
+    Single<WorkoutResult> saveWorkoutResult(WorkoutResult wr);
 
 }
