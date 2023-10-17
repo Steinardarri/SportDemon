@@ -365,12 +365,13 @@ public class PlayTrackerActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             try {
+                assert iStream != null;
                 photo = getBytes(iStream);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-            WorkoutResult wr = new WorkoutResult(mWorkout.getUser(), mWorkout.toString(), photo);
+            WorkoutResult wr = new WorkoutResult(mWorkout.toString(), photo);
 
             Intent skil = new Intent();
             skil.putExtra("WORKOUTRESULT", wr);

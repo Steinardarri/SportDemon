@@ -12,13 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import dmax.dialog.SpotsDialog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
-import is.hi.hbvg601.team16.sportdemon.services.implementations.NetworkManagerAPI;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.WorkoutServiceImplementation;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ExerciseComboActivity extends AppCompatActivity {
 
@@ -30,11 +27,9 @@ public class ExerciseComboActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        NetworkManagerAPI nmAPI = new NetworkManagerAPI();
-        this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
+        this.mWorkoutService = new WorkoutServiceImplementation(this);
 
         boolean isAnEdit = false;
-
 
         ExerciseCombo ec = (ExerciseCombo) getIntent().getSerializableExtra("EXERCISECOMBO");
         assert ec != null : "ExerciseCombo is null";
@@ -75,49 +70,71 @@ public class ExerciseComboActivity extends AppCompatActivity {
 
             SpotsDialog loadingDialog = new SpotsDialog(this, "Setting up new Exercise");
             loadingDialog.show();
-            // Setja upp nýtt ExerciseCombo á server
-            Call<ExerciseCombo> callSync = mWorkoutService.saveExerciseCombo(ec);
-            callSync.enqueue(new Callback<ExerciseCombo>() {
-                @Override
-                public void onResponse(@NonNull Call<ExerciseCombo> call, @NonNull Response<ExerciseCombo> response) {
-                    if (response.isSuccessful()) {
-                        // Get response
-                        try {
-                            Intent skil = new Intent();
 
-                            skil.putExtra("EXERCISECOMBO", ec);
-                            skil.putExtra("EDIT", finalIsAnEdit);
-                            setResult(RESULT_OK, skil);
+            mWorkoutService.saveExerciseCombo(ec)
+                    .subscribeOn(Schedulers.io())
+                    .doOnSuccess(exerciseCombo -> {
+                        Intent skil = new Intent();
 
-                            loadingDialog.dismiss();
-                            finish();
+                        skil.putExtra("EXERCISECOMBO", exerciseCombo);
+                        skil.putExtra("EDIT", finalIsAnEdit);
+                        setResult(RESULT_OK, skil);
 
-                        } catch (Exception e) {
-                            // UI
-                            Toast.makeText(ExerciseComboActivity.this,
-                                    e.toString(),
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                            loadingDialog.dismiss();
-                        }
-                    } else {
+                        loadingDialog.dismiss();
+                        finish();
+                    })
+                    .doOnError(error -> {
                         Toast.makeText(ExerciseComboActivity.this,
-                                response.code()+" - "+response,
+                                error.getMessage(),
                                 Toast.LENGTH_SHORT
                         ).show();
                         loadingDialog.dismiss();
-                    }
-                }
+                    })
+                    .subscribe();
 
-                @Override
-                public void onFailure(@NonNull Call<ExerciseCombo> call, @NonNull Throwable t) {
-                    Toast.makeText(ExerciseComboActivity.this,
-                            t.toString(),
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    loadingDialog.dismiss();
-                }
-            });
+//            Call<ExerciseCombo> callSync = mWorkoutService.saveExerciseCombo(ec);
+//            callSync.enqueue(new Callback<ExerciseCombo>() {
+//                @Override
+//                public void onResponse(@NonNull Call<ExerciseCombo> call, @NonNull Response<ExerciseCombo> response) {
+//                    if (response.isSuccessful()) {
+//                        // Get response
+//                        try {
+//                            Intent skil = new Intent();
+//
+//                            skil.putExtra("EXERCISECOMBO", ec);
+//                            skil.putExtra("EDIT", finalIsAnEdit);
+//                            setResult(RESULT_OK, skil);
+//
+//                            loadingDialog.dismiss();
+//                            finish();
+//
+//                        } catch (Exception e) {
+//                            // UI
+//                            Toast.makeText(ExerciseComboActivity.this,
+//                                    e.toString(),
+//                                    Toast.LENGTH_SHORT
+//                            ).show();
+//                            loadingDialog.dismiss();
+//                        }
+//                    } else {
+//                        Toast.makeText(ExerciseComboActivity.this,
+//                                response.code()+" - "+response,
+//                                Toast.LENGTH_SHORT
+//                        ).show();
+//                        loadingDialog.dismiss();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(@NonNull Call<ExerciseCombo> call, @NonNull Throwable t) {
+//                    Toast.makeText(ExerciseComboActivity.this,
+//                            t.toString(),
+//                            Toast.LENGTH_SHORT
+//                    ).show();
+//                    loadingDialog.dismiss();
+//                }
+//            });
+
         });
     }
 

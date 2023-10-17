@@ -18,7 +18,7 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 public interface ExerciseComboDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insertExerciseCombo(ExerciseCombo exerciseCombo);
+    Single<ExerciseCombo> insertExerciseCombo(ExerciseCombo exerciseCombo);
 
     @Update
     Completable updateExerciseCombo(ExerciseCombo exerciseCombo);

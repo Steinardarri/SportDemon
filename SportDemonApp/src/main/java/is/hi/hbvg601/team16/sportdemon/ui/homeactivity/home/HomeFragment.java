@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +17,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import dmax.dialog.SpotsDialog;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.observers.DisposableCompletableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import is.hi.hbvg601.team16.sportdemon.LoginActivity;
 import is.hi.hbvg601.team16.sportdemon.R;
 import is.hi.hbvg601.team16.sportdemon.WorkoutActivity;
 import is.hi.hbvg601.team16.sportdemon.databinding.FragmentHomeBinding;
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
@@ -79,6 +71,7 @@ public class HomeFragment extends Fragment {
 
         mWorkoutService.getAllWorkouts()
                 .toObservable()
+                .distinct()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<List<Workout>>() {
                     @Override
@@ -153,7 +146,7 @@ public class HomeFragment extends Fragment {
                             .subscribeOn(Schedulers.io())
                             .doOnSuccess(workout -> {
                                 mHomeService.setCurrentWorkout(workout);
-                                mHomeService.addWorkoutToUser(workout);
+//                                mHomeService.addWorkoutToUser(workout);
                                 Intent i = new Intent(getActivity(), WorkoutActivity.class);
                                 loadingDialog.dismiss();
                                 workoutResultLauncher.launch(i);
@@ -243,7 +236,7 @@ public class HomeFragment extends Fragment {
                     mWorkoutService.saveWorkoutResult(wr)
                             .subscribeOn(Schedulers.io())
                             .doOnSuccess(workoutResult -> {
-                                mHomeService.addWorkoutResultToUser(workoutResult);
+//                                mHomeService.addWorkoutResultToUser(workoutResult);
                                 loadingDialog.dismiss();
                                 Toast.makeText(getContext(),
                                         "Workout Result Saved",
@@ -336,7 +329,7 @@ public class HomeFragment extends Fragment {
                                     .subscribeOn(Schedulers.io())
                                     .doOnComplete(() -> {
                                         // Local
-                                        mHomeService.removeWorkoutFromUser(w);
+//                                        mHomeService.removeWorkoutFromUser(w);
                                         Toast.makeText(getContext(),
                                                 "Workout removed successfully",
                                                 Toast.LENGTH_LONG
@@ -417,7 +410,7 @@ public class HomeFragment extends Fragment {
     }
 
 //    private void refreshList() {
-//        // Ætti ekki að þurfa ef flowable virkar rétt
+//        // Ætti ekki að þurfa ef getAllWorkouts() flowable virkar rétt
 //        WorkoutsRecyclerViewAdapter adapter =
 //                (WorkoutsRecyclerViewAdapter) mBinding.workoutRecyclerView.getAdapter();
 //        assert adapter != null;

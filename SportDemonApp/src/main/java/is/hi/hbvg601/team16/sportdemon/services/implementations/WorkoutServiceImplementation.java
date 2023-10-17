@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.room.Room;
 
 import java.util.List;
-import java.util.UUID;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -15,8 +14,6 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
-
-import retrofit2.Call;
 
 public class WorkoutServiceImplementation implements WorkoutService {
 
@@ -35,18 +32,8 @@ public class WorkoutServiceImplementation implements WorkoutService {
     }
 
     @Override
-    public Call<Void> updateWorkout(Workout workout) {
-        return nmAPI.updateWorkout(workout);
-    }
-
-    @Override
     public Completable deleteWorkout(Workout workout) {
         return db.workoutDAO().deleteWorkout(workout);
-    }
-
-    @Override
-    public Call<Workout> findWorkoutByID(UUID id) {
-        return nmAPI.findWorkoutByID(id);
     }
 
     @Override
@@ -57,26 +44,16 @@ public class WorkoutServiceImplementation implements WorkoutService {
     // ExerciseCombo
 
     @Override
-    public Call<ExerciseCombo> saveExerciseCombo(ExerciseCombo ec) {
-        return nmAPI.addExerciseCombo(ec);
+    public Single<ExerciseCombo> saveExerciseCombo(ExerciseCombo ec) {
+        return db.exerciseComboDAO().insertExerciseCombo(ec);
     }
 
     @Override
-    public Call<Void> updateExerciseCombo(ExerciseCombo exerciseCombo) {
-        return nmAPI.updateExerciseCombo(exerciseCombo);
-    }
-
-    @Override
-    public Call<Void> deleteExerciseCombo(ExerciseCombo ec) {
-        return nmAPI.deleteExerciseCombo(ec.getId());
+    public Completable deleteEC(ExerciseCombo ec) {
+        return db.exerciseComboDAO().deleteExerciseCombo(ec);
     }
 
     // Workout Result
-
-    @Override
-    public Call<WorkoutResult> findWorkoutResultByID(UUID id) {
-        return nmAPI.getWorkoutResult(id);
-    }
 
     @Override
     public Single<WorkoutResult> saveWorkoutResult(WorkoutResult wr) {

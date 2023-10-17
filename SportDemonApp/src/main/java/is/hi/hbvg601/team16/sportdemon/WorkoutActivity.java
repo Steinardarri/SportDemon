@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,20 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.services.HomeService;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.HomeServiceImplementation;
-import is.hi.hbvg601.team16.sportdemon.services.implementations.NetworkManagerAPI;
 import is.hi.hbvg601.team16.sportdemon.services.implementations.WorkoutServiceImplementation;
 import is.hi.hbvg601.team16.sportdemon.ui.workoutactivity.ExerciseComboRecyclerViewAdapter;
 
 import dmax.dialog.SpotsDialog;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class WorkoutActivity extends AppCompatActivity {
 
@@ -47,8 +42,7 @@ public class WorkoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
-        NetworkManagerAPI nmAPI = new NetworkManagerAPI();
-        this.mWorkoutService = new WorkoutServiceImplementation(nmAPI);
+        this.mWorkoutService = new WorkoutServiceImplementation(this);
         this.mHomeService = new HomeServiceImplementation(this);
 
         Workout mWorkout = mHomeService.getCurrentWorkout();
@@ -100,55 +94,80 @@ public class WorkoutActivity extends AppCompatActivity {
                                 );
                                 loadingDialog.show();
 
-                                Call<Void> callSync = mWorkoutService.deleteExerciseCombo(ec);
-                                callSync.enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                                        if (response.isSuccessful()) {
-                                            // Get response
-                                            try {
-                                                // Local
-                                                mHomeService.removeExerciseComboInCurrentWorkout(ec);
-                                                mHomeService.editCurrentWorkoutInUser();
+                                mWorkoutService.deleteEC(ec)
+                                        .subscribeOn(Schedulers.io())
+                                        .doOnComplete(() -> {
+                                            // Local
+                                            mHomeService.removeExerciseComboInCurrentWorkout(ec);
 
-                                                Toast.makeText(WorkoutActivity.this,
-                                                        "Exercise removed successfully",
-                                                        Toast.LENGTH_LONG
-                                                ).show();
-
-                                                refreshList();
-
-                                                loadingDialog.dismiss();
-                                                dialog.dismiss();
-                                            } catch (Exception e) {
-                                                // UI
-                                                Toast.makeText(WorkoutActivity.this,
-                                                        e.toString(),
-                                                        Toast.LENGTH_LONG
-                                                ).show();
-                                                loadingDialog.dismiss();
-                                                dialog.dismiss();
-                                            }
-                                        } else {
                                             Toast.makeText(WorkoutActivity.this,
-                                                    response.code()+" - "+ response,
-                                                    Toast.LENGTH_SHORT
+                                                    "Exercise removed successfully",
+                                                    Toast.LENGTH_LONG
+                                            ).show();
+                                            refreshList();
+                                            loadingDialog.dismiss();
+                                            dialog.dismiss();
+                                        })
+                                        .doOnError(error -> {
+                                            Toast.makeText(WorkoutActivity.this,
+                                                    error.getMessage(),
+                                                    Toast.LENGTH_LONG
                                             ).show();
                                             loadingDialog.dismiss();
                                             dialog.dismiss();
-                                        }
-                                    }
+                                        })
+                                        .subscribe();
 
-                                    @Override
-                                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                                        Toast.makeText(WorkoutActivity.this,
-                                                t.toString(),
-                                                Toast.LENGTH_LONG
-                                        ).show();
-                                        loadingDialog.dismiss();
-                                        dialog.dismiss();
-                                    }
-                                });
+//                                Call<Void> callSync = mWorkoutService.deleteExerciseCombo(ec);
+//                                callSync.enqueue(new Callback<Void>() {
+//                                    @Override
+//                                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+//                                        if (response.isSuccessful()) {
+//                                            // Get response
+//                                            try {
+//                                                // Local
+//                                                mHomeService.removeExerciseComboInCurrentWorkout(ec);
+//                                                mHomeService.editCurrentWorkoutInUser();
+//
+//                                                Toast.makeText(WorkoutActivity.this,
+//                                                        "Exercise removed successfully",
+//                                                        Toast.LENGTH_LONG
+//                                                ).show();
+//
+//                                                refreshList();
+//
+//                                                loadingDialog.dismiss();
+//                                                dialog.dismiss();
+//                                            } catch (Exception e) {
+//                                                // UI
+//                                                Toast.makeText(WorkoutActivity.this,
+//                                                        e.toString(),
+//                                                        Toast.LENGTH_LONG
+//                                                ).show();
+//                                                loadingDialog.dismiss();
+//                                                dialog.dismiss();
+//                                            }
+//                                        } else {
+//                                            Toast.makeText(WorkoutActivity.this,
+//                                                    response.code()+" - "+ response,
+//                                                    Toast.LENGTH_SHORT
+//                                            ).show();
+//                                            loadingDialog.dismiss();
+//                                            dialog.dismiss();
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+//                                        Toast.makeText(WorkoutActivity.this,
+//                                                t.toString(),
+//                                                Toast.LENGTH_LONG
+//                                        ).show();
+//                                        loadingDialog.dismiss();
+//                                        dialog.dismiss();
+//                                    }
+//                                });
+
                             });
                             alert.setNegativeButton("NO", (dialog, which) -> {
                                 // close dialog
@@ -205,7 +224,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     } else {
                         mHomeService.addExerciseComboToCurrentWorkout(ec);
                     }
-                    mHomeService.editCurrentWorkoutInUser();
+//                    mHomeService.editCurrentWorkoutInUser();
                 }
                 refreshList();
             }
@@ -236,40 +255,6 @@ public class WorkoutActivity extends AppCompatActivity {
         Workout w = mHomeService.getCurrentWorkout();
         if(w != null) adapter.setData(w.getExerciseComboList());
         mECRecyclerView.setAdapter(adapter);
-    }
-
-    private void saveWorkoutToServer(Workout w) {
-        Call<Void> callSync = mWorkoutService.updateWorkout(w);
-
-        SpotsDialog loadingDialog = new SpotsDialog(this, "Saving to server");
-        loadingDialog.show();
-
-        callSync.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(WorkoutActivity.this,
-                            "Saving Successful",
-                            Toast.LENGTH_SHORT
-                    ).show();
-                } else {
-                    Toast.makeText(WorkoutActivity.this,
-                            response.code()+" - "+response,
-                            Toast.LENGTH_SHORT
-                    ).show();
-                }
-                loadingDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Toast.makeText(WorkoutActivity.this,
-                        t.toString(),
-                        Toast.LENGTH_SHORT
-                ).show();
-                loadingDialog.dismiss();
-            }
-        });
     }
 
 }
