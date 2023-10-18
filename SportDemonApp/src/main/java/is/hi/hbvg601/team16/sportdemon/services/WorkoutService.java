@@ -16,7 +16,7 @@ public interface WorkoutService {
 
     // Workout
 
-    Single<Workout> saveWorkout(Workout workout);
+    Completable saveWorkout(Workout workout);
 
     Completable deleteWorkout(Workout workout);
 
@@ -26,12 +26,12 @@ public interface WorkoutService {
 
     // Exercise
 
-    Single<ExerciseCombo> saveExerciseCombo(ExerciseCombo ec);
+    Completable saveExerciseCombo(ExerciseCombo ec);
 
     Completable deleteEC(ExerciseCombo ec);
 
     // Workout Result
 
-    Single<WorkoutResult> saveWorkoutResult(WorkoutResult wr);
+    Completable saveWorkoutResult(WorkoutResult wr);
 
 }

@@ -147,9 +147,8 @@ public class HomeFragment extends Fragment {
                     mWorkoutService.saveWorkout(newWorkout)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .doOnSuccess(workout -> {
-                                mHomeService.setCurrentWorkout(workout);
-//                                mHomeService.addWorkoutToUser(workout);
+                            .doOnComplete(() -> {
+                                mHomeService.setCurrentWorkout(newWorkout);
                                 Intent i = new Intent(getActivity(), WorkoutActivity.class);
                                 loadingDialog.dismiss();
                                 workoutResultLauncher.launch(i);
@@ -238,8 +237,7 @@ public class HomeFragment extends Fragment {
 
                     mWorkoutService.saveWorkoutResult(wr)
                             .subscribeOn(Schedulers.io())
-                            .doOnSuccess(workoutResult -> {
-//                                mHomeService.addWorkoutResultToUser(workoutResult);
+                            .doOnComplete(() -> {
                                 loadingDialog.dismiss();
                                 Toast.makeText(getContext(),
                                         "Workout Result Saved",

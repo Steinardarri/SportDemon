@@ -46,7 +46,7 @@ public class Workout implements Serializable {
     public UUID getId() {
         return id;
     }
-    void setId(@NonNull UUID id) {
+    public void setId(@NonNull UUID id) {
         this.id = id;
     }
 

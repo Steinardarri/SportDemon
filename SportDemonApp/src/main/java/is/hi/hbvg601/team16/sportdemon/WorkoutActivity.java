@@ -101,9 +101,6 @@ public class WorkoutActivity extends AppCompatActivity {
                                 mWorkoutService.deleteEC(ec)
                                         .subscribeOn(Schedulers.io())
                                         .doOnComplete(() -> {
-                                            // Local
-                                            mHomeService.removeExerciseComboInCurrentWorkout(ec);
-
                                             Toast.makeText(WorkoutActivity.this,
                                                     "Exercise removed successfully",
                                                     Toast.LENGTH_LONG
@@ -228,15 +225,7 @@ public class WorkoutActivity extends AppCompatActivity {
                 if(result.getResultCode() == RESULT_SUCCESS) {
                     Intent data = result.getData();
                     assert data != null;
-
-                    ExerciseCombo ec = (ExerciseCombo) data.getSerializableExtra("EXERCISECOMBO");
-                    boolean edit = data.getBooleanExtra("EDIT", false);
-
-                    if (edit) {
-                        mHomeService.editExerciseComboInCurrentWorkout(ec);
-                    } else {
-                        mHomeService.addExerciseComboToCurrentWorkout(ec);
-                    }
+                    // *****
                 }
                 refreshList();
             }

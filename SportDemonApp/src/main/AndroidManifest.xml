@@ -37,10 +37,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignupActivity" android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout" />
-        <activity android:name=".LoginActivity" android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout" />
         <activity android:name=".WorkoutActivity" android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize|screenLayout" />
         <activity android:name=".ExerciseComboActivity" android:screenOrientation="portrait"

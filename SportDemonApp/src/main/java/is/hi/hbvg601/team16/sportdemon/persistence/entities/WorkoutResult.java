@@ -2,11 +2,11 @@ package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.sql.Date;
+import java.time.*;
 import java.util.UUID;
 
 /******************************************************************************
@@ -26,35 +26,35 @@ public class WorkoutResult implements Serializable {
     @PrimaryKey
     @NonNull
     private UUID id;
-    private Date date;
+    private LocalDate date;
     private String data;
     private byte[] photo;
 
     public WorkoutResult() {
         this.id = UUID.randomUUID();
     }
+    @Ignore
     public WorkoutResult(String data, byte[] photo) {
         this.id = UUID.randomUUID();
 
         this.data = data;
         this.photo = photo;
 
-        Calendar today = Calendar.getInstance();
-        this.date = new java.sql.Date(today.getTimeInMillis());
+        this.date = LocalDate.now();
     }
 
     @NonNull
     public UUID getId() {
         return id;
     }
-    void setId(@NonNull UUID id) {
+    public void setId(@NonNull UUID id) {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -71,4 +71,5 @@ public class WorkoutResult implements Serializable {
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
+
 }

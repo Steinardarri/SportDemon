@@ -21,7 +21,7 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.transaction.WorkoutW
 public interface WorkoutDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<Workout> insertWorkout(Workout workout);
+    Completable insertWorkout(Workout workout);
 
     @Update
     void updateWorkout(Workout workout);

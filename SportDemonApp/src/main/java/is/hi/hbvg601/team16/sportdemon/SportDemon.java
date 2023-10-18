@@ -5,14 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.List;
-
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
-import is.hi.hbvg601.team16.sportdemon.persistence.entities.User;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 
 /**
@@ -22,34 +15,8 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 public class SportDemon extends Application {
     private final SharedPreferences mPrefs;
 
-    public SportDemon() {
-        mPrefs = null;
-    }
     public SportDemon(Context context) {
         mPrefs = context.getSharedPreferences("SportDemonData", MODE_PRIVATE);
-    }
-
-    /**
-     * Sækir vistaðan user og breytir frá json í User hlut
-     * @return User sem er vistaður
-     */
-    public User getCurrentUser() {
-        Gson gson = new Gson();
-
-        String json = mPrefs.getString("CurrentUser", "");
-        return gson.fromJson(json, User.class);
-    }
-    /**
-     * Vistar User sem json hlut í String
-     * @param user til að vista
-     */
-    public void setCurrentUser(User user) {
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        Gson gson = new Gson();
-
-        String json = gson.toJson(user);
-        prefsEditor.putString("CurrentUser", json);
-        prefsEditor.apply();
     }
 
     /**
@@ -74,4 +41,5 @@ public class SportDemon extends Application {
         prefsEditor.putString("CurrentWorkout", json);
         prefsEditor.apply();
     }
+
 }

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0a59340ecf14c857c6aaa3f09d5a2532",
+    "identityHash": "0495094dc11ead12af64f6a8fca17af4",
     "entities": [
       {
         "tableName": "Workout",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `title` TEXT, `description` TEXT, `restBetweenEC` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `exerciseComboList` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `title` TEXT, `description` TEXT, `restBetweenEC` INTEGER NOT NULL, `duration` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -37,12 +37,6 @@
             "columnName": "duration",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "exerciseComboList",
-            "columnName": "exerciseComboList",
-            "affinity": "TEXT",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -56,7 +50,7 @@
       },
       {
         "tableName": "WorkoutResult",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `date` TEXT, `data` TEXT, `photo` BLOB, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `date` INTEGER, `data` TEXT, `photo` BLOB, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -67,7 +61,7 @@
           {
             "fieldPath": "date",
             "columnName": "date",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -94,7 +88,7 @@
       },
       {
         "tableName": "ExerciseCombo",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `workout` BLOB, `title` TEXT, `sets` INTEGER NOT NULL, `reps` INTEGER NOT NULL, `weight` REAL NOT NULL, `equipment` TEXT, `durationPerSet` INTEGER NOT NULL, `restBetweenSets` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `workoutID` BLOB, `title` TEXT, `sets` INTEGER NOT NULL, `reps` INTEGER NOT NULL, `weight` REAL NOT NULL, `equipment` TEXT, `durationPerSet` INTEGER NOT NULL, `restBetweenSets` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -103,8 +97,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "workout",
-            "columnName": "workout",
+            "fieldPath": "workoutID",
+            "columnName": "workoutID",
             "affinity": "BLOB",
             "notNull": false
           },
@@ -164,7 +158,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0a59340ecf14c857c6aaa3f09d5a2532')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0495094dc11ead12af64f6a8fca17af4')"
     ]
   }
 }

@@ -1,6 +1,5 @@
 package is.hi.hbvg601.team16.sportdemon;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -73,10 +72,10 @@ public class ExerciseComboActivity extends AppCompatActivity {
 
             mWorkoutService.saveExerciseCombo(ec)
                     .subscribeOn(Schedulers.io())
-                    .doOnSuccess(exerciseCombo -> {
+                    .doOnComplete(() -> {
                         Intent skil = new Intent();
 
-                        skil.putExtra("EXERCISECOMBO", exerciseCombo);
+                        skil.putExtra("EXERCISECOMBO", ec);
                         skil.putExtra("EDIT", finalIsAnEdit);
                         setResult(RESULT_OK, skil);
 

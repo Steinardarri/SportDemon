@@ -17,7 +17,7 @@ import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
 public interface WorkoutResultDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<WorkoutResult> insertWorkoutResult(WorkoutResult workoutResult);
+    Completable insertWorkoutResult(WorkoutResult workoutResult);
 
     @Update
     Completable updateWorkoutResult(WorkoutResult workoutResult);

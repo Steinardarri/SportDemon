@@ -29,7 +29,7 @@ public class WorkoutServiceImplementation implements WorkoutService {
     // Workout
 
     @Override
-    public Single<Workout> saveWorkout(Workout workout) {
+    public Completable saveWorkout(Workout workout) {
         return db.workoutDAO().insertWorkout(workout);
     }
 
@@ -51,7 +51,7 @@ public class WorkoutServiceImplementation implements WorkoutService {
     // ExerciseCombo
 
     @Override
-    public Single<ExerciseCombo> saveExerciseCombo(ExerciseCombo ec) {
+    public Completable saveExerciseCombo(ExerciseCombo ec) {
         return db.exerciseComboDAO().insertExerciseCombo(ec);
     }
 
@@ -63,7 +63,7 @@ public class WorkoutServiceImplementation implements WorkoutService {
     // Workout Result
 
     @Override
-    public Single<WorkoutResult> saveWorkoutResult(WorkoutResult wr) {
+    public Completable saveWorkoutResult(WorkoutResult wr) {
         return db.workoutResultDAO().insertWorkoutResult(wr);
     }
 
