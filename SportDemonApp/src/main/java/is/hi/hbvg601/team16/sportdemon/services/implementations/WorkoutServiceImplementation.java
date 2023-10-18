@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.room.Room;
 
 import java.util.List;
+import java.util.UUID;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -13,6 +14,7 @@ import is.hi.hbvg601.team16.sportdemon.persistence.SportDemonDatabase;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
+import is.hi.hbvg601.team16.sportdemon.persistence.entities.transaction.WorkoutWithEC;
 import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
 
 public class WorkoutServiceImplementation implements WorkoutService {
@@ -39,6 +41,11 @@ public class WorkoutServiceImplementation implements WorkoutService {
     @Override
     public Flowable<List<Workout>> getAllWorkouts() {
         return db.workoutDAO().getWorkouts();
+    }
+
+    @Override
+    public Single<WorkoutWithEC> getWorkoutWithEC(UUID id) {
+        return db.workoutDAO().getWorkoutWithEC(id);
     }
 
     // ExerciseCombo

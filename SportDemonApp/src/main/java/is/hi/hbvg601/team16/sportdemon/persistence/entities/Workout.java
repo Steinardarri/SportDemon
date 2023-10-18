@@ -2,11 +2,10 @@ package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /******************************************************************************
@@ -30,11 +29,11 @@ public class Workout implements Serializable {
     private String description;
     private int restBetweenEC;
     private int duration;
-    private List<ExerciseCombo> exerciseComboList = new ArrayList<>();
 
     public Workout() {
         this.id = UUID.randomUUID();
     }
+    @Ignore
     public Workout(String title, String description, int rest) {
         this.id = UUID.randomUUID();
 
@@ -79,49 +78,6 @@ public class Workout implements Serializable {
         this.duration = duration;
     }
 
-    public List<ExerciseCombo> getExerciseComboList() {
-        return exerciseComboList;
-    }
-    public void setExerciseComboList(List<ExerciseCombo> exerciseComboList) {
-        this.exerciseComboList = exerciseComboList;
-    }
-
-    public void addExerciseCombo(ExerciseCombo ec) {
-        exerciseComboList.add(ec);
-    }
-
-    public void editExerciseCombo(ExerciseCombo newEC) {
-        for (ExerciseCombo ec : exerciseComboList){
-            if (ec.getId().equals(newEC.getId())){
-                int i = exerciseComboList.indexOf(ec);
-                exerciseComboList.set(i, newEC);
-                break;
-            }
-        }
-    }
-
-    public void removeExerciseCombo(ExerciseCombo ec) {
-        for (ExerciseCombo oldEC : exerciseComboList){
-            if (oldEC.getId().equals(ec.getId())){
-                exerciseComboList.remove(oldEC);
-                break;
-            }
-        }
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        StringBuilder workout = new StringBuilder("Workout Summary:\n");
-        workout.append("\n-------\n");
-        for (ExerciseCombo ec : exerciseComboList) {
-            workout .append(ec.getTitle())
-                    .append("\n")
-                    .append(ec)
-                    .append("\n-------\n");
-        }
-        return workout.toString();
-    }
 }
 
 

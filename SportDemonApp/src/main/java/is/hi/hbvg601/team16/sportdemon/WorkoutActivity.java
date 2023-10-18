@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
@@ -29,6 +30,9 @@ import is.hi.hbvg601.team16.sportdemon.ui.workoutactivity.ExerciseComboRecyclerV
 import dmax.dialog.SpotsDialog;
 
 public class WorkoutActivity extends AppCompatActivity {
+
+    private RecyclerView mECRecyclerView;
+    private ExerciseComboRecyclerViewAdapter mAdapter;
 
     private WorkoutService mWorkoutService;
     private HomeService mHomeService;
@@ -46,17 +50,16 @@ public class WorkoutActivity extends AppCompatActivity {
         this.mHomeService = new HomeServiceImplementation(this);
 
         Workout mWorkout = mHomeService.getCurrentWorkout();
+
         TextView title = findViewById(R.id.workout_title);
         title.setText(mWorkout.getTitle());
 
         // Setja upp RecyclerView fyrir ExerciseCombos
-        RecyclerView mECRecyclerView = findViewById(R.id.workout_recyclerView);
+        this.mECRecyclerView = findViewById(R.id.workout_recyclerView);
         mECRecyclerView.setLayoutManager(new LinearLayoutManager(WorkoutActivity.this));
 
-        ExerciseComboRecyclerViewAdapter adapter = new ExerciseComboRecyclerViewAdapter(
-                WorkoutActivity.this, mWorkout.getExerciseComboList()
-        );
-        adapter.setClickListener(
+        this.mAdapter = new ExerciseComboRecyclerViewAdapter(WorkoutActivity.this);
+        mAdapter.setClickListener(
                 (View v, int position, List<ExerciseCombo> data) -> {
                     Intent i = new Intent(
                             WorkoutActivity.this, ExerciseComboActivity.class
@@ -64,11 +67,12 @@ public class WorkoutActivity extends AppCompatActivity {
                     i.putExtra("EXERCISECOMBO", data.get(position));
                     exerciseComboResultLauncher.launch(i);
                 });
-        mECRecyclerView.setAdapter(adapter);
+
+        refreshList();
 
         findViewById(R.id.workout_add_button).setOnClickListener(v -> {
             ExerciseCombo newEC = new ExerciseCombo();
-            newEC.setWorkout(mWorkout.getId());
+            newEC.setWorkoutID(mWorkout.getId());
             Intent i = new Intent(WorkoutActivity.this, ExerciseComboActivity.class);
             i.putExtra("EXERCISECOMBO", newEC);
             exerciseComboResultLauncher.launch(i);
@@ -79,7 +83,7 @@ public class WorkoutActivity extends AppCompatActivity {
             if(!v.isActivated()) {
                 button.setText(this.getString(R.string.cancel));
                 v.setActivated(true);
-                adapter.setClickListener(
+                mAdapter.setClickListener(
                         (View v2, int position, List<ExerciseCombo> data) -> {
                             ExerciseCombo ec = data.get(position);
 
@@ -176,12 +180,12 @@ public class WorkoutActivity extends AppCompatActivity {
                             alert.show();
                         });
 
-                mECRecyclerView.setAdapter(adapter);
+                mECRecyclerView.setAdapter(mAdapter);
                 mECRecyclerView.setBackgroundColor(Color.argb(31,255,0,0));
             } else {
                 v.setActivated(false);
                 button.setText(this.getString(R.string.remove));
-                adapter.setClickListener(
+                mAdapter.setClickListener(
                         (View v2, int position, List<ExerciseCombo> data) -> {
                             Intent i = new Intent(
                                     WorkoutActivity.this, ExerciseComboActivity.class
@@ -189,15 +193,22 @@ public class WorkoutActivity extends AppCompatActivity {
                             i.putExtra("EXERCISECOMBO", data.get(position));
                             exerciseComboResultLauncher.launch(i);
                         });
-                mECRecyclerView.setAdapter(adapter);
+                mECRecyclerView.setAdapter(mAdapter);
                 mECRecyclerView.setBackgroundColor(Color.TRANSPARENT);
             }
         });
 
         findViewById(R.id.workout_play_button).setOnClickListener( v -> {
-            Intent i = new Intent(WorkoutActivity.this, PlayTrackerActivity.class);
-            i.putExtra("WORKOUT", mHomeService.getCurrentWorkout());
-            playTrackerResultLauncher.launch(i);
+            if(!mAdapter.getData().isEmpty()) {
+                Intent i = new Intent(WorkoutActivity.this, PlayTrackerActivity.class);
+                i.putExtra("WORKOUT", mHomeService.getCurrentWorkout());
+                playTrackerResultLauncher.launch(i);
+            } else {
+                Toast.makeText(WorkoutActivity.this,
+                        "Give the workout an exercise",
+                        Toast.LENGTH_LONG
+                ).show();
+            }
         });
 
     }
@@ -205,6 +216,8 @@ public class WorkoutActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mECRecyclerView = null;
+        mAdapter = null;
         mHomeService = null;
         mWorkoutService = null;
     }
@@ -224,7 +237,6 @@ public class WorkoutActivity extends AppCompatActivity {
                     } else {
                         mHomeService.addExerciseComboToCurrentWorkout(ec);
                     }
-//                    mHomeService.editCurrentWorkoutInUser();
                 }
                 refreshList();
             }
@@ -248,13 +260,20 @@ public class WorkoutActivity extends AppCompatActivity {
     );
 
     private void refreshList() {
-        RecyclerView mECRecyclerView = findViewById(R.id.workout_recyclerView);
-        ExerciseComboRecyclerViewAdapter adapter =
-                (ExerciseComboRecyclerViewAdapter) mECRecyclerView.getAdapter();
-        assert adapter != null;
         Workout w = mHomeService.getCurrentWorkout();
-        if(w != null) adapter.setData(w.getExerciseComboList());
-        mECRecyclerView.setAdapter(adapter);
+
+        mWorkoutService.getWorkoutWithEC(w.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess(workoutWithEC -> {
+                    mAdapter.setData(workoutWithEC.getExerciseComboList());
+                    mECRecyclerView.setAdapter(mAdapter);
+                })
+                .doOnError(error -> Toast.makeText(WorkoutActivity.this,
+                        error.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show())
+                .subscribe();
     }
 
 }

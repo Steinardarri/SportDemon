@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dmax.dialog.SpotsDialog;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -73,6 +74,7 @@ public class HomeFragment extends Fragment {
                 .toObservable()
                 .distinct()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Workout>>() {
                     @Override
                     public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
@@ -144,6 +146,7 @@ public class HomeFragment extends Fragment {
 
                     mWorkoutService.saveWorkout(newWorkout)
                             .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .doOnSuccess(workout -> {
                                 mHomeService.setCurrentWorkout(workout);
 //                                mHomeService.addWorkoutToUser(workout);

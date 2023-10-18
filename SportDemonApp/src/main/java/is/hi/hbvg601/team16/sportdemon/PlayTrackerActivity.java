@@ -39,16 +39,23 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import dmax.dialog.SpotsDialog;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.ExerciseCombo;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.Workout;
 import is.hi.hbvg601.team16.sportdemon.persistence.entities.WorkoutResult;
+import is.hi.hbvg601.team16.sportdemon.services.WorkoutService;
+import is.hi.hbvg601.team16.sportdemon.services.implementations.WorkoutServiceImplementation;
 import is.hi.hbvg601.team16.sportdemon.ui.playtrackeractivity.PlayTrackerRecyclerViewAdapter;
 
 
 public class PlayTrackerActivity extends AppCompatActivity {
+
+    private WorkoutService mWorkoutService;
 
     private MediaPlayer mWhistle;
     private MediaPlayer mFinished;
@@ -59,7 +66,8 @@ public class PlayTrackerActivity extends AppCompatActivity {
     private long mTimeLeftInMillis;
 
     private Workout mWorkout;
-    //               timer, exercise text, setsText, #exComboText
+
+    //                 timer, exercise text, setsText, #exComboText
     private List<Quartet<Integer, String, String, String>> mTrackerList;
     private int mTrackerIndex = -1; // Index is incremented before being used
 
@@ -87,7 +95,10 @@ public class PlayTrackerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_tracker);
 
+        this.mWorkoutService = new WorkoutServiceImplementation(PlayTrackerActivity.this);
+
         mWorkout = (Workout) getIntent().getSerializableExtra("WORKOUT");
+
         assert mWorkout != null : "Workout is null";
 
         mWhistle = MediaPlayer.create(PlayTrackerActivity.this, R.raw.whistle);
@@ -105,7 +116,20 @@ public class PlayTrackerActivity extends AppCompatActivity {
         mWorkoutTitleText.setText(mWorkout.getTitle());
 
         // Búa til lista fyrir play tracker til að ítra yfir
-        List<ExerciseCombo> ecl = mWorkout.getExerciseComboList();
+        AtomicReference<List<ExerciseCombo>> arECL = new AtomicReference<>();
+        mWorkoutService.getWorkoutWithEC(mWorkout.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess(workoutWithEC ->
+                    arECL.set(workoutWithEC.getExerciseComboList())
+                )
+                .doOnError(error -> Toast.makeText(PlayTrackerActivity.this,
+                        error.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show())
+                .subscribe();
+
+        List<ExerciseCombo> ecl = arECL.get();
         mTrackerList = new ArrayList<>();
 
         int ecIndex = 1;

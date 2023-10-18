@@ -20,9 +20,8 @@ public class ExerciseComboRecyclerViewAdapter
     private final LayoutInflater inflater;
     private ItemClickListener mClickListener;
 
-    public ExerciseComboRecyclerViewAdapter(Context context, List<ExerciseCombo> data) {
+    public ExerciseComboRecyclerViewAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
-        this.data = data;
     }
 
     @NonNull

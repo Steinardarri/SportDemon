@@ -2,6 +2,7 @@ package is.hi.hbvg601.team16.sportdemon.persistence.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -24,7 +25,7 @@ public class ExerciseCombo implements Serializable {
     @PrimaryKey
     @NonNull
     private UUID id;
-    private UUID workout;
+    private UUID workoutID;
     private String title;
     private int sets;
     private int reps;
@@ -36,6 +37,7 @@ public class ExerciseCombo implements Serializable {
     public ExerciseCombo() {
         this.id = UUID.randomUUID();
     }
+    @Ignore
     public ExerciseCombo(String title, int sets, int reps, double weight,
                          String equipment, int durationPerSet, int restBetweenSets) {
         this.id = UUID.randomUUID();
@@ -57,11 +59,11 @@ public class ExerciseCombo implements Serializable {
         this.id = id;
     }
 
-    public UUID getWorkout() {
-        return workout;
+    public UUID getWorkoutID() {
+        return workoutID;
     }
-    public void setWorkout(UUID workout) {
-        this.workout = workout;
+    public void setWorkoutID(UUID workoutID) {
+        this.workoutID = workoutID;
     }
 
     public String getTitle() {
@@ -132,4 +134,5 @@ public class ExerciseCombo implements Serializable {
 
         return info;
     }
+
 }
